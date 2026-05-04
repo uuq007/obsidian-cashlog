@@ -1,0 +1,23 @@
+{
+  "name": "obsidian-cashlog",
+  "version": "0.1.0",
+  "description": "在 Obsidian 中记录和查询收支流水",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.17.19",
+    "obsidian": "latest",
+    "tslib": "2.4.0",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "chrono-node": "^2.3.9"
+  }
+}

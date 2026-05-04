@@ -1,0 +1,1796 @@
+/* Cashlog 记账插件样式 */
+
+/* 查询结果容器 */
+.cashlog-results {
+  font-size: 0.95em;
+  padding: 4px 0;
+}
+
+/* 条目列表 */
+.cashlog-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 4px 0;
+}
+
+.cashlog-list li {
+  padding: 3px 0;
+  line-height: 1.6;
+}
+
+/* 记账条目各部分间距 */
+.cashlog-entry span {
+  margin-right: 6px;
+}
+
+/* 金额 */
+.cashlog-amount {
+  font-weight: 600;
+  font-family: var(--font-monospace);
+}
+
+.cashlog-amount-expense {
+  color: #e74c3c;
+}
+
+.cashlog-amount-income {
+  color: #27ae60;
+}
+
+/* 标签 */
+.cashlog-tag {
+  background: var(--tag-background, var(--background-secondary));
+  border: 1px solid var(--tag-border, var(--background-modifier-border));
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.9em;
+}
+
+/* 描述 */
+.cashlog-description {
+  color: var(--text-normal);
+}
+
+/* 日期时间 */
+.cashlog-date,
+.cashlog-time {
+  color: var(--text-muted);
+  font-size: 0.85em;
+}
+
+/* 分组标题 */
+.cashlog-group-header {
+  margin-top: 12px;
+  margin-bottom: 4px;
+  padding: 4px 0;
+  font-size: 1.05em;
+  color: var(--text-normal);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* 分组汇总 */
+.cashlog-group-summary {
+  margin: 4px 0 8px 0;
+  padding: 4px 8px;
+  font-size: 0.9em;
+  color: var(--text-muted);
+  border-left: 2px solid var(--background-modifier-border);
+}
+
+.cashlog-group-summary span {
+  margin-right: 12px;
+}
+
+/* 总汇总 */
+.cashlog-summary {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-top: 2px solid var(--background-modifier-border);
+  font-weight: 600;
+}
+
+.cashlog-summary-expense {
+  color: #e74c3c;
+}
+
+.cashlog-summary-income {
+  color: #27ae60;
+}
+
+.cashlog-summary-balance {
+  color: var(--text-normal);
+}
+
+.cashlog-summary-count {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.9em;
+}
+
+/* 错误提示 */
+.cashlog-error {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 4px 0;
+}
+
+/* 编辑按钮 */
+.cashlog-edit-button {
+  text-decoration: none;
+}
+
+/* 笔记链接（模拟内部链接外观，不使用 internal-link 类以避免 Obsidian 预览弹窗） */
+.cashlog-note-link {
+  color: var(--link-color);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cashlog-note-link:hover {
+  color: var(--link-color-hover);
+  text-decoration: underline;
+}
+
+/* 深色主题适配 */
+.theme-dark .cashlog-amount-expense {
+  color: #ff6b6b;
+}
+
+.theme-dark .cashlog-amount-income {
+  color: #51cf66;
+}
+
+.theme-dark .cashlog-summary-expense {
+  color: #ff6b6b;
+}
+
+.theme-dark .cashlog-summary-income {
+  color: #51cf66;
+}
+
+.theme-dark .cashlog-error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* ==================== Modal 样式 ==================== */
+
+/* 描述输入框 */
+.cashlog-desc-input {
+  width: 100%;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  line-height: 1.4;
+  font-family: inherit;
+}
+
+.cashlog-desc-input:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px var(--background-modifier-border);
+}
+
+/* 金额行容器 */
+.cashlog-field-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 日期/时间行容器：图标内嵌在输入框内 */
+.cashlog-field-row-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 💴 金额图标（无边框，在输入框外） */
+.cashlog-amount-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* 内嵌图标按钮（日历/时钟，在输入框内部左侧） */
+.cashlog-icon-btn-inner {
+  position: absolute;
+  left: 4px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.cashlog-icon-btn-inner:hover {
+  color: var(--text-normal);
+}
+
+/* 统一输入框样式（金额/日期/时间等宽） */
+.cashlog-field-input {
+  width: 130px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.cashlog-field-input:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px var(--background-modifier-border);
+}
+
+/* 日期/时间输入框：左侧留出图标空间 */
+.cashlog-field-input-icon {
+  padding-left: 24px;
+}
+
+/* 隐藏原生日期/时间选择器的右侧图标（防止双图标） */
+input[type="date"].cashlog-field-input::-webkit-calendar-picker-indicator,
+input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/* 隐藏元素 */
+.hidden {
+  display: none;
+}
+
+/* 图表容器 */
+.cashlog-chart {
+  box-sizing: border-box;
+}
+
+/* 图表颜色探针（用于读取主题文字颜色） */
+.cashlog-chart-probe {
+  color: var(--text-normal);
+  position: absolute;
+  pointer-events: none;
+}
+
+/* 表格包装器 - 支持横向滚动 */
+.cashlog-chart-table-wrapper {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* 表格 - 自适应宽度 */
+.cashlog-chart-table {
+  width: 100%;
+  white-space: nowrap;
+}
+
+/* ==================== Cashlog 面板样式 ==================== */
+
+/* 面板容器 */
+.cashlog-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 面板内容区 */
+.cashlog-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+}
+
+/* 底部标签栏 */
+.cashlog-panel-tabs {
+  display: flex;
+  border-top: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+}
+
+/* 标签按钮 */
+.cashlog-tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.cashlog-tab-btn:hover {
+  color: var(--text-normal);
+}
+
+.cashlog-tab-btn.active {
+  color: var(--interactive-accent);
+  font-weight: 600;
+  border-top: 2px solid var(--interactive-accent);
+  margin-top: -1px;
+}
+
+/* ==================== 仪表盘样式 ==================== */
+
+/* 统计时间范围标签 */
+.cashlog-period-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: -14px -16px 16px -16px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #fff;
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+}
+
+.cashlog-period-mode {
+  font-size: 0.8em;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.cashlog-period-range {
+  font-size: 0.88em;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: var(--font-monospace);
+  font-weight: 500;
+}
+
+/* 金额显示/隐藏切换按钮 */
+.cashlog-period-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.2s, background 0.2s;
+}
+
+.cashlog-period-toggle:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 摘要卡片行 */
+.cashlog-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* 单个卡片 */
+.cashlog-card {
+  background: var(--background-secondary);
+  border-radius: 10px;
+  padding: 14px 10px;
+  text-align: center;
+  border: 1px solid var(--background-modifier-border);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s;
+  cursor: pointer;
+}
+
+.cashlog-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--interactive-accent);
+}
+
+.cashlog-card:active {
+  transform: translateY(0);
+}
+
+.cashlog-card-label {
+  font-size: 0.78em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.cashlog-card-value {
+  font-size: 1.15em;
+  font-weight: 700;
+  font-family: var(--font-monospace);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cashlog-card-income {
+  border-left: 3px solid #27ae60;
+}
+.cashlog-card-income .cashlog-card-value {
+  color: #27ae60;
+}
+
+.cashlog-card-expense {
+  border-left: 3px solid #e74c3c;
+}
+.cashlog-card-expense .cashlog-card-value {
+  color: #e74c3c;
+}
+
+.cashlog-card-balance {
+  border-left: 3px solid #3b82f6;
+}
+.cashlog-card-balance .cashlog-card-value {
+  color: var(--text-normal);
+}
+
+.cashlog-card-count {
+  border-left: 3px solid #8b5cf6;
+}
+.cashlog-card-count .cashlog-card-value {
+  color: var(--text-accent);
+}
+
+/* 面板分区 */
+.cashlog-section {
+  margin-bottom: 20px;
+}
+
+.cashlog-section-title {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: var(--text-normal);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--background-modifier-border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.cashlog-section-title:hover {
+  color: var(--interactive-accent);
+  border-bottom-color: var(--interactive-accent);
+}
+
+/* 账户余额表 */
+.cashlog-account-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.cashlog-account-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  transition: background-color 0.15s;
+}
+
+.cashlog-account-table tr:last-child td {
+  border-bottom: none;
+}
+
+.cashlog-account-table tr {
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.cashlog-account-table tr:hover {
+  background: var(--background-modifier-hover);
+}
+
+.cashlog-account-table tr:active {
+  background: var(--background-modifier-border);
+}
+
+.cashlog-account-name {
+  text-align: left;
+  font-weight: 500;
+}
+
+.cashlog-account-table td:last-child {
+  text-align: right;
+  font-family: var(--font-monospace);
+  font-weight: 600;
+}
+
+/* 进度条 */
+.cashlog-progress-item {
+  margin-bottom: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background-color 0.15s;
+  cursor: pointer;
+}
+
+.cashlog-progress-item:hover {
+  background: var(--background-modifier-hover);
+}
+
+.cashlog-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85em;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.cashlog-progress-bar {
+  height: 10px;
+  background: var(--background-modifier-border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.cashlog-progress-fill {
+  height: 100%;
+  background: var(--interactive-accent);
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.cashlog-progress-fill.overspent {
+  background: linear-gradient(90deg, #f87171, #e74c3c);
+}
+
+.cashlog-progress-fill.goal {
+  background: linear-gradient(90deg, #34d399, #27ae60);
+}
+
+.cashlog-progress-fill.achieved {
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+}
+
+.cashlog-progress-fill.category {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+/* 最近交易列表 */
+.cashlog-recent-list {
+  font-size: 0.88em;
+}
+
+.cashlog-recent-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background-color 0.15s;
+  border-bottom: none;
+}
+
+.cashlog-recent-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.cashlog-recent-date {
+  color: var(--text-muted);
+  min-width: 36px;
+  font-size: 0.85em;
+  font-family: var(--font-monospace);
+}
+
+.cashlog-recent-desc {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.cashlog-recent-account {
+  color: var(--text-muted);
+  font-size: 0.8em;
+}
+
+.cashlog-recent-amount {
+  font-family: var(--font-monospace);
+  font-weight: 700;
+  min-width: 80px;
+  text-align: right;
+  font-size: 0.95em;
+}
+
+.cashlog-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+/* ==================== 账户和附件样式 ==================== */
+
+/* 账户徽章 */
+.cashlog-account {
+  color: var(--text-accent);
+  font-size: 0.9em;
+}
+
+.cashlog-transfer-from {
+  color: #e74c3c;
+}
+
+.cashlog-transfer-to {
+  color: #27ae60;
+}
+
+/* 附件链接 */
+.cashlog-attachment-link {
+  text-decoration: none;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.cashlog-attachment-link:hover {
+  text-decoration: underline;
+}
+
+/* ==================== 附件模态框样式 ==================== */
+
+.cashlog-attachment-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cashlog-attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cashlog-attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: var(--background-secondary);
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.cashlog-attachment-remove {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cashlog-attachment-remove:hover {
+  color: #e74c3c;
+}
+
+.cashlog-attachment-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.cashlog-attachment-add-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-normal);
+  font-size: 0.9em;
+}
+
+.cashlog-attachment-add-btn:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* 文件输入隐藏 */
+.cashlog-file-input {
+  display: none;
+}
+
+/* 禁用态字段（待上传附件等） */
+.cashlog-field-disabled {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* ==================== 深色主题适配 ==================== */
+
+.theme-dark .cashlog-card {
+  background: var(--background-primary-alt);
+}
+
+.theme-dark .cashlog-card-income .cashlog-card-value {
+  color: #51cf66;
+}
+
+.theme-dark .cashlog-card-expense .cashlog-card-value {
+  color: #ff6b6b;
+}
+
+.theme-dark .cashlog-progress-fill.category {
+  background: #f0a030;
+}
+
+.theme-dark .cashlog-progress-fill.goal {
+  color: #51cf66;
+}
+
+.theme-dark .cashlog-transfer-from {
+  color: #ff6b6b;
+}
+
+.theme-dark .cashlog-transfer-to {
+  color: #51cf66;
+}
+
+/* ==================== 账户行样式 ==================== */
+
+.cashlog-account-section {
+  margin-bottom: 4px;
+}
+
+.cashlog-account-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.cashlog-account-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cashlog-account-select {
+  flex: 1;
+  min-width: 100px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+}
+
+.cashlog-account-amount {
+  width: 100px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+}
+
+.cashlog-account-amount:focus,
+.cashlog-account-select:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+}
+
+.cashlog-account-remove-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  line-height: 1;
+}
+
+.cashlog-account-remove-btn:hover {
+  color: #e74c3c;
+}
+
+.cashlog-account-add-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-normal);
+  font-size: 0.9em;
+}
+
+.cashlog-account-add-btn:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* ==================== 面板设置页面样式 ==================== */
+
+.cashlog-settings-section {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cashlog-settings-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 1.05em;
+}
+
+.cashlog-settings-section.tags {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.cashlog-settings-section.accounts {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.cashlog-settings-section.attachments {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.cashlog-settings-section.budget {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+}
+
+.cashlog-settings-section.stats {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: white;
+}
+
+.cashlog-settings-section.advanced {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  color: white;
+}
+
+.cashlog-settings-content {
+  padding: 16px;
+  background: var(--background-secondary);
+  border-radius: 0 0 10px 10px;
+}
+
+.cashlog-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.cashlog-settings-row:last-child {
+  border-bottom: none;
+}
+
+.cashlog-settings-label {
+  font-weight: 500;
+  color: var(--text-normal);
+}
+
+.cashlog-settings-desc {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.cashlog-settings-input {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  min-width: 60px;
+  max-width: 200px;
+  width: 120px;
+  transition: all 0.2s;
+}
+
+.cashlog-settings-input:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.cashlog-settings-textarea {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 60px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.cashlog-settings-textarea:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.cashlog-settings-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--background-modifier-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cashlog-settings-toggle.active {
+  background: var(--interactive-accent);
+}
+
+.cashlog-settings-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.cashlog-settings-toggle.active::after {
+  transform: translateX(20px);
+}
+
+.cashlog-settings-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.cashlog-settings-btn-primary {
+  background: var(--interactive-accent);
+  color: white;
+}
+
+.cashlog-settings-btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.cashlog-settings-btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.cashlog-settings-btn-danger:hover {
+  background: #dc2626;
+}
+
+.cashlog-settings-btn-secondary {
+  background: var(--background-modifier-border);
+  color: var(--text-normal);
+}
+
+.cashlog-settings-btn-secondary:hover {
+  background: var(--background-modifier-hover);
+}
+
+.cashlog-settings-select {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  min-width: 120px;
+  height: 36px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.cashlog-settings-select:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+}
+
+.cashlog-budget-card,
+.cashlog-goal-card {
+  background: var(--background-primary);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid var(--background-modifier-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.cashlog-budget-card:hover,
+.cashlog-goal-card:hover {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cashlog-budget-info,
+.cashlog-goal-info {
+  flex: 1;
+}
+
+.cashlog-budget-name,
+.cashlog-goal-name {
+  font-weight: 600;
+  color: var(--text-normal);
+  margin-bottom: 4px;
+}
+
+.cashlog-budget-meta,
+.cashlog-goal-meta {
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
+
+.cashlog-budget-tag,
+.cashlog-goal-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--background-modifier-border);
+  border-radius: 4px;
+  font-size: 0.8em;
+  color: var(--text-muted);
+  margin-left: 8px;
+}
+
+.cashlog-budget-delete,
+.cashlog-goal-delete {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.cashlog-budget-delete:hover,
+.cashlog-goal-delete:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.cashlog-settings-divider {
+  height: 1px;
+  background: var(--background-modifier-border);
+  margin: 12px 0;
+}
+
+.cashlog-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cashlog-settings-grid .cashlog-settings-input,
+.cashlog-settings-grid .cashlog-settings-select {
+  width: 100%;
+  min-width: unset;
+}
+
+.cashlog-settings-empty {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+.cashlog-settings-add-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--background-primary);
+  border-radius: 8px;
+  border: 1px dashed var(--background-modifier-border);
+}
+
+.cashlog-settings-add-form .cashlog-settings-input {
+  flex: 1;
+  min-width: 100px;
+}
+
+.cashlog-settings-add-form .cashlog-settings-btn {
+  flex-shrink: 0;
+}
+
+/* 账户余额输入组 */
+.cashlog-account-balance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.cashlog-account-balance-row:last-child {
+  border-bottom: none;
+}
+
+.cashlog-account-balance-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cashlog-account-balance-label span:first-child {
+  font-size: 1.2em;
+}
+
+.cashlog-account-balance-input {
+  width: 120px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  text-align: right;
+}
+
+.cashlog-account-balance-input:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+}
+
+/* 深色主题适配 */
+.theme-dark .cashlog-settings-section {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .cashlog-settings-content {
+  background: var(--background-primary-alt);
+}
+
+.theme-dark .cashlog-budget-card,
+.theme-dark .cashlog-goal-card {
+  background: var(--background-secondary);
+}
+
+.theme-dark .cashlog-budget-delete,
+.theme-dark .cashlog-goal-delete {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.theme-dark .cashlog-budget-delete:hover,
+.theme-dark .cashlog-goal-delete:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* ==================== 标签编辑按钮样式 ==================== */
+
+.cashlog-settings-btn-tag {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--interactive-accent);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 120px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.cashlog-settings-btn-tag:hover {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+/* ==================== 标签编辑弹窗样式 ==================== */
+
+.cashlog-tag-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cashlog-tag-modal {
+  background: var(--background-primary);
+  border-radius: 12px;
+  padding: 24px;
+  width: 320px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cashlog-tag-modal-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+.cashlog-tag-modal-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.cashlog-tag-modal-input:focus {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.cashlog-tag-modal-error {
+  color: #ef4444;
+  font-size: 0.85em;
+  line-height: 1.4;
+  padding: 4px 0;
+}
+
+.cashlog-tag-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* 深色主题适配 */
+.theme-dark .cashlog-tag-modal-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.theme-dark .cashlog-tag-modal {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ==================== 子标签 chip 列表样式 ==================== */
+
+.cashlog-subtag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.cashlog-subtag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-normal);
+  font-size: 0.85em;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+
+.cashlog-subtag-chip:hover {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+.cashlog-subtag-add {
+  color: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+  border-style: dashed;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 4px 8px;
+  min-width: 22px;
+  justify-content: center;
+}
+
+.cashlog-subtag-add:hover {
+  background: var(--interactive-accent);
+  color: white;
+  border-style: solid;
+}
+
+/* 缓存中发现的子标签（不在 settings 列表中） */
+.cashlog-subtag-chip-cache {
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+.cashlog-subtag-chip-cache:hover {
+  opacity: 1;
+  border-style: solid;
+}
+
+/* ==================== 弹窗描述文本 ==================== */
+
+.cashlog-tag-modal-desc {
+  font-size: 0.9em;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ==================== 附件目录建议下拉样式 ==================== */
+
+/* 建议弹出层在设置面板内的适配 */
+.cashlog-settings-content .suggestion-container {
+  max-height: 260px;
+  overflow-y: auto;
+  font-size: 0.9em;
+}
+
+/* 自定义日期范围容器 */
+.cashlog-settings-date-range {
+  display: flex;
+  align-items: center;
+}
+
+/* ==================== 图表样式 ==================== */
+
+/* 图表容器 */
+.cashlog-chart-container {
+  position: relative;
+  margin: 16px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.cashlog-chart-canvas {
+  display: block;
+  max-width: 100%;
+}
+
+/* 图表标题 */
+.cashlog-chart-title {
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-normal);
+}
+
+/* 图表表格 - 分组标题 */
+.cashlog-chart-group {
+  margin-top: 16px;
+  margin-bottom: 6px;
+  padding: 4px 0;
+  font-size: 1.05em;
+  color: var(--text-normal);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* 图表表格 - 分组小计行 */
+.cashlog-chart-summary-row {
+  background: var(--background-secondary);
+  font-weight: 600;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.cashlog-chart-summary-row td {
+  padding: 4px 8px;
+}
+
+/* 图表表格 - 总汇总 */
+.cashlog-chart-total-summary {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-top: 2px solid var(--background-modifier-border);
+  font-weight: 600;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* 图表表格 - 描述/链接单元格 */
+.cashlog-chart-desc,
+.cashlog-chart-link {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 图表选项区域 */
+.cashlog-chart-options {
+  padding: 12px;
+  background: var(--background-secondary);
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+/* 图表弹窗 - 最大宽度 */
+.cashlog-chart-modal .modal-content {
+  max-width: var(--dialog-width, 720px);
+}
+
+/* 图表弹窗 - 全宽输入框 */
+.cashlog-chart-input-full {
+  width: 100%;
+}
+
+/* 图表弹窗 - 无左内边距的复选框列表 */
+.cashlog-checkbox-list-no-pad {
+  padding-left: 0;
+}
+
+.cashlog-chart-options .setting-item {
+  margin-bottom: 8px;
+}
+
+.cashlog-chart-options .setting-item-control {
+  display: flex;
+  gap: 8px;
+}
+
+.cashlog-chart-options input[type="text"] {
+  width: 80px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+}
+
+.cashlog-chart-options input[type="text"]:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+}
+
+/* 图表表格 - 表格选项容器 */
+.cashlog-table-options {
+  padding: 12px;
+  background: var(--background-secondary);
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+/* 图表弹窗 - 复选框列表 */
+.cashlog-checkbox-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-left: 24px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.cashlog-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* 图表弹窗 - 列配置卡片 */
+.cashlog-col-config-card {
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--background-secondary);
+  border-radius: 4px;
+}
+
+/* 暗色主题适配 */
+.theme-dark .cashlog-chart-title {
+  color: var(--text-normal);
+}
+
+.theme-dark .cashlog-chart-options {
+  background: var(--background-primary-alt);
+}
+
+.theme-dark .cashlog-chart-options input[type="text"] {
+  background: var(--background-secondary);
+  border-color: var(--background-modifier-border);
+  color: var(--text-normal);
+}
+
+.theme-dark .cashlog-chart-summary-row {
+  background: var(--background-primary-alt);
+}
+
+/* ==================== 仪表盘交互样式 ==================== */
+
+/* 返回按钮 */
+.cashlog-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.cashlog-back-btn:hover {
+  color: var(--interactive-accent);
+  background: var(--background-secondary);
+  border-color: var(--interactive-accent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* 子页面标题 */
+.cashlog-subpage-title {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: var(--text-normal);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--interactive-accent);
+}
+
+/* ==================== 账户明细卡片 ==================== */
+
+.cashlog-account-detail-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+
+.cashlog-account-detail-title {
+  font-size: 1em;
+  font-weight: 700;
+  color: var(--text-normal);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.cashlog-account-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 0.9em;
+}
+
+.cashlog-account-detail-label {
+  color: var(--text-muted);
+}
+
+.cashlog-account-detail-value {
+  font-family: var(--font-monospace);
+  font-weight: 600;
+}
+
+.cashlog-account-detail-divider {
+  height: 1px;
+  background: var(--background-modifier-border);
+  margin: 8px 0;
+}
+
+.cashlog-account-detail-total {
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.cashlog-account-detail-total .cashlog-account-detail-label {
+  color: var(--text-normal);
+}
+
+/* 深色主题适配 */
+.theme-dark .cashlog-account-detail-card {
+  background: var(--background-primary-alt);
+  border-color: var(--background-modifier-border);
+}
+
+/* 信息提示框（账户初始余额等） */
+.cashlog-info-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  background: var(--background-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+  font-size: 0.88em;
+}
+
+.cashlog-info-icon {
+  font-size: 1.1em;
+}
+
+.cashlog-info-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.cashlog-info-value {
+  font-family: var(--font-monospace);
+  font-weight: 700;
+}
+
+.cashlog-info-note {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 0.8em;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* 悬浮提示 */
+.cashlog-tooltip {
+  position: fixed;
+  z-index: 1000;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border-hover);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 0.83em;
+  line-height: 1.8;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  max-width: 280px;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+.theme-dark .cashlog-tooltip {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  border-color: var(--background-modifier-border);
+}
+
+.cashlog-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 1px 0;
+}
+
+.cashlog-tooltip-label {
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-size: 0.95em;
+}
+
+.cashlog-tooltip-value {
+  color: var(--text-normal);
+  font-weight: 600;
+  text-align: right;
+  font-family: var(--font-monospace);
+}
+
+/* 深色主题卡片适配 */
+.theme-dark .cashlog-card {
+  border-color: var(--background-modifier-border);
+}
+
+.theme-dark .cashlog-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border-color: var(--interactive-accent);
+}
+
+/* ==================== 面板设置 - 内联样式迁移 ==================== */
+
+/* 账户初始余额标题 */
+.cashlog-balance-title {
+  padding: 8px 0;
+}
+
+/* textarea 行容器 */
+.cashlog-textarea-row {
+  margin-bottom: 12px;
+}
+
+/* textarea 行标签 */
+.cashlog-textarea-label {
+  margin-bottom: 4px;
+}
+
+/* 全宽 select（弹窗内） */
+.cashlog-settings-select-full {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* 表单内 select 行 */
+.cashlog-settings-select-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+/* 表单内 flex select（标签/周期选择） */
+.cashlog-settings-select-flex {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 警告提示框 */
+.cashlog-warning-box {
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: var(--text-warning, #b45309);
+  background: var(--background-modifier-warning, rgba(180, 83, 9, 0.1));
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+/* 自定义日期范围 - 隐藏状态 */
+.cashlog-settings-date-range-hidden {
+  display: none;
+}
+
+/* 自定义日期范围 - 显示时补充 gap */
+.cashlog-settings-date-range:not(.cashlog-settings-date-range-hidden) {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+/* 日期输入框 */
+.cashlog-settings-date-input {
+  flex: 1;
+  min-width: 0;
+}
