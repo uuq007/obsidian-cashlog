@@ -1,12 +1,11 @@
 import * as chrono from "chrono-node";
-import { moment } from "obsidian";
-import type { Moment } from "moment";
+import { moment } from "../types";
 import { DateRange } from "./DateRange";
 
 // 日期解析器：支持绝对日期、自然语言日期、编号日期范围、相对日期范围
 export class DateParser {
   // 解析单个日期（使用 chrono）
-  static parseDate(input: string, forwardDate: boolean = false): Moment {
+  static parseDate(input: string, forwardDate: boolean = false): ReturnType<typeof moment> {
     return moment(
       chrono.parseDate(input, undefined, { forwardDate }),
     ).startOf("day");
@@ -14,10 +13,11 @@ export class DateParser {
 
   // 解析日期范围（按优先级依次尝试）
   static parseDateRange(input: string, forwardDate: boolean = false): DateRange {
+    void forwardDate;
     const parsers = [
-      DateParser.parseRelativeDateRange,
-      DateParser.parseNumberedDateRange,
-      DateParser.parseAbsoluteDateRange,
+      (input: string, fwd: boolean) => DateParser.parseRelativeDateRange(input, fwd),
+      (input: string, fwd: boolean) => DateParser.parseNumberedDateRange(input, fwd),
+      (input: string, fwd: boolean) => DateParser.parseAbsoluteDateRange(input, fwd),
     ];
 
     for (const parser of parsers) {

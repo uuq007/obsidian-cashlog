@@ -1,4 +1,3 @@
-import { moment } from "obsidian";
 import { CashlogEntry } from "../EntryLocation";
 import { FilterFunction, Sorter, Grouper, QueryResult, EntryGroup, Summary } from "./Filter";
 import { parseFilter } from "./FilterParser";
@@ -103,8 +102,6 @@ export function parseTableConfig(source: string): TableConfig {
   const lines = source.split("\n");
 
   for (const line of lines) {
-    const trimLine = line.trim().toLowerCase();
-
     // 表格列数
     const colCountMatch = line.match(/^table\s+columns\s+(\d+)/i);
     if (colCountMatch) {
@@ -138,8 +135,6 @@ export function parseChartConfig(source: string): ChartConfig {
   const lines = source.split("\n");
 
   for (const line of lines) {
-    const trimLine = line.trim().toLowerCase();
-
     // chart type
     const typeMatch = line.match(/^chart\s+type\s+(bar|line|pie)/i);
     if (typeMatch) {
@@ -543,22 +538,24 @@ export class Query {
       for (const sorter of this.sorters) {
         let cmp = 0;
         switch (sorter.field) {
-          case "date":
+          case "date": {
             const aDate = a.date ? a.date.valueOf() : 0;
             const bDate = b.date ? b.date.valueOf() : 0;
             cmp = aDate - bDate;
             break;
+          }
           case "amount":
             cmp = Math.abs(a.amount) - Math.abs(b.amount);
             break;
           case "description":
             cmp = a.description.localeCompare(b.description);
             break;
-          case "account":
+          case "account": {
             const aAcct = (a.accountAmounts[0]?.account || "").toLowerCase();
             const bAcct = (b.accountAmounts[0]?.account || "").toLowerCase();
             cmp = aAcct.localeCompare(bAcct);
             break;
+          }
         }
         if (sorter.direction === "descending") cmp = -cmp;
         if (cmp !== 0) return cmp;
@@ -597,11 +594,12 @@ export class Query {
           case "year":
             keyOptions.push([entry.date ? entry.date.format("YYYY") : "无日期"]);
             break;
-          case "account":
+          case "account": {
             const accts = entry.accountAmounts.map((aa) => aa.account).filter(Boolean);
             keyOptions.push(accts.length > 0 ? accts : ["无账户"]);
             break;
-          case "type":
+          }
+          case "type": {
             const typeLabels: Record<string, string> = {
               normal: "其他",
               transfer: "转账",
@@ -619,6 +617,7 @@ export class Query {
             }
             keyOptions.push([typeKey]);
             break;
+          }
         }
       }
 
@@ -632,7 +631,7 @@ export class Query {
       }
     }
 
-    let groups = Array.from(groupMap.entries()).map(([key, entries]) => ({ key, entries }));
+    const groups = Array.from(groupMap.entries()).map(([key, entries]) => ({ key, entries }));
 
     // 按标签分组时：收入标签在前，支出标签在后
     if (isTagGroup) {
@@ -707,7 +706,7 @@ export class Query {
       type: this._displayChartType,
       title: this._chartTitle,
       groupBy: this.groupers.length > 0 ? (this.groupers[0].field as GroupByField) : "month",
-      valueType: this._chartValueType as PieValueType,
+      valueType: this._chartValueType,
       splitBy: this._chartSplitBy ?? undefined,
       splitItems: this._chartSplitItems.length > 0 ? this._chartSplitItems : undefined,
       width: this._chartWidth,

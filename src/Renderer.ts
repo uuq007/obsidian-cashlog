@@ -1,11 +1,11 @@
 import { Keymap, Notice, TFile } from "obsidian";
-import { CashlogEntry, EntryLocation } from "./EntryLocation";
-import { QueryResult, EntryGroup, Summary } from "./Query/Filter";
+import { CashlogEntry } from "./EntryLocation";
+import { QueryResult, Summary } from "./Query/Filter";
 import { Query } from "./Query/Query";
 import { CashlogModal, EditableEntryData } from "./CashlogModal";
 import { buildEntryFromModalData } from "./EntryEditor";
 import { extractNoteName, renderAttachmentLink } from "./PathUtils";
-import { t, tp, formatMoney } from "./i18n";
+import { t, tp } from "./i18n";
 import type CashlogPlugin from "./main";
 
 // 渲染查询结果到 HTML
@@ -123,8 +123,8 @@ function renderEntry(
     for (const att of entry.attachments) {
       renderAttachmentLink(li, att, folder, (fullPath) => {
         const file = plugin.app.vault.getAbstractFileByPath(fullPath);
-        if (file) {
-          plugin.app.workspace.getLeaf().openFile(file as any);
+        if (file && file instanceof TFile) {
+          plugin.app.workspace.getLeaf().openFile(file);
         }
       });
     }
@@ -167,13 +167,13 @@ function renderEntry(
       cls: "cashlog-note-link",
       text: ` ${noteName}`,
     });
-    linkEl.addEventListener("click", async (ev: MouseEvent) => {
-      await openFileAtLine(plugin, entry, ev);
+    linkEl.addEventListener("click", (ev: MouseEvent) => {
+      void openFileAtLine(plugin, entry, ev);
     });
-    linkEl.addEventListener("mousedown", async (ev: MouseEvent) => {
+    linkEl.addEventListener("mousedown", (ev: MouseEvent) => {
       // 中键点击在新标签页打开（仿 tasks）
       if (ev.button === 1) {
-        await openFileAtLine(plugin, entry, ev);
+        void openFileAtLine(plugin, entry, ev);
       }
     });
   }

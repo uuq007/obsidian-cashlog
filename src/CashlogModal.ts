@@ -1,10 +1,11 @@
-import { App, Modal, moment, Notice, Setting } from "obsidian";
-import { CashlogEntry, type AccountAmount } from "./CashlogEntry";
+import { App, Modal, Notice, Setting } from "obsidian";
+import { CashlogEntry } from "./CashlogEntry";
 import type { CashlogSettings } from "./Settings";
 import type CashlogPlugin from "./main";
 import { AttachmentManager } from "./AttachmentManager";
 import { AccountManager } from "./AccountManager";
 import { t, tp } from "./i18n";
+import { moment } from "./types";
 
 // 账户行数据（UI 用）
 export interface AccountAmountItem {
@@ -304,7 +305,7 @@ export class CashlogModal extends Modal {
     });
 
     this.descInputEl.addEventListener("input", () => {
-      this.data.description = (this.descInputEl as HTMLInputElement).value;
+      if (this.descInputEl) this.data.description = this.descInputEl.value;
     });
 
     this.descInputEl.addEventListener("keydown", (e: KeyboardEvent) => {
@@ -341,7 +342,7 @@ export class CashlogModal extends Modal {
       if (this.data.accounts.length === 0) {
         this.data.accounts.push({ account: "", amount: "" });
       }
-      this.data.accounts[0].amount = (input as HTMLInputElement).value;
+      this.data.accounts[0].amount = input.value;
     });
   }
 
@@ -401,7 +402,7 @@ export class CashlogModal extends Modal {
       },
     });
     amountInput.addEventListener("input", () => {
-      this.data.accounts[index].amount = (amountInput as HTMLInputElement).value;
+      this.data.accounts[index].amount = amountInput.value;
     });
 
     // - 删除按钮（多于一行时显示）
@@ -485,7 +486,7 @@ export class CashlogModal extends Modal {
       },
     });
     amountInput.addEventListener("input", () => {
-      item.amount = (amountInput as HTMLInputElement).value;
+      item.amount = amountInput.value;
     });
     // 失焦时同步转出总额到转入账户（仅一个转入账户时）
     if (direction === "from") {
@@ -568,7 +569,7 @@ export class CashlogModal extends Modal {
 
     // 当前余额提示（使用预计算的余额）
     const currentBalance = balances[item.account] || 0;
-    const balanceHint = row.createEl("span", {
+    row.createEl("span", {
       cls: "cashlog-balance-hint",
       text: tp("cashlogModal.currentBalance", { amount: currentBalance.toFixed(2) }),
     });
@@ -584,7 +585,7 @@ export class CashlogModal extends Modal {
       },
     });
     amountInput.addEventListener("input", () => {
-      this.data.balanceChangeAccounts[index].amount = (amountInput as HTMLInputElement).value;
+      this.data.balanceChangeAccounts[index].amount = amountInput.value;
     });
 
     // 删除按钮（多于一行时显示）
@@ -618,7 +619,7 @@ export class CashlogModal extends Modal {
       cls: "cashlog-file-input",
       attr: { type: "file", accept: "image/*", multiple: "multiple" },
     });
-    fileInput.style.display = "none";
+    fileInput.addClass("cashlog-hidden");
     this.fileInputEl = fileInput;
 
     fileInput.addEventListener("change", () => {
@@ -658,7 +659,7 @@ export class CashlogModal extends Modal {
 
   // 确认时批量处理附件：上传待上传的、删除待删除的
   private async processAttachments(): Promise<void> {
-    const attManager = new AttachmentManager(this.app.vault, this.settings);
+    const attManager = new AttachmentManager(this.app, this.app.vault, this.settings);
 
     // 上传待上传文件，用真实文件名替换 tempId
     for (const { file, tempId } of this.pendingUploads) {
@@ -759,10 +760,10 @@ export class CashlogModal extends Modal {
     }
     calendarBtn.appendChild(calSvg);
     calendarBtn.addEventListener("click", () => {
-      (dateInput as HTMLInputElement).showPicker();
+      (dateInput as HTMLInputElement & { showPicker: () => void }).showPicker();
     });
     dateInput.addEventListener("change", () => {
-      this.data.date = (dateInput as HTMLInputElement).value;
+      this.data.date = dateInput.value;
     });
   }
 
@@ -798,10 +799,10 @@ export class CashlogModal extends Modal {
     clkSvg.appendChild(clkPoly);
     clockBtn.appendChild(clkSvg);
     clockBtn.addEventListener("click", () => {
-      (timeInput as HTMLInputElement).showPicker();
+      (timeInput as HTMLInputElement & { showPicker: () => void }).showPicker();
     });
     timeInput.addEventListener("change", () => {
-      this.data.time = (timeInput as HTMLInputElement).value;
+      this.data.time = timeInput.value;
     });
   }
 
@@ -823,7 +824,7 @@ export class CashlogModal extends Modal {
   }
 
   // 填充子标签（合并 settings 和缓存中发现的子标签）
-  private populateSubTags(dropdown: any): void {
+  private populateSubTags(dropdown: { addOption: (value: string, display: string) => void; setValue: (value: string) => void }): void {
     dropdown.addOption("", t("cashlogModal.noSubTag"));
     const baseTag = this.data.tagType === "income"
       ? this.settings.incomeTag

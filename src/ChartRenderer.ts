@@ -1,4 +1,4 @@
-import { MarkdownRenderChild, moment } from "obsidian";
+import { MarkdownRenderChild, TFile } from "obsidian";
 import { t, tp } from "./i18n";
 import { Query, TableColConfig, parseTableConfig, createDefaultTableConfig } from "./Query/Query";
 import type { ChartConfig, GroupByField, SplitBy, PieValueType } from "./Query/Query";
@@ -6,8 +6,9 @@ import { QueryResult, EntryGroup } from "./Query/Filter";
 import { CashlogEntry } from "./EntryLocation";
 import { extractNoteName, renderAttachmentLink } from "./PathUtils";
 import type CashlogPlugin from "./main";
-import { Chart, registerables } from "chart.js";
+import { Chart, registerables, type TooltipItem } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import type { Context as DatalabelsContext } from "chartjs-plugin-datalabels/types/context";
 
 Chart.register(...registerables, ChartDataLabels);
 
@@ -161,8 +162,8 @@ function renderEntryRow(
           for (let i = 0; i < entry.attachments.length; i++) {
             renderAttachmentLink(td, entry.attachments[i], folder, (fullPath) => {
               const file = plugin.app.vault.getAbstractFileByPath(fullPath);
-              if (file) {
-                plugin.app.workspace.getLeaf().openFile(file as any);
+              if (file && file instanceof TFile) {
+                plugin.app.workspace.getLeaf().openFile(file);
               }
             });
             if (i < entry.attachments.length - 1) {
@@ -191,8 +192,8 @@ function renderEntryRow(
           linkEl.addEventListener("click", (e) => {
             e.preventDefault();
             const file = plugin?.app.vault.getAbstractFileByPath(locPath);
-            if (file) {
-              plugin?.app.workspace.getLeaf().openFile(file as any);
+            if (file && file instanceof TFile) {
+              plugin?.app.workspace.getLeaf().openFile(file);
             }
           });
         } else {
@@ -413,7 +414,7 @@ export function transformToChartData(
   };
   const label = labelMap[valueType] || "";
 
-  const dataset: any = {
+  const dataset: ChartDataResult["datasets"][number] & { _rawValues: number[] } = {
     label,
     data,
     backgroundColor: bgColors,
@@ -515,7 +516,7 @@ function transformSplitChartData(
       const displayValue = chartType === "bar" ? Math.abs(rawValue) : rawValue;
       data.push(Math.round(displayValue * 100) / 100);
     }
-    const ds: any = {
+    const ds: ChartDataResult["datasets"][number] & { _rawData: number[] } = {
       label: formatSplitItemLabel(item, splitBy),
       data,
       backgroundColor: [colors[idx % colors.length]],
@@ -748,6 +749,9 @@ export function clearLabelColorCache(): void {
   _cachedLabelColor = null;
 }
 
+// Chart.js 回调中用到的扩展数据集类型（包含自定义 _rawData/_rawValues）
+type ChartDatasetExtended = { _rawData?: number[]; _rawValues?: number[]; data: number[]; label: string };
+
 // 构建 datalabels 插件配置（条形图/折线图通用）
 function buildDatalabelsConfig(config: ChartConfig) {
   if (!config.showLabels) return {};
@@ -756,8 +760,9 @@ function buildDatalabelsConfig(config: ChartConfig) {
       anchor: "end" as const,
       align: "end" as const,
       offset: 6,
-      formatter: (value: number, context: any) => {
-        const raw = context.dataset._rawData?.[context.dataIndex];
+      formatter: (value: number, context: DatalabelsContext) => {
+        const ds = context.dataset as ChartDatasetExtended;
+        const raw = ds._rawData?.[context.dataIndex];
         if (raw !== undefined) return raw.toLocaleString();
         return value.toLocaleString();
       },
@@ -780,7 +785,7 @@ function renderBarChart(
     data: ds.data,
     backgroundColor: ds.backgroundColor[0] || config.colors[i % config.colors.length],
     borderWidth: 1,
-    _rawData: (ds as any)._rawData,
+    _rawData: (ds as ChartDatasetExtended)._rawData,
   }));
 
   return new Chart(canvas, {
@@ -803,9 +808,10 @@ function renderBarChart(
         },
         tooltip: {
           callbacks: {
-            label: (context: any) => {
-              const raw = context.dataset._rawData?.[context.dataIndex];
-              const displayVal = raw !== undefined ? raw : context.parsed.y;
+            label: (context: TooltipItem<"bar">) => {
+              const ds = context.dataset as ChartDatasetExtended;
+              const raw = ds._rawData?.[context.dataIndex];
+              const displayVal = raw !== undefined ? raw : (context.parsed.y ?? 0);
               return `${context.dataset.label}: ${displayVal.toLocaleString()}`;
             },
           },
@@ -835,7 +841,7 @@ function renderLineChart(
       fill: false,
       tension: 0.3,
       pointBackgroundColor: color,
-      _rawData: (ds as any)._rawData,
+      _rawData: (ds as ChartDatasetExtended)._rawData,
     };
   });
 
@@ -859,9 +865,10 @@ function renderLineChart(
         },
         tooltip: {
           callbacks: {
-            label: (context: any) => {
-              const raw = context.dataset._rawData?.[context.dataIndex];
-              const displayVal = raw !== undefined ? raw : context.parsed.y;
+            label: (context: TooltipItem<"line">) => {
+              const ds = context.dataset as ChartDatasetExtended;
+              const raw = ds._rawData?.[context.dataIndex];
+              const displayVal = raw !== undefined ? raw : (context.parsed.y ?? 0);
               return `${context.dataset.label}: ${displayVal.toLocaleString()}`;
             },
           },
@@ -879,10 +886,11 @@ export function buildPieDatalabelsConfig(config: ChartConfig) {
   return {
     datalabels: {
       anchor: "center" as const,
-      formatter: (_value: number, context: any) => {
-        const total = (context.dataset.data as number[]).reduce((a: number, b: number) => a + b, 0);
+      formatter: (_value: number, context: DatalabelsContext) => {
+        const ds = context.dataset as ChartDatasetExtended;
+        const total = ds.data.reduce((a: number, b: number) => a + b, 0);
         if (total === 0) return "";
-        const percentage = ((context.dataset.data[context.dataIndex] / total) * 100).toFixed(0);
+        const percentage = ((ds.data[context.dataIndex] / total) * 100).toFixed(0);
         return `${percentage}%`;
       },
       font: { weight: "bold" as const, size: 12 },
@@ -918,11 +926,12 @@ export function renderPieChart(
         legend: { display: config.showLegend },
         tooltip: {
           callbacks: {
-            label: (context: any) => {
-              const rawValues = context.dataset._rawValues as number[] | undefined;
+            label: (context: TooltipItem<"pie">) => {
+              const ds = context.dataset as ChartDatasetExtended;
+              const rawValues = ds._rawValues;
               const raw = rawValues?.[context.dataIndex];
               const displayVal = raw !== undefined ? raw : (context.parsed as number);
-              const total = (context.dataset.data as number[]).reduce((a: number, b: number) => a + b, 0);
+              const total = ds.data.reduce((a: number, b: number) => a + b, 0);
               const percentage = total > 0 ? ((context.dataset.data[context.dataIndex] / total) * 100).toFixed(1) : "0.0";
               return `${context.label}: ${displayVal.toLocaleString()} (${percentage}%)`;
             },
@@ -1002,7 +1011,7 @@ export class CashlogChartRenderChild extends MarkdownRenderChild {
         // 条形图：双维度分组
         const chartData = transformSplitChartData(
           result,
-          query.groupField as GroupByField,
+          chartConfig.groupBy,
           chartConfig.splitBy || "valueType",
           chartConfig.splitItems || [],
           chartConfig.colors,
@@ -1013,7 +1022,7 @@ export class CashlogChartRenderChild extends MarkdownRenderChild {
         // 折线图：双维度分组
         const chartData = transformSplitChartData(
           result,
-          query.groupField as GroupByField,
+          chartConfig.groupBy,
           chartConfig.splitBy || "valueType",
           chartConfig.splitItems || [],
           chartConfig.colors,

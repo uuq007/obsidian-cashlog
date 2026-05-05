@@ -1,8 +1,8 @@
-import { moment } from "obsidian";
-import type { Moment } from "moment";
 import type { CashlogEntry } from "./EntryLocation";
 import type { BudgetConfig, GoalConfig } from "./Settings";
 import { DateRange } from "./Query/DateRange";
+import { moment } from "./types";
+import type { Moment } from "./types";
 
 export interface BudgetProgress {
   config: BudgetConfig;

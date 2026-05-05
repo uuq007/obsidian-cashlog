@@ -1,5 +1,5 @@
-import type { Moment } from "moment";
 import { EntryLocation } from "./EntryLocation";
+import type { Moment } from "./types";
 
 // 账户-金额对
 export interface AccountAmount {

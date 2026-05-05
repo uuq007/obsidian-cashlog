@@ -1,10 +1,14 @@
-import { Menu, Notice, Setting, normalizePath } from "obsidian";
+import { Menu, Notice, normalizePath } from "obsidian";
 import { FolderSuggest } from "./FolderSuggest";
 import type CashlogPlugin from "./main";
 import { DEFAULT_SETTINGS } from "./Settings";
 import type { BudgetConfig, GoalConfig } from "./Settings";
-import { validateTagName, validateSubTagName, validateAccountName } from "./TagValidation";
+import { validateSubTagName, validateAccountName } from "./TagValidation";
 import { t, tp } from "./i18n";
+
+let panelBudgetId = 0;
+let panelGoalId = 0;
+
 import {
   createModalOverlay,
   createModalCard,
@@ -21,20 +25,21 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
   // 保存滚动位置
   const scrollTop = container.scrollTop;
 
-  // 确保 container 有 createEl 方法
-  if (!(container as any).createEl) {
-    (container as any).createEl = function(tag: string, opts?: any) {
+  // 确保 container 有 createEl 方法（polyfill for 非 Obsidian 容器）
+  if (!("createEl" in container)) {
+    type CreateElFn = HTMLElement["createEl"];
+    (container as unknown as { createEl: CreateElFn }).createEl = function(this: HTMLElement, tag: string, opts?: Record<string, unknown>) {
       const el = document.createElement(tag);
       if (opts) {
-        if (opts.cls) el.className = opts.cls;
-        if (opts.text) el.textContent = opts.text;
-        if (opts.html) el.innerHTML = opts.html;
+        if (opts.cls) el.className = opts.cls as string;
+        if (opts.text) el.textContent = opts.text as string;
         if (opts.attr) {
-          for (const k in opts.attr) el.setAttribute(k, opts.attr[k]);
+          const attrObj = opts.attr as Record<string, string>;
+          for (const k in attrObj) el.setAttribute(k, attrObj[k]);
         }
       }
-      return el;
-    };
+      return el as HTMLElement & ReturnType<CreateElFn>;
+    } as unknown as CreateElFn;
   }
 
   container.empty();
@@ -285,15 +290,6 @@ function renderSection(
   title: string,
   renderContent: () => void
 ): void {
-  const gradientMap: Record<string, string> = {
-    tags: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-    accounts: "linear-gradient(135deg, #10b981, #059669)",
-    attachments: "linear-gradient(135deg, #f59e0b, #d97706)",
-    budget: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
-    stats: "linear-gradient(135deg, #06b6d4, #0891b2)",
-    advanced: "linear-gradient(135deg, #6b7280, #4b5563)"
-  };
-
   // 使用原生 DOM API 避免 Obsidian 包装问题
   const section = document.createElement("div");
   section.className = `cashlog-settings-section ${type}`;
@@ -409,44 +405,6 @@ function renderAttachmentFolderRow(
     plugin.settings.attachmentFolder = normalizePath(input.value) || DEFAULT_SETTINGS.attachmentFolder;
     await plugin.saveSettings();
   });
-}
-
-function renderTextareaRow(
-  container: HTMLElement,
-  label: string,
-  value: string,
-  onChange: (v: string) => Promise<void>,
-  desc?: string
-): void {
-  const row = document.createElement("div");
-  row.className = "cashlog-textarea-row";
-  container.appendChild(row);
-
-  const labelDiv = document.createElement("div");
-  labelDiv.className = "cashlog-textarea-label";
-  row.appendChild(labelDiv);
-
-  const labelSpan = document.createElement("span");
-  labelSpan.className = "cashlog-settings-label";
-  labelSpan.textContent = label;
-  labelDiv.appendChild(labelSpan);
-
-  if (desc) {
-    const descDiv = document.createElement("div");
-    descDiv.className = "cashlog-settings-desc";
-    descDiv.textContent = desc;
-    labelDiv.appendChild(descDiv);
-  }
-
-  const textarea = document.createElement("textarea");
-  textarea.className = "cashlog-settings-textarea cashlog-settings-textarea-full";
-  textarea.value = value;
-  textarea.rows = 3;
-  textarea.placeholder = t("panelSettings.placeholder.globalQuery");
-  textarea.addEventListener("change", async () => {
-    await onChange(textarea.value);
-  });
-  row.appendChild(textarea);
 }
 
 function renderSelectRow(
@@ -651,14 +609,14 @@ function openAddSubTagModal(
     const validation = validateSubTagName(newName);
     if (!validation.valid) {
       errorEl.textContent = validation.message || t("validation.subTagName.invalid");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 
     // 检查是否重复
     if (subTags.includes(newName)) {
       errorEl.textContent = t("validation.subTagName.exists");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 
@@ -720,7 +678,7 @@ function openEditSubTagModal(
     const validation = validateSubTagName(newName);
     if (!validation.valid) {
       errorEl.textContent = validation.message || t("validation.subTagName.invalid");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 
@@ -1052,12 +1010,12 @@ function openAddAccountModal(
     const validation = validateAccountName(name);
     if (!validation.valid) {
       errorEl.textContent = validation.message || t("validation.accountName.invalid");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
     if (plugin.settings.accounts.includes(name)) {
       errorEl.textContent = t("validation.accountName.exists");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 
@@ -1104,12 +1062,12 @@ function openEditAccountModal(
     const validation = validateAccountName(newName);
     if (!validation.valid) {
       errorEl.textContent = validation.message || t("validation.accountName.invalid");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
     if (plugin.settings.accounts.some((a) => a !== oldName && a === newName)) {
       errorEl.textContent = t("validation.accountName.exists");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 
@@ -1192,7 +1150,7 @@ function openDeleteAccountDialog(
     const target = select.value;
     if (!target) {
       errorEl.textContent = t("panelSettings.selectTargetAccount");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 
@@ -1285,7 +1243,7 @@ function openBalanceEditModal(
     const value = parseFloat(input.value);
     if (isNaN(value)) {
       errorEl.textContent = t("validation.invalidAmount");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 
@@ -1501,7 +1459,7 @@ function renderAddBudgetForm(container: HTMLElement, plugin: CashlogPlugin): voi
 
   select.addEventListener("change", () => {
     const isCustom = select.value === "custom";
-    dateRangeContainer.style.display = isCustom ? "flex" : "none";
+    dateRangeContainer.toggleClass("cashlog-settings-date-range-hidden", !isCustom);
     if (!isCustom) {
       startDateInput.value = "";
       endDateInput.value = "";
@@ -1623,7 +1581,7 @@ function renderAddGoalForm(container: HTMLElement, plugin: CashlogPlugin): void 
 
   select.addEventListener("change", () => {
     const isCustom = select.value === "custom";
-    dateRangeContainer.style.display = isCustom ? "flex" : "none";
+    dateRangeContainer.toggleClass("cashlog-settings-date-range-hidden", !isCustom);
     if (!isCustom) {
       startDateInput.value = "";
       endDateInput.value = "";

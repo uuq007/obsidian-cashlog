@@ -129,7 +129,7 @@ export class Cache {
   }
 
   // 处理文件删除事件（增量更新）
-  async onFileDeleted(file: TFile): Promise<void> {
+  onFileDeleted(file: TFile): void {
     this.entries = this.entries.filter((e) => e.location?.path !== file.path);
     this.events.trigger("cashlog-cache-update");
   }

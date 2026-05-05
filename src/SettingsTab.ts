@@ -1,11 +1,10 @@
-import { App, Notice, PluginSettingTab, Setting, normalizePath } from "obsidian";
+import { App, PluginSettingTab, Setting, normalizePath } from "obsidian";
 import { FolderSuggest } from "./FolderSuggest";
 import type CashlogPlugin from "./main";
 import { DEFAULT_SETTINGS } from "./Settings";
 import type { BudgetConfig, GoalConfig } from "./Settings";
-import { validateTagName } from "./TagValidation";
 import { openTagEditModal } from "./ModalHelpers";
-import { t, tp } from "./i18n";
+import { t } from "./i18n";
 
 let budgetIdCounter = 0;
 let goalIdCounter = 0;
@@ -22,10 +21,10 @@ export class CashlogSettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: t("settings.heading") });
+    new Setting(containerEl).setName(t("settings.heading")).setHeading();
 
     // ===== 标签设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.tags") });
+    new Setting(containerEl).setName(t("settings.section.tags")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.incomeTag.name"))
@@ -102,14 +101,14 @@ export class CashlogSettingsTab extends PluginSettingTab {
     }
 
     // ===== 子标签预设 =====
-    containerEl.createEl("h3", { text: t("settings.section.subTagPresets") });
+    new Setting(containerEl).setName(t("settings.section.subTagPresets")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.section.subTagPresets"))
       .setDesc(t("settings.subTagPresets.desc"));
 
     // ===== 账户设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.accounts") });
+    new Setting(containerEl).setName(t("settings.section.accounts")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.enableAccounts.name"))
@@ -125,7 +124,7 @@ export class CashlogSettingsTab extends PluginSettingTab {
       );
 
     // ===== 附件设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.attachments") });
+    new Setting(containerEl).setName(t("settings.section.attachments")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.enableAttachments.name"))
@@ -165,7 +164,7 @@ export class CashlogSettingsTab extends PluginSettingTab {
     }
 
     // ===== 预算设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.budget") });
+    new Setting(containerEl).setName(t("settings.section.budget")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.enableBudgets.name"))
@@ -181,7 +180,7 @@ export class CashlogSettingsTab extends PluginSettingTab {
       );
 
     // ===== 目标设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.goals") });
+    new Setting(containerEl).setName(t("settings.section.goals")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.enableGoals.name"))
@@ -197,7 +196,7 @@ export class CashlogSettingsTab extends PluginSettingTab {
       );
 
     // ===== 统计设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.stats") });
+    new Setting(containerEl).setName(t("settings.section.stats")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.statsMode.name"))
@@ -254,7 +253,7 @@ export class CashlogSettingsTab extends PluginSettingTab {
     }
 
     // ===== 高级设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.advanced") });
+    new Setting(containerEl).setName(t("settings.section.advanced")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.showEditButton.name"))
@@ -294,7 +293,7 @@ export class CashlogSettingsTab extends PluginSettingTab {
       );
 
     // ===== 路径设置 =====
-    containerEl.createEl("h3", { text: t("settings.section.paths") });
+    new Setting(containerEl).setName(t("settings.section.paths")).setHeading();
 
     let excludeInput: HTMLTextAreaElement;
     new Setting(containerEl)
@@ -385,20 +384,13 @@ export class CashlogSettingsTab extends PluginSettingTab {
       name: "", amount: 0, period: "monthly", tag: "", rollover: false,
     };
 
-    let nameInput: HTMLInputElement;
-    let amountInput: HTMLInputElement;
-    let periodSelect: HTMLSelectElement;
-    let tagInput: HTMLInputElement;
-
     new Setting(container)
       .setName(t("settings.newBudget"))
       .addText((text) => {
         text.setPlaceholder(t("settings.placeholder.name")).onChange((v) => (newBudget.name = v));
-        nameInput = text.inputEl;
       })
       .addText((text) => {
         text.setPlaceholder(t("settings.placeholder.amount")).onChange((v) => (newBudget.amount = parseFloat(v) || 0));
-        amountInput = text.inputEl;
       });
 
     new Setting(container)
@@ -409,11 +401,9 @@ export class CashlogSettingsTab extends PluginSettingTab {
           .addOption("yearly", t("settings.period.yearlyFull"))
           .addOption("custom", t("settings.period.customFull"))
           .onChange((v: BudgetConfig["period"]) => (newBudget.period = v));
-        periodSelect = (dropdown as any).selectEl;
       })
       .addText((text) => {
         text.setPlaceholder(t("settings.placeholder.tag")).onChange((v) => (newBudget.tag = v));
-        tagInput = text.inputEl;
       })
       .addButton((btn) =>
         btn.setButtonText(t("modal.button.add")).setCta().onClick(async () => {
@@ -421,10 +411,10 @@ export class CashlogSettingsTab extends PluginSettingTab {
           budgetIdCounter++;
           this.plugin.settings.budgets.push({
             id: `budget-${Date.now()}-${budgetIdCounter}`,
-            name: newBudget.name!,
-            amount: newBudget.amount!,
-            period: newBudget.period!,
-            tag: newBudget.tag!,
+            name: newBudget.name,
+            amount: newBudget.amount,
+            period: newBudget.period ?? "monthly",
+            tag: newBudget.tag ?? "",
             rollover: false,
           });
           await this.plugin.saveSettings();
@@ -486,10 +476,10 @@ export class CashlogSettingsTab extends PluginSettingTab {
           goalIdCounter++;
           this.plugin.settings.goals.push({
             id: `goal-${Date.now()}-${goalIdCounter}`,
-            name: newGoal.name!,
-            targetAmount: newGoal.targetAmount!,
-            period: newGoal.period!,
-            tag: newGoal.tag!,
+            name: newGoal.name,
+            targetAmount: newGoal.targetAmount,
+            period: newGoal.period ?? "monthly",
+            tag: newGoal.tag ?? "",
           });
           await this.plugin.saveSettings();
           this.display();

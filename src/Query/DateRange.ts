@@ -1,4 +1,4 @@
-import { Moment, moment } from "obsidian";
+import { moment, type Moment } from "../types";
 
 // 日期范围：表示两个日期之间的闭区间
 export class DateRange {

@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, moment, Notice } from "obsidian";
+import { Editor, MarkdownView, Notice } from "obsidian";
 import type CashlogPlugin from "./main";
 import { CashlogEntry } from "./CashlogEntry";
 import { parseCashlogLineLenient } from "./CashlogSerializer";
@@ -7,12 +7,13 @@ import { ChartModal } from "./ChartModal";
 import { nonCashlogRegex } from "./CashlogRegex";
 import { buildEntryFromModalData } from "./EntryEditor";
 import { t } from "./i18n";
+import { moment } from "./types";
 
 // 注册所有命令
 export function addCommands(plugin: CashlogPlugin): void {
   plugin.addCommand({
-    id: "create-or-edit-cashlog",
-    name: "Create or edit cashlog",
+    id: "create-or-edit",
+    name: "Create or edit",
     icon: "yen-sign",
     editorCheckCallback: (checking, editor, view) => {
       return createOrEdit(checking, editor, view, plugin);
@@ -32,11 +33,11 @@ export function addCommands(plugin: CashlogPlugin): void {
   });
 
   plugin.addCommand({
-    id: "open-cashlog-panel",
+    id: "open-panel",
     name: t("commands.openPanel"),
     icon: "yen-sign",
     callback: () => {
-      plugin.activateCashlogPanel();
+      void plugin.activateCashlogPanel();
     },
   });
 }

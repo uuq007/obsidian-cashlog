@@ -1,4 +1,4 @@
-import { moment } from "obsidian";
+import { moment } from "./types";
 import { CashlogEntry, type AccountAmount } from "./CashlogEntry";
 import { EditableEntryData } from "./CashlogModal";
 import type CashlogPlugin from "./main";

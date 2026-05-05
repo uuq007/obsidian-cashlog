@@ -1,11 +1,10 @@
 import { Notice } from "obsidian";
 import { validateTagName } from "./TagValidation";
-import type CashlogPlugin from "./main";
 import { t, tp } from "./i18n";
 
 // ========== Modal 构建辅助函数 ==========
 
-export function createModalOverlay(container: HTMLElement): HTMLElement {
+export function createModalOverlay(_container: HTMLElement): HTMLElement {
   const overlay = document.createElement("div");
   overlay.className = "cashlog-tag-modal-overlay";
   overlay.addEventListener("click", (e) => {
@@ -40,8 +39,7 @@ export function createModalInput(modal: HTMLElement, placeholder: string, value?
 
 export function createModalError(modal: HTMLElement): HTMLElement {
   const errorEl = document.createElement("div");
-  errorEl.className = "cashlog-tag-modal-error";
-  errorEl.style.display = "none";
+  errorEl.className = "cashlog-tag-modal-error cashlog-hidden";
   modal.appendChild(errorEl);
   return errorEl;
 }
@@ -56,7 +54,7 @@ export function createModalButtonRow(modal: HTMLElement): HTMLElement {
 export function createModalButton(
   text: string,
   type: "primary" | "secondary",
-  onClick: (btn: HTMLButtonElement) => void
+  onClick: (btn: HTMLButtonElement) => void | Promise<void>
 ): HTMLButtonElement {
   const btn = document.createElement("button");
   btn.className = "cashlog-settings-btn";
@@ -66,7 +64,7 @@ export function createModalButton(
     btn.classList.add("cashlog-settings-btn-secondary");
   }
   btn.textContent = text;
-  btn.addEventListener("click", () => onClick(btn));
+  btn.addEventListener("click", () => { void onClick(btn); });
   return btn;
 }
 
@@ -104,7 +102,7 @@ export function openTagEditModal(
     const validation = validateTagName(newName);
     if (!validation.valid) {
       errorEl.textContent = validation.message || t("validation.tagName.invalid");
-      errorEl.style.display = "block";
+      errorEl.removeClass("cashlog-hidden");
       return;
     }
 

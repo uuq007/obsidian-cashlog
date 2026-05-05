@@ -12,7 +12,7 @@ import {
 } from "./ChartRenderer";
 import type { ChartDataResult } from "./ChartRenderer";
 import type { ChartConfig, GroupByField, PieValueType } from "./Query/Query";
-import { t, tp, formatMoney, formatMoneyUnsigned } from "./i18n";
+import { t, tp, formatMoneyUnsigned } from "./i18n";
 
 export const CASHLOG_VIEW_TYPE = "cashlog-panel";
 
@@ -289,7 +289,7 @@ export class CashlogView extends ItemView {
     }
 
     // 分隔线 + 当前余额
-    const divider = card.createEl("div", { cls: "cashlog-account-detail-divider" });
+    card.createEl("div", { cls: "cashlog-account-detail-divider" });
     const totalRow = card.createEl("div", { cls: "cashlog-account-detail-row cashlog-account-detail-total" });
     totalRow.createEl("span", { cls: "cashlog-account-detail-label", text: t("dashboard.accountDetail.currentBalance") });
     const totalCls = currentBalance >= 0 ? "cashlog-amount-income" : "cashlog-amount-expense";

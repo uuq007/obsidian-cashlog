@@ -1,8 +1,10 @@
-import { moment, type Vault } from "obsidian";
+import { type App, type Vault } from "obsidian";
+import { moment } from "./types";
 import type { CashlogSettings } from "./Settings";
 
 export class AttachmentManager {
   constructor(
+    private app: App,
     private vault: Vault,
     private settings: CashlogSettings,
   ) {}
@@ -46,7 +48,7 @@ export class AttachmentManager {
     const filePath = `${this.settings.attachmentFolder}/${fileName}`;
     const file = this.vault.getAbstractFileByPath(filePath);
     if (file) {
-      await this.vault.delete(file);
+      await this.app.fileManager.trashFile(file);
     }
   }
 }

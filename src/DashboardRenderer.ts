@@ -1,4 +1,4 @@
-import { moment, setIcon } from "obsidian";
+import { setIcon } from "obsidian";
 import type CashlogPlugin from "./main";
 import type { CashlogEntry } from "./EntryLocation";
 import type { CashlogSettings } from "./Settings";

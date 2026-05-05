@@ -25,7 +25,7 @@ export default class CashlogPlugin extends Plugin {
     await this.loadSettings();
 
     // 初始化管理器
-    this.attachmentManager = new AttachmentManager(this.app.vault, this.settings);
+    this.attachmentManager = new AttachmentManager(this.app, this.app.vault, this.settings);
     this.accountManager = new AccountManager();
     this.budgetManager = new BudgetManager();
 
@@ -68,30 +68,32 @@ export default class CashlogPlugin extends Plugin {
 
       this.registerEvent(
         this.app.vault.on("modify", async (file) => {
-          if (file.extension === "md") {
-            await this.cache.onFileChanged(file as any);
+          if (file instanceof TFile && file.extension === "md") {
+            await this.cache.onFileChanged(file);
           }
         }),
       );
 
       this.registerEvent(
         this.app.vault.on("create", async (file) => {
-          if (file.extension === "md") {
-            await this.cache.onFileCreated(file as any);
+          if (file instanceof TFile && file.extension === "md") {
+            await this.cache.onFileCreated(file);
           }
         }),
       );
 
       this.registerEvent(
-        this.app.vault.on("delete", async (file) => {
-          await this.cache.onFileDeleted(file as any);
+        this.app.vault.on("delete", (file) => {
+          if (file instanceof TFile) {
+            this.cache.onFileDeleted(file);
+          }
         }),
       );
 
       this.registerEvent(
-        this.app.vault.on("rename", async (file) => {
-          if (file.extension === "md") {
-            await this.cache.onFileRenamed(file as any, "");
+        this.app.vault.on("rename", async (file, oldPath) => {
+          if (file instanceof TFile && file.extension === "md") {
+            await this.cache.onFileRenamed(file, oldPath);
           }
         }),
       );
@@ -249,7 +251,7 @@ export default class CashlogPlugin extends Plugin {
   }
 
   // 打开 Cashlog 面板
-  async activateCashlogPanel(): Promise<void> {
+  activateCashlogPanel(): void {
     const leaves = this.app.workspace.getLeavesOfType(CASHLOG_VIEW_TYPE);
     if (leaves.length > 0) {
       this.app.workspace.revealLeaf(leaves[0]);
@@ -257,7 +259,7 @@ export default class CashlogPlugin extends Plugin {
     }
     const leaf = this.app.workspace.getRightLeaf(false);
     if (leaf) {
-      await leaf.setViewState({
+      leaf.setViewState({
         type: CASHLOG_VIEW_TYPE,
         active: true,
       });

@@ -1,5 +1,10 @@
 /* Cashlog 记账插件样式 */
 
+/* 通用隐藏类 */
+.cashlog-hidden {
+  display: none;
+}
+
 /* 查询结果容器 */
 .cashlog-results {
   font-size: 0.95em;
@@ -1793,4 +1798,9 @@ input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
 .cashlog-settings-date-input {
   flex: 1;
   min-width: 0;
+}
+
+/* 隐藏元素（用于 errorEl 等需要显示/隐藏的元素） */
+.cashlog-hidden {
+  display: none !important;
 }

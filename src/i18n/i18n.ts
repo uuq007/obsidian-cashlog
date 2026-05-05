@@ -27,7 +27,7 @@ export function initI18n(): void {
   registerLocale("en", en as StringMap);
 
   // 优先使用 moment locale（反映 Obsidian 的语言设置）
-  const momentLocale = (window as any).moment?.locale?.() || "";
+  const momentLocale = (window as unknown as { moment?: { locale?: () => string } }).moment?.locale?.() || "";
   if (momentLocale) {
     currentLocale = isZhLang(momentLocale) ? "zh-CN" : "en";
   } else {

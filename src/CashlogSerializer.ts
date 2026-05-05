@@ -1,6 +1,6 @@
-import { moment } from "obsidian";
-import type { Moment } from "moment";
 import { CashlogEntry, type AccountAmount } from "./CashlogEntry";
+import { moment } from "./types";
+import type { Moment } from "./types";
 import { EntryLocation } from "./EntryLocation";
 import {
   listItemRegex,

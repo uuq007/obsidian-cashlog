@@ -1,4 +1,4 @@
-import { App, Editor, Modal, Notice, Setting, moment } from "obsidian";
+import { App, Editor, Modal, Notice, Setting } from "obsidian";
 import type CashlogPlugin from "./main";
 import type { CashlogEntry } from "./CashlogEntry";
 import { t, tp } from "./i18n";
@@ -108,7 +108,7 @@ export class ChartModal extends Modal {
     contentEl.addClass("cashlog-chart-modal");
 
     // === 过滤条件 ===
-    contentEl.createEl("h3", { text: t("chartModal.filterSection") });
+    new Setting(contentEl).setName(t("chartModal.filterSection")).setHeading();
 
     // 类型（多选复选框）
     new Setting(contentEl)
@@ -258,7 +258,7 @@ export class ChartModal extends Modal {
       );
 
     // === 图表类型 ===
-    contentEl.createEl("h3", { text: t("chartModal.chartTypeSection") });
+    new Setting(contentEl).setName(t("chartModal.chartTypeSection")).setHeading();
 
     new Setting(contentEl)
       .setName(t("chartModal.selectType"))
