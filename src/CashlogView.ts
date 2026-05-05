@@ -71,6 +71,7 @@ export class CashlogView extends ItemView {
         this.refresh();
       }),
     );
+    await Promise.resolve();
   }
 
   async onClose(): Promise<void> {

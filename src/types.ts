@@ -3,4 +3,4 @@
 import { moment as _obsMoment } from "obsidian";
 
 export const moment = _obsMoment as unknown as typeof import("moment");
-export type Moment = ReturnType<typeof import("moment")>;
+export type Moment = import("moment").Moment;

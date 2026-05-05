@@ -268,10 +268,12 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
       text: t("modal.button.reset"),
       cls: "cashlog-settings-btn cashlog-settings-btn-danger"
     });
-    btn.addEventListener("click", async () => {
-      Object.assign(s, DEFAULT_SETTINGS);
-      await plugin.saveSettings();
-      renderPanelSettings(container, plugin);
+    btn.addEventListener("click", () => {
+      void (async () => {
+        Object.assign(s, DEFAULT_SETTINGS);
+        await plugin.saveSettings();
+        renderPanelSettings(container, plugin);
+      })();
     });
   });
 
@@ -326,10 +328,12 @@ function renderToggleRow(
 
   const toggle = document.createElement("div");
   toggle.className = "cashlog-settings-toggle" + (value ? " active" : "");
-  toggle.addEventListener("click", async () => {
-    const newValue = !value;
-    toggle.classList.toggle("active", newValue);
-    await onChange(newValue);
+  toggle.addEventListener("click", () => {
+    void (async () => {
+      const newValue = !value;
+      toggle.classList.toggle("active", newValue);
+      await onChange(newValue);
+    })();
   });
   row.appendChild(toggle);
 }
@@ -364,8 +368,10 @@ function renderInputRow(
   input.type = "text";
   input.className = "cashlog-settings-input";
   input.value = value;
-  input.addEventListener("change", async () => {
-    await onChange(input.value);
+  input.addEventListener("change", () => {
+    void (async () => {
+      await onChange(input.value);
+    })();
   });
   row.appendChild(input);
 }
@@ -395,15 +401,19 @@ function renderAttachmentFolderRow(
   row.appendChild(input);
 
   // 绑定文件夹建议
-  new FolderSuggest(plugin.app, input, async (folderPath: string) => {
+  new FolderSuggest(plugin.app, input, (folderPath: string) => {
     plugin.settings.attachmentFolder = normalizePath(folderPath) || DEFAULT_SETTINGS.attachmentFolder;
-    await plugin.saveSettings();
+    plugin.saveSettings().catch((e) => {
+      new Notice(t("error.queryError") + ": " + (e as Error).message);
+    });
   });
 
   // 手动输入时也保存（失焦触发）
-  input.addEventListener("change", async () => {
-    plugin.settings.attachmentFolder = normalizePath(input.value) || DEFAULT_SETTINGS.attachmentFolder;
-    await plugin.saveSettings();
+  input.addEventListener("change", () => {
+    void (async () => {
+      plugin.settings.attachmentFolder = normalizePath(input.value) || DEFAULT_SETTINGS.attachmentFolder;
+      await plugin.saveSettings();
+    })();
   });
 }
 
@@ -432,8 +442,10 @@ function renderSelectRow(
     if (opt.value === value) option.selected = true;
     select.appendChild(option);
   }
-  select.addEventListener("change", async () => {
-    await onChange(select.value);
+  select.addEventListener("change", () => {
+    void (async () => {
+      await onChange(select.value);
+    })();
   });
   row.appendChild(select);
 }
@@ -1305,8 +1317,10 @@ function renderBudgetCard(
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = t("modal.button.delete");
   deleteBtn.className = "cashlog-budget-delete";
-  deleteBtn.addEventListener("click", async () => {
-    await onDelete();
+  deleteBtn.addEventListener("click", () => {
+    void (async () => {
+      await onDelete();
+    })();
   });
   card.appendChild(deleteBtn);
 }
@@ -1348,8 +1362,10 @@ function renderGoalCard(
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = t("modal.button.delete");
   deleteBtn.className = "cashlog-goal-delete";
-  deleteBtn.addEventListener("click", async () => {
-    await onDelete();
+  deleteBtn.addEventListener("click", () => {
+    void (async () => {
+      await onDelete();
+    })();
   });
   card.appendChild(deleteBtn);
 }
@@ -1471,38 +1487,40 @@ function renderAddBudgetForm(container: HTMLElement, plugin: CashlogPlugin): voi
   addBtn.className = "cashlog-settings-btn cashlog-settings-btn-primary";
   form.appendChild(addBtn);
 
-  addBtn.addEventListener("click", async () => {
-    const name = nameInput.value.trim();
-    const amount = parseFloat(amountInput.value) || 0;
-    const tag = tagSelect.value;
-    const period = select.value as BudgetConfig["period"];
+  addBtn.addEventListener("click", () => {
+    void (async () => {
+      const name = nameInput.value.trim();
+      const amount = parseFloat(amountInput.value) || 0;
+      const tag = tagSelect.value;
+      const period = select.value as BudgetConfig["period"];
 
-    if (!name || !amount) {
-      new Notice(t("notice.fillBudgetName"));
-      return;
-    }
+      if (!name || !amount) {
+        new Notice(t("notice.fillBudgetName"));
+        return;
+      }
 
-    panelBudgetId++;
-    const budget: BudgetConfig = {
-      id: `b-${Date.now()}-${panelBudgetId}`,
-      name,
-      amount,
-      period,
-      tag,
-      rollover: false
-    };
-    if (period === "custom") {
-      if (startDateInput.value) budget.startDate = startDateInput.value;
-      if (endDateInput.value) budget.endDate = endDateInput.value;
-    }
-    plugin.settings.budgets.push(budget);
-    await plugin.saveSettings();
+      panelBudgetId++;
+      const budget: BudgetConfig = {
+        id: `b-${Date.now()}-${panelBudgetId}`,
+        name,
+        amount,
+        period,
+        tag,
+        rollover: false
+      };
+      if (period === "custom") {
+        if (startDateInput.value) budget.startDate = startDateInput.value;
+        if (endDateInput.value) budget.endDate = endDateInput.value;
+      }
+      plugin.settings.budgets.push(budget);
+      await plugin.saveSettings();
 
-    // 重新渲染整个设置页面
-    const panelContent = container.closest(".cashlog-panel-content");
-    if (panelContent) {
-      renderPanelSettings(panelContent as HTMLElement, plugin);
-    }
+      // 重新渲染整个设置页面
+      const panelContent = container.closest(".cashlog-panel-content");
+      if (panelContent) {
+        renderPanelSettings(panelContent as HTMLElement, plugin);
+      }
+    })();
   });
 }
 
@@ -1593,36 +1611,38 @@ function renderAddGoalForm(container: HTMLElement, plugin: CashlogPlugin): void 
   addBtn.className = "cashlog-settings-btn cashlog-settings-btn-primary";
   form.appendChild(addBtn);
 
-  addBtn.addEventListener("click", async () => {
-    const name = nameInput.value.trim();
-    const targetAmount = parseFloat(amountInput.value) || 0;
-    const tag = tagSelect.value;
-    const period = select.value as GoalConfig["period"];
+  addBtn.addEventListener("click", () => {
+    void (async () => {
+      const name = nameInput.value.trim();
+      const targetAmount = parseFloat(amountInput.value) || 0;
+      const tag = tagSelect.value;
+      const period = select.value as GoalConfig["period"];
 
-    if (!name || !targetAmount) {
-      new Notice(t("notice.fillGoalName"));
-      return;
-    }
+      if (!name || !targetAmount) {
+        new Notice(t("notice.fillGoalName"));
+        return;
+      }
 
-    panelGoalId++;
-    const goal: GoalConfig = {
-      id: `g-${Date.now()}-${panelGoalId}`,
-      name,
-      targetAmount,
-      period,
-      tag
-    };
-    if (period === "custom") {
-      if (startDateInput.value) goal.startDate = startDateInput.value;
-      if (endDateInput.value) goal.endDate = endDateInput.value;
-    }
-    plugin.settings.goals.push(goal);
-    await plugin.saveSettings();
+      panelGoalId++;
+      const goal: GoalConfig = {
+        id: `g-${Date.now()}-${panelGoalId}`,
+        name,
+        targetAmount,
+        period,
+        tag
+      };
+      if (period === "custom") {
+        if (startDateInput.value) goal.startDate = startDateInput.value;
+        if (endDateInput.value) goal.endDate = endDateInput.value;
+      }
+      plugin.settings.goals.push(goal);
+      await plugin.saveSettings();
 
-    // 重新渲染整个设置页面
-    const panelContent = container.closest(".cashlog-panel-content");
-    if (panelContent) {
-      renderPanelSettings(panelContent as HTMLElement, plugin);
-    }
+      // 重新渲染整个设置页面
+      const panelContent = container.closest(".cashlog-panel-content");
+      if (panelContent) {
+        renderPanelSettings(panelContent as HTMLElement, plugin);
+      }
+    })();
   });
 }

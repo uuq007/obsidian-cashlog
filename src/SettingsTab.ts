@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting, normalizePath } from "obsidian";
+import { App, Notice, PluginSettingTab, Setting, normalizePath } from "obsidian";
 import { FolderSuggest } from "./FolderSuggest";
 import type CashlogPlugin from "./main";
 import { DEFAULT_SETTINGS } from "./Settings";
@@ -156,9 +156,11 @@ export class CashlogSettingsTab extends PluginSettingTab {
         });
       // 绑定文件夹模糊匹配建议
       if (inputEl) {
-        new FolderSuggest(this.app, inputEl, async (folderPath: string) => {
+        new FolderSuggest(this.app, inputEl, (folderPath: string) => {
           this.plugin.settings.attachmentFolder = normalizePath(folderPath) || DEFAULT_SETTINGS.attachmentFolder;
-          await this.plugin.saveSettings();
+          this.plugin.saveSettings().catch((e) => {
+            new Notice(t("error.queryError") + ": " + (e as Error).message);
+          });
         });
       }
     }

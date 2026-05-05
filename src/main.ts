@@ -251,15 +251,15 @@ export default class CashlogPlugin extends Plugin {
   }
 
   // 打开 Cashlog 面板
-  activateCashlogPanel(): void {
+  async activateCashlogPanel(): Promise<void> {
     const leaves = this.app.workspace.getLeavesOfType(CASHLOG_VIEW_TYPE);
     if (leaves.length > 0) {
-      this.app.workspace.revealLeaf(leaves[0]);
+      await this.app.workspace.revealLeaf(leaves[0]);
       return;
     }
     const leaf = this.app.workspace.getRightLeaf(false);
     if (leaf) {
-      leaf.setViewState({
+      await leaf.setViewState({
         type: CASHLOG_VIEW_TYPE,
         active: true,
       });

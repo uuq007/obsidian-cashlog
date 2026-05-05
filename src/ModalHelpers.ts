@@ -154,17 +154,19 @@ export function createAsyncModalButton(
     btn.classList.add("cashlog-settings-btn-secondary");
   }
   btn.textContent = text;
-  btn.addEventListener("click", async () => {
-    btn.disabled = true;
-    btn.textContent = t("modal.button.processing");
-    try {
-      await onClick(btn);
-      if (onSuccess) onSuccess();
-    } catch (e) {
-      new Notice(tp("notice.operationFailed", { message: (e as Error).message }));
-      btn.disabled = false;
-      btn.textContent = text;
-    }
+  btn.addEventListener("click", () => {
+    void (async () => {
+      btn.disabled = true;
+      btn.textContent = t("modal.button.processing");
+      try {
+        await onClick(btn);
+        if (onSuccess) onSuccess();
+      } catch (e) {
+        new Notice(tp("notice.operationFailed", { message: (e as Error).message }));
+        btn.disabled = false;
+        btn.textContent = text;
+      }
+    })();
   });
   return btn;
 }

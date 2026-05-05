@@ -163,7 +163,7 @@ function renderEntryRow(
             renderAttachmentLink(td, entry.attachments[i], folder, (fullPath) => {
               const file = plugin.app.vault.getAbstractFileByPath(fullPath);
               if (file && file instanceof TFile) {
-                plugin.app.workspace.getLeaf().openFile(file);
+                void plugin.app.workspace.getLeaf().openFile(file);
               }
             });
             if (i < entry.attachments.length - 1) {
@@ -193,7 +193,7 @@ function renderEntryRow(
             e.preventDefault();
             const file = plugin?.app.vault.getAbstractFileByPath(locPath);
             if (file && file instanceof TFile) {
-              plugin?.app.workspace.getLeaf().openFile(file);
+              void plugin?.app.workspace.getLeaf().openFile(file);
             }
           });
         } else {
@@ -721,7 +721,7 @@ export function createChartContainer(containerEl: HTMLElement, config: ChartConf
 
   const canvas = wrapper.createEl("canvas", {
     cls: "cashlog-chart-canvas",
-  }) as HTMLCanvasElement;
+  });
 
   // 设置容器固定尺寸，配合 maintainAspectRatio: false 使图表精确匹配
   wrapper.style.width = `${config.width}px`;
@@ -930,7 +930,7 @@ export function renderPieChart(
               const ds = context.dataset as ChartDatasetExtended;
               const rawValues = ds._rawValues;
               const raw = rawValues?.[context.dataIndex];
-              const displayVal = raw !== undefined ? raw : (context.parsed as number);
+              const displayVal = raw !== undefined ? raw : context.parsed;
               const total = ds.data.reduce((a: number, b: number) => a + b, 0);
               const percentage = total > 0 ? ((context.dataset.data[context.dataIndex] / total) * 100).toFixed(1) : "0.0";
               return `${context.label}: ${displayVal.toLocaleString()} (${percentage}%)`;

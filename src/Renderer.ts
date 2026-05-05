@@ -124,7 +124,7 @@ function renderEntry(
       renderAttachmentLink(li, att, folder, (fullPath) => {
         const file = plugin.app.vault.getAbstractFileByPath(fullPath);
         if (file && file instanceof TFile) {
-          plugin.app.workspace.getLeaf().openFile(file);
+          void plugin.app.workspace.getLeaf().openFile(file);
         }
       });
     }
@@ -184,7 +184,9 @@ function openEditModal(plugin: CashlogPlugin, entry: CashlogEntry): void {
   const settings = plugin.settings;
   const app = plugin.app;
 
-  const writeToFile = async (data: EditableEntryData) => {
+  const writeToFile = (data: EditableEntryData) => {
+    if (!entry.location) return;
+
     // 余额变更需要校验缓存是否就绪
     if (data.tagType === "balanceChange") {
       if (!plugin.cache) {
@@ -199,12 +201,14 @@ function openEditModal(plugin: CashlogPlugin, entry: CashlogEntry): void {
     });
     const newLine = newEntry.toFileLineString();
 
-    const file = app.vault.getAbstractFileByPath(entry.location!.path);
+    const file = app.vault.getAbstractFileByPath(entry.location.path);
     if (file instanceof TFile) {
-      await app.vault.process(file, (content) => {
+      app.vault.process(file, (content) => {
         const lines = content.split("\n");
-        lines[entry.location!.lineNumber] = newLine;
+        lines[entry.location.lineNumber] = newLine;
         return lines.join("\n");
+      }).catch((e) => {
+        new Notice(t("error.queryError") + ": " + (e as Error).message);
       });
     }
   };
@@ -222,13 +226,15 @@ async function openFileAtLine(
   ev.preventDefault();
   ev.stopPropagation();
 
-  const file = plugin.app.vault.getAbstractFileByPath(entry.location!.path);
+  if (!entry.location) return;
+
+  const file = plugin.app.vault.getAbstractFileByPath(entry.location.path);
   if (!(file instanceof TFile)) return;
 
   // 重新读取文件内容，精确定位行号（仿 tasks getTaskLineAndFile）
   const content = await plugin.app.vault.read(file);
   const lines = content.split("\n");
-  const storedLine = entry.location!.lineNumber;
+  const storedLine = entry.location.lineNumber;
   const originalLine = entry.originalMarkdown;
 
   let resolvedLine = storedLine;
