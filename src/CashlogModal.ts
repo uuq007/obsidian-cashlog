@@ -563,15 +563,16 @@ export class CashlogModal extends Modal {
       if (item.account === acct) opt.selected = true;
     }
 
-    select.addEventListener("change", () => {
-      this.data.balanceChangeAccounts[index].account = select.value;
+    // 当前余额提示（使用预计算的余额）
+    const balanceHint = row.createEl("span", {
+      cls: "cashlog-balance-hint",
+      text: tp("cashlogModal.currentBalance", { amount: (balances[item.account] || 0).toFixed(2) }),
     });
 
-    // 当前余额提示（使用预计算的余额）
-    const currentBalance = balances[item.account] || 0;
-    row.createEl("span", {
-      cls: "cashlog-balance-hint",
-      text: tp("cashlogModal.currentBalance", { amount: currentBalance.toFixed(2) }),
+    select.addEventListener("change", () => {
+      this.data.balanceChangeAccounts[index].account = select.value;
+      const newBalance = balances[select.value] || 0;
+      balanceHint.textContent = tp("cashlogModal.currentBalance", { amount: newBalance.toFixed(2) });
     });
 
     // 目标余额输入
