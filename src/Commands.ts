@@ -58,7 +58,7 @@ function extractLineContext(line: string): { indentation: string; listMarker: st
 function createOrEdit(
   checking: boolean,
   editor: Editor,
-  view: MarkdownView,
+  _view: MarkdownView,
   plugin: CashlogPlugin,
 ): boolean {
   if (checking) {

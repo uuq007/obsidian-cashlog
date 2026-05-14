@@ -114,7 +114,7 @@ export class ChartModal extends Modal {
     new Setting(contentEl)
       .setName(t("chartModal.typeFilter"));
 
-    const typeContainer = contentEl.createEl("div", {
+    const typeContainer = contentEl.createDiv({
       cls: "cashlog-checkbox-list",
     });
 
@@ -165,7 +165,7 @@ export class ChartModal extends Modal {
     });
 
     // 标签区域（类型变更时重建）
-    const tagSection = contentEl.createEl("div", { cls: "cashlog-tag-section" });
+    const tagSection = contentEl.createDiv({ cls: "cashlog-tag-section" });
     const rebuildTags = () => {
       tagSection.empty();
       const allTags = this.getUniqueTags();
@@ -174,7 +174,7 @@ export class ChartModal extends Modal {
           .setName(t("chartModal.tagFilter"))
           .setDesc(t("chartModal.tagFilterDesc"));
 
-        const tagContainer = tagSection.createEl("div", {
+        const tagContainer = tagSection.createDiv({
           cls: "cashlog-checkbox-list",
         });
         for (const tag of allTags) {
@@ -214,7 +214,7 @@ export class ChartModal extends Modal {
       );
 
     // 金额范围
-    contentEl.createEl("div", { cls: "cashlog-field-row", attr: { style: "display:flex;gap:8px;align-items:center;margin-bottom:8px;" } });
+    contentEl.createDiv({ cls: "cashlog-field-row", attr: { style: "display:flex;gap:8px;align-items:center;margin-bottom:8px;" } });
     new Setting(contentEl)
       .setName(t("chartModal.amountRange"))
       .setDesc(t("chartModal.amountRangeDesc"))
@@ -277,14 +277,14 @@ export class ChartModal extends Modal {
       );
 
     // === 表格选项（仅当选择表格时显示）===
-    this.tableOptionsContainer = contentEl.createEl("div", {
+    this.tableOptionsContainer = contentEl.createDiv({
       cls: "cashlog-table-options",
     });
     this.tableOptionsContainer.addClass("hidden");
     this.buildTableOptionsUI();
 
     // === 图表选项（仅当选择图表时显示）===
-    this.chartOptionsContainer = contentEl.createEl("div", {
+    this.chartOptionsContainer = contentEl.createDiv({
       cls: "cashlog-chart-options",
     });
     this.chartOptionsContainer.addClass("hidden");
@@ -690,7 +690,7 @@ export class ChartModal extends Modal {
 
     for (let i = 0; i < this.tableColCount; i++) {
       const col = this.tableCols[i];
-      const colContainer = this.tableOptionsContainer.createEl("div", {
+      const colContainer = this.tableOptionsContainer.createDiv({
         cls: "cashlog-col-config-card",
       });
 
@@ -821,7 +821,7 @@ export class ChartModal extends Modal {
       );
 
     // 子分组项选择区域（动态重建）
-    this.barSplitItemsContainer = this.chartOptionsContainer.createEl("div");
+    this.barSplitItemsContainer = this.chartOptionsContainer.createDiv();
     this.rebuildBarSplitItemsUI();
 
     // 图表尺寸
@@ -981,7 +981,7 @@ export class ChartModal extends Modal {
       );
 
     // 子分组项选择区域（动态重建）
-    this.lineSplitItemsContainer = this.chartOptionsContainer.createEl("div");
+    this.lineSplitItemsContainer = this.chartOptionsContainer.createDiv();
     this.rebuildLineSplitItemsUI();
 
     // 图表尺寸
@@ -1117,7 +1117,7 @@ export class ChartModal extends Modal {
       );
 
     // 数值类型（动态重建）
-    this.pieValueTypeContainer = this.chartOptionsContainer.createEl("div");
+    this.pieValueTypeContainer = this.chartOptionsContainer.createDiv();
     this.rebuildPieValueTypeUI();
 
     // 图表尺寸
@@ -1214,12 +1214,12 @@ export class ChartModal extends Modal {
     container.createEl("strong", { text: title });
 
     if (items.length === 0) {
-      container.createEl("div", { text: t("chartModal.noItems"), cls: "cashlog-empty" });
+      container.createDiv({ text: t("chartModal.noItems"), cls: "cashlog-empty" });
       return;
     }
 
     const targetItems = chartKind === "line" ? this.lineSplitItems : this.barSplitItems;
-    const list = container.createEl("div", { cls: "cashlog-checkbox-list cashlog-checkbox-list-no-pad" });
+    const list = container.createDiv({ cls: "cashlog-checkbox-list cashlog-checkbox-list-no-pad" });
 
     for (const item of items) {
       const lbl = list.createEl("label", { cls: "cashlog-checkbox-label" });

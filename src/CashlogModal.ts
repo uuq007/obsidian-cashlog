@@ -180,7 +180,7 @@ export class CashlogModal extends Modal {
     // 获取或创建条件字段区域容器
     let conditionalArea = contentEl.querySelector(".cashlog-conditional-area") as HTMLElement;
     if (!conditionalArea) {
-      conditionalArea = contentEl.createEl("div", { cls: "cashlog-conditional-area" });
+      conditionalArea = contentEl.createDiv({ cls: "cashlog-conditional-area" });
     }
     conditionalArea.empty();
 
@@ -233,7 +233,7 @@ export class CashlogModal extends Modal {
 
     // 自动聚焦描述字段（仅首次渲染）
     if (needsFullRebuild) {
-      setTimeout(() => {
+      activeWindow.setTimeout(() => {
         const descInput = contentEl.querySelector(".cashlog-desc-input") as HTMLElement;
         if (descInput) descInput.focus();
       }, 10);
@@ -242,7 +242,7 @@ export class CashlogModal extends Modal {
 
   // 渲染类型选择器（稳定字段）
   private renderTypeFieldStable(container: HTMLElement): void {
-    const wrapper = container.createEl("div", { cls: "cashlog-modal-form" });
+    const wrapper = container.createDiv({ cls: "cashlog-modal-form" });
     wrapper.addClass("cashlog-type-stable");
 
     const setting = new Setting(wrapper).setName(t("cashlogModal.type"));
@@ -325,8 +325,8 @@ export class CashlogModal extends Modal {
       .setDesc(t("cashlogModal.amountDesc"));
 
     setting.controlEl.empty();
-    const wrapper = setting.controlEl.createEl("div", { cls: "cashlog-field-row" });
-    wrapper.createEl("span", { cls: "cashlog-amount-icon", text: "💴" });
+    const wrapper = setting.controlEl.createDiv({ cls: "cashlog-field-row" });
+    wrapper.createSpan({ cls: "cashlog-amount-icon", text: "💴" });
 
     const input = wrapper.createEl("input", {
       cls: "cashlog-field-input",
@@ -348,10 +348,10 @@ export class CashlogModal extends Modal {
 
   // 收入/支出的账户行
   private renderAccountRows(container: HTMLElement): void {
-    const section = container.createEl("div", { cls: "cashlog-account-section" });
+    const section = container.createDiv({ cls: "cashlog-account-section" });
     new Setting(section).setName(t("cashlogModal.account")).setDesc(t("cashlogModal.accountDesc"));
 
-    const listEl = section.createEl("div", { cls: "cashlog-account-list" });
+    const listEl = section.createDiv({ cls: "cashlog-account-list" });
 
     // 渲染所有账户行
     for (let i = 0; i < this.data.accounts.length; i++) {
@@ -374,7 +374,7 @@ export class CashlogModal extends Modal {
 
   // 渲染单个账户行
   private renderAccountRow(listEl: HTMLElement, index: number): void {
-    const row = listEl.createEl("div", { cls: "cashlog-account-row" });
+    const row = listEl.createDiv({ cls: "cashlog-account-row" });
     const item = this.data.accounts[index];
 
     // 账户下拉
@@ -421,10 +421,10 @@ export class CashlogModal extends Modal {
   // 转账字段
   private renderTransferFields(container: HTMLElement): void {
     // 转出账户
-    const fromSection = container.createEl("div", { cls: "cashlog-account-section" });
+    const fromSection = container.createDiv({ cls: "cashlog-account-section" });
     new Setting(fromSection).setName(t("cashlogModal.fromAccount"));
 
-    const fromList = fromSection.createEl("div", { cls: "cashlog-account-list" });
+    const fromList = fromSection.createDiv({ cls: "cashlog-account-list" });
     for (let i = 0; i < this.data.fromAccounts.length; i++) {
       this.renderTransferRow(fromList, "from", i);
     }
@@ -439,10 +439,10 @@ export class CashlogModal extends Modal {
     });
 
     // 转入账户
-    const toSection = container.createEl("div", { cls: "cashlog-account-section" });
+    const toSection = container.createDiv({ cls: "cashlog-account-section" });
     new Setting(toSection).setName(t("cashlogModal.toAccount"));
 
-    const toList = toSection.createEl("div", { cls: "cashlog-account-list cashlog-transfer-to" });
+    const toList = toSection.createDiv({ cls: "cashlog-account-list cashlog-transfer-to" });
     for (let i = 0; i < this.data.toAccounts.length; i++) {
       this.renderTransferRow(toList, "to", i);
     }
@@ -459,7 +459,7 @@ export class CashlogModal extends Modal {
 
   // 渲染转账账户行
   private renderTransferRow(listEl: HTMLElement, direction: "from" | "to", index: number): void {
-    const row = listEl.createEl("div", { cls: "cashlog-account-row" });
+    const row = listEl.createDiv({ cls: "cashlog-account-row" });
     const items = direction === "from" ? this.data.fromAccounts : this.data.toAccounts;
     const item = items[index];
 
@@ -520,10 +520,10 @@ export class CashlogModal extends Modal {
 
   // 余额变更字段
   private renderBalanceChangeFields(container: HTMLElement): void {
-    const section = container.createEl("div", { cls: "cashlog-account-section" });
+    const section = container.createDiv({ cls: "cashlog-account-section" });
     new Setting(section).setName(t("cashlogModal.balanceChange")).setDesc(t("cashlogModal.balanceChangeDesc"));
 
-    const listEl = section.createEl("div", { cls: "cashlog-account-list" });
+    const listEl = section.createDiv({ cls: "cashlog-account-list" });
 
     // 提前计算一次余额，避免每行重复遍历全部条目
     let balances: Record<string, number> = {};
@@ -553,7 +553,7 @@ export class CashlogModal extends Modal {
 
   // 渲染余额变更单行（balances 由父方法预计算传入）
   private renderBalanceChangeRow(listEl: HTMLElement, index: number, balances: Record<string, number>): void {
-    const row = listEl.createEl("div", { cls: "cashlog-account-row" });
+    const row = listEl.createDiv({ cls: "cashlog-account-row" });
     const item = this.data.balanceChangeAccounts[index];
 
     // 账户下拉
@@ -564,7 +564,7 @@ export class CashlogModal extends Modal {
     }
 
     // 当前余额提示（使用预计算的余额）
-    const balanceHint = row.createEl("span", {
+    const balanceHint = row.createSpan({
       cls: "cashlog-balance-hint",
       text: tp("cashlogModal.currentBalance", { amount: (balances[item.account] || 0).toFixed(2) }),
     });
@@ -609,12 +609,12 @@ export class CashlogModal extends Modal {
       .setDesc(t("cashlogModal.attachmentDesc"));
 
     setting.controlEl.empty();
-    const attContainer = setting.controlEl.createEl("div", { cls: "cashlog-attachment-area" });
+    const attContainer = setting.controlEl.createDiv({ cls: "cashlog-attachment-area" });
 
-    const listEl = attContainer.createEl("div", { cls: "cashlog-attachment-list" });
+    const listEl = attContainer.createDiv({ cls: "cashlog-attachment-list" });
     this.renderAttachmentList(listEl);
 
-    const btnRow = attContainer.createEl("div", { cls: "cashlog-attachment-btns" });
+    const btnRow = attContainer.createDiv({ cls: "cashlog-attachment-btns" });
 
     const fileInput = attContainer.createEl("input", {
       cls: "cashlog-file-input",
@@ -696,11 +696,11 @@ export class CashlogModal extends Modal {
     listEl.empty();
     for (let i = 0; i < this.data.attachments.length; i++) {
       const att = this.data.attachments[i];
-      const item = listEl.createEl("div", { cls: "cashlog-attachment-item" });
+      const item = listEl.createDiv({ cls: "cashlog-attachment-item" });
       const [fileName, displayName] = att.includes("|") ? att.split("|") : [att, att];
       const isPending = fileName.startsWith("__pending_");
 
-      const label = item.createEl("span", { text: `🧷 ${displayName}` });
+      const label = item.createSpan({ text: `🧷 ${displayName}` });
       if (isPending) {
         label.addClass("cashlog-field-disabled");
         label.setAttr("title", t("cashlogModal.pending"));
@@ -728,7 +728,7 @@ export class CashlogModal extends Modal {
   private renderDateField(container: HTMLElement): void {
     const setting = new Setting(container).setName(t("cashlogModal.date"));
     setting.controlEl.empty();
-    const wrapper = setting.controlEl.createEl("div", { cls: "cashlog-field-row-icon" });
+    const wrapper = setting.controlEl.createDiv({ cls: "cashlog-field-row-icon" });
 
     const dateInput = wrapper.createEl("input", {
       cls: "cashlog-field-input cashlog-field-input-icon",
@@ -739,27 +739,12 @@ export class CashlogModal extends Modal {
       cls: "cashlog-icon-btn-inner",
       attr: { type: "button", title: t("cashlogModal.selectDate") },
     });
-    const calSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    calSvg.setAttribute("width", "14");
-    calSvg.setAttribute("height", "14");
-    calSvg.setAttribute("viewBox", "0 0 24 24");
-    calSvg.setAttribute("fill", "none");
-    calSvg.setAttribute("stroke", "currentColor");
-    calSvg.setAttribute("stroke-width", "2");
-    calSvg.setAttribute("stroke-linecap", "round");
-    calSvg.setAttribute("stroke-linejoin", "round");
-    const calRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    calRect.setAttribute("x", "3"); calRect.setAttribute("y", "4");
-    calRect.setAttribute("width", "18"); calRect.setAttribute("height", "18");
-    calRect.setAttribute("rx", "2"); calRect.setAttribute("ry", "2");
-    calSvg.appendChild(calRect);
-    for (const [x1, y1, x2, y2] of [["16","2","16","6"],["8","2","8","6"],["3","10","21","10"]]) {
-      const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      l.setAttribute("x1", x1); l.setAttribute("y1", y1);
-      l.setAttribute("x2", x2); l.setAttribute("y2", y2);
-      calSvg.appendChild(l);
-    }
-    calendarBtn.appendChild(calSvg);
+    calendarBtn.createSvg("svg", { attr: { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" } }, (calSvg) => {
+      calSvg.createSvg("rect", { attr: { x: "3", y: "4", width: "18", height: "18", rx: "2", ry: "2" } });
+      for (const [x1, y1, x2, y2] of [["16","2","16","6"],["8","2","8","6"],["3","10","21","10"]]) {
+        calSvg.createSvg("line", { attr: { x1, y1, x2, y2 } });
+      }
+    });
     calendarBtn.addEventListener("click", () => {
       (dateInput as HTMLInputElement & { showPicker: () => void }).showPicker();
     });
@@ -772,7 +757,7 @@ export class CashlogModal extends Modal {
   private renderTimeField(container: HTMLElement): void {
     const setting = new Setting(container).setName(t("cashlogModal.time")).setDesc(t("cashlogModal.timeDesc"));
     setting.controlEl.empty();
-    const wrapper = setting.controlEl.createEl("div", { cls: "cashlog-field-row-icon" });
+    const wrapper = setting.controlEl.createDiv({ cls: "cashlog-field-row-icon" });
 
     const timeInput = wrapper.createEl("input", {
       cls: "cashlog-field-input cashlog-field-input-icon",
@@ -783,22 +768,10 @@ export class CashlogModal extends Modal {
       cls: "cashlog-icon-btn-inner",
       attr: { type: "button", title: t("cashlogModal.selectTime") },
     });
-    const clkSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    clkSvg.setAttribute("width", "14");
-    clkSvg.setAttribute("height", "14");
-    clkSvg.setAttribute("viewBox", "0 0 24 24");
-    clkSvg.setAttribute("fill", "none");
-    clkSvg.setAttribute("stroke", "currentColor");
-    clkSvg.setAttribute("stroke-width", "2");
-    clkSvg.setAttribute("stroke-linecap", "round");
-    clkSvg.setAttribute("stroke-linejoin", "round");
-    const clkCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    clkCircle.setAttribute("cx", "12"); clkCircle.setAttribute("cy", "12"); clkCircle.setAttribute("r", "10");
-    clkSvg.appendChild(clkCircle);
-    const clkPoly = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    clkPoly.setAttribute("points", "12 6 12 12 16 14");
-    clkSvg.appendChild(clkPoly);
-    clockBtn.appendChild(clkSvg);
+    clockBtn.createSvg("svg", { attr: { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" } }, (clkSvg) => {
+      clkSvg.createSvg("circle", { attr: { cx: "12", cy: "12", r: "10" } });
+      clkSvg.createSvg("polyline", { attr: { points: "12 6 12 12 16 14" } });
+    });
     clockBtn.addEventListener("click", () => {
       (timeInput as HTMLInputElement & { showPicker: () => void }).showPicker();
     });

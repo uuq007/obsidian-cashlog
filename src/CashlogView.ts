@@ -57,10 +57,10 @@ export class CashlogView extends ItemView {
     container.addClass("cashlog-panel");
 
     // 内容区
-    this.panelContentEl = container.createEl("div", { cls: "cashlog-panel-content" });
+    this.panelContentEl = container.createDiv({ cls: "cashlog-panel-content" });
 
     // 底部标签栏
-    this.tabBarEl = container.createEl("div", { cls: "cashlog-panel-tabs" });
+    this.tabBarEl = container.createDiv({ cls: "cashlog-panel-tabs" });
 
     this.renderTabBar();
     this.switchTab("dashboard");
@@ -183,7 +183,7 @@ export class CashlogView extends ItemView {
     this.renderBackButton();
 
     // 子页面标题
-    this.panelContentEl.createEl("div", {
+    this.panelContentEl.createDiv({
       cls: "cashlog-subpage-title",
       text: this.subPage.title,
     });
@@ -229,7 +229,7 @@ export class CashlogView extends ItemView {
       },
     };
 
-    const listContainer = this.panelContentEl.createEl("div");
+    const listContainer = this.panelContentEl.createDiv();
     renderQueryResult(listContainer, result, query, this.plugin);
   }
 
@@ -266,8 +266,8 @@ export class CashlogView extends ItemView {
     const currentBalance = initialBalance + incomeSum + expenseSum + transferIn + transferOut + balanceAdj;
 
     // === 余额明细卡片 ===
-    const card = this.panelContentEl.createEl("div", { cls: "cashlog-account-detail-card" });
-    card.createEl("div", { cls: "cashlog-account-detail-title", text: tp("dashboard.accountDetail.title", { account: accountName }) });
+    const card = this.panelContentEl.createDiv({ cls: "cashlog-account-detail-card" });
+    card.createDiv({ cls: "cashlog-account-detail-title", text: tp("dashboard.accountDetail.title", { account: accountName }) });
 
     const rows: Array<{ label: string; value: number; cls?: string }> = [
       { label: t("dashboard.accountDetail.initialBalance"), value: initialBalance },
@@ -279,23 +279,23 @@ export class CashlogView extends ItemView {
     ];
 
     for (const r of rows) {
-      const row = card.createEl("div", { cls: "cashlog-account-detail-row" });
-      row.createEl("span", { cls: "cashlog-account-detail-label", text: r.label });
+      const row = card.createDiv({ cls: "cashlog-account-detail-row" });
+      row.createSpan({ cls: "cashlog-account-detail-label", text: r.label });
       const valCls = r.cls || (r.value >= 0 ? "cashlog-amount-income" : "cashlog-amount-expense");
       const sign = r.value >= 0 ? "" : "-";
-      row.createEl("span", {
+      row.createSpan({
         cls: `cashlog-account-detail-value ${valCls}`,
         text: `${sign}¥${formatMoneyUnsigned(Math.abs(r.value))}`,
       });
     }
 
     // 分隔线 + 当前余额
-    card.createEl("div", { cls: "cashlog-account-detail-divider" });
-    const totalRow = card.createEl("div", { cls: "cashlog-account-detail-row cashlog-account-detail-total" });
-    totalRow.createEl("span", { cls: "cashlog-account-detail-label", text: t("dashboard.accountDetail.currentBalance") });
+    card.createDiv({ cls: "cashlog-account-detail-divider" });
+    const totalRow = card.createDiv({ cls: "cashlog-account-detail-row cashlog-account-detail-total" });
+    totalRow.createSpan({ cls: "cashlog-account-detail-label", text: t("dashboard.accountDetail.currentBalance") });
     const totalCls = currentBalance >= 0 ? "cashlog-amount-income" : "cashlog-amount-expense";
     const totalSign = currentBalance >= 0 ? "" : "-";
-    totalRow.createEl("span", {
+    totalRow.createSpan({
       cls: `cashlog-account-detail-value ${totalCls}`,
       text: `${totalSign}¥${formatMoneyUnsigned(Math.abs(currentBalance))}`,
     });
@@ -319,7 +319,7 @@ export class CashlogView extends ItemView {
       },
     };
 
-    const listContainer = this.panelContentEl.createEl("div");
+    const listContainer = this.panelContentEl.createDiv();
     renderQueryResult(listContainer, listResult, listQuery, this.plugin);
   }
 
@@ -380,7 +380,7 @@ export class CashlogView extends ItemView {
     };
 
     // 创建子容器避免 createChartContainer 清空返回按钮和标题
-    const chartContainer = this.panelContentEl.createEl("div");
+    const chartContainer = this.panelContentEl.createDiv();
     renderPieChart(chartContainer, chartData, chartConfig);
   }
 }

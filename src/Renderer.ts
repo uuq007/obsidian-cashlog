@@ -21,7 +21,7 @@ export function renderQueryResult(
   for (const group of result.groups) {
     // 分组标题
     if (result.groups.length > 1) {
-      const groupHeader = containerEl.createEl("div", {
+      const groupHeader = containerEl.createDiv({
         cls: "cashlog-group-header",
       });
       groupHeader.createEl("strong", { text: group.key });
@@ -72,7 +72,7 @@ function renderEntry(
 
   // 标签
   if (!query.shouldHideTag && entry.tags.length > 0) {
-    const tagSpan = li.createEl("span", {
+    const tagSpan = li.createSpan({
       cls: "cashlog-tag",
       text: entry.tags.join(" "),
     });
@@ -81,7 +81,7 @@ function renderEntry(
 
   // 描述
   if (entry.description) {
-    li.createEl("span", {
+    li.createSpan({
       cls: "cashlog-description",
       text: entry.description,
     });
@@ -90,7 +90,7 @@ function renderEntry(
   // 转账和余额变更特殊显示
   if (entry.isTransfer || entry.isBalanceChange) {
     for (const aa of entry.accountAmounts) {
-      li.createEl("span", {
+      li.createSpan({
         cls: `cashlog-account ${aa.amount < 0 ? "cashlog-transfer-from" : "cashlog-transfer-to"}`,
         text: `💳${aa.account}💴${aa.amount}`,
       });
@@ -101,7 +101,7 @@ function renderEntry(
       const noAcct = entry.noAccountAmount;
       if (noAcct !== 0) {
         const amountClass = entry.isExpense ? "cashlog-amount-expense" : "cashlog-amount-income";
-        li.createEl("span", {
+        li.createSpan({
           cls: `cashlog-amount ${amountClass}`,
           text: `💴${noAcct}`,
         });
@@ -110,7 +110,7 @@ function renderEntry(
 
     // 账户
     for (const aa of entry.accountAmounts) {
-      li.createEl("span", {
+      li.createSpan({
         cls: "cashlog-account",
         text: `💳${aa.account}💴${aa.amount}`,
       });
@@ -132,7 +132,7 @@ function renderEntry(
 
   // 日期
   if (!query.shouldHideDate && entry.date) {
-    li.createEl("span", {
+    li.createSpan({
       cls: "cashlog-date",
       text: `➕${entry.date.format("YYYY-MM-DD")}`,
     });
@@ -140,7 +140,7 @@ function renderEntry(
 
   // 时间
   if (!query.shouldHideTime && entry.time) {
-    li.createEl("span", {
+    li.createSpan({
       cls: "cashlog-time",
       text: `⏰${entry.time}`,
     });
@@ -274,15 +274,15 @@ function calculateGroupSummary(entries: CashlogEntry[]): Summary {
 
 // 渲染分组汇总
 function renderGroupSummary(containerEl: HTMLElement, summary: Summary): void {
-  const div = containerEl.createEl("div", { cls: "cashlog-group-summary" });
+  const div = containerEl.createDiv({ cls: "cashlog-group-summary" });
   if (summary.totalExpense !== 0) {
-    div.createEl("span", {
+    div.createSpan({
       cls: "cashlog-summary-expense",
       text: tp("renderer.groupExpense", { amount: summary.totalExpense }),
     });
   }
   if (summary.totalIncome !== 0) {
-    div.createEl("span", {
+    div.createSpan({
       cls: "cashlog-summary-income",
       text: tp("renderer.groupIncome", { amount: summary.totalIncome }),
     });
@@ -291,31 +291,31 @@ function renderGroupSummary(containerEl: HTMLElement, summary: Summary): void {
 
 // 渲染总汇总
 function renderSummary(containerEl: HTMLElement, summary: Summary, query: Query): void {
-  const div = containerEl.createEl("div", { cls: "cashlog-summary" });
+  const div = containerEl.createDiv({ cls: "cashlog-summary" });
 
   if (query.shouldShowTotalExpense || query.shouldShowTotal) {
-    div.createEl("div", {
+    div.createDiv({
       cls: "cashlog-summary-expense",
       text: tp("renderer.totalExpense", { amount: summary.totalExpense }),
     });
   }
 
   if (query.shouldShowTotalIncome || query.shouldShowTotal) {
-    div.createEl("div", {
+    div.createDiv({
       cls: "cashlog-summary-income",
       text: tp("renderer.totalIncome", { amount: summary.totalIncome }),
     });
   }
 
   if (query.shouldShowBalance || query.shouldShowTotal) {
-    div.createEl("div", {
+    div.createDiv({
       cls: "cashlog-summary-balance",
       text: tp("renderer.netBalance", { amount: summary.balance }),
     });
   }
 
   if (query.shouldShowCount || query.shouldShowTotal) {
-    div.createEl("div", {
+    div.createDiv({
       cls: "cashlog-summary-count",
       text: tp("renderer.entryCount", { count: summary.count }),
     });

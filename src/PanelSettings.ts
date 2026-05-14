@@ -29,7 +29,7 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
   if (!("createEl" in container)) {
     type CreateElFn = HTMLElement["createEl"];
     (container as unknown as { createEl: CreateElFn }).createEl = function(this: HTMLElement, tag: string, opts?: Record<string, unknown>) {
-      const el = document.createElement(tag);
+      const el = activeDocument.createElement(tag);
       if (opts) {
         if (opts.cls) el.className = opts.cls as string;
         if (opts.text) el.textContent = opts.text as string;
@@ -112,7 +112,7 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
       renderDivider(container);
 
       // 账户初始余额标题
-      const balanceTitle = document.createElement("div");
+      const balanceTitle = activeDocument.createElement("div");
       balanceTitle.className = "cashlog-settings-label cashlog-balance-title";
       balanceTitle.textContent = t("panelSettings.accountInitialBalance");
       container.appendChild(balanceTitle);
@@ -160,7 +160,7 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
           });
         }
       } else {
-        container.createEl("div", {
+        container.createDiv({
           cls: "cashlog-settings-empty",
           text: t("panelSettings.noBudget")
         });
@@ -193,7 +193,7 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
           });
         }
       } else {
-        container.createEl("div", {
+        container.createDiv({
           cls: "cashlog-settings-empty",
           text: t("panelSettings.noGoal")
         });
@@ -258,11 +258,11 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
 
   // ========== 重置 ==========
   renderSection(container, "advanced", "🔄", t("panelSettings.sectionReset"), () => {
-    const row = container.createEl("div", { cls: "cashlog-settings-row" });
+    const row = container.createDiv({ cls: "cashlog-settings-row" });
 
-    const label = row.createEl("div");
-    label.createEl("div", { text: t("panelSettings.restoreDefaults"), cls: "cashlog-settings-label" });
-    label.createEl("div", { text: t("panelSettings.restoreDefaultsDesc"), cls: "cashlog-settings-desc" });
+    const label = row.createDiv();
+    label.createDiv({ text: t("panelSettings.restoreDefaults"), cls: "cashlog-settings-label" });
+    label.createDiv({ text: t("panelSettings.restoreDefaultsDesc"), cls: "cashlog-settings-desc" });
 
     const btn = row.createEl("button", {
       text: t("modal.button.reset"),
@@ -293,16 +293,16 @@ function renderSection(
   renderContent: () => void
 ): void {
   // 使用原生 DOM API 避免 Obsidian 包装问题
-  const section = document.createElement("div");
+  const section = activeDocument.createElement("div");
   section.className = `cashlog-settings-section ${type}`;
 
-  const header = document.createElement("div");
+  const header = activeDocument.createElement("div");
   header.className = "cashlog-settings-header";
   header.createSpan({ text: icon });
   header.append(` ${title}`);
   section.appendChild(header);
 
-  const content = document.createElement("div");
+  const content = activeDocument.createElement("div");
   content.className = "cashlog-settings-content";
   section.appendChild(content);
 
@@ -317,16 +317,16 @@ function renderToggleRow(
   value: boolean,
   onChange: (v: boolean) => Promise<void>
 ): void {
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = label;
   row.appendChild(labelSpan);
 
-  const toggle = document.createElement("div");
+  const toggle = activeDocument.createElement("div");
   toggle.className = "cashlog-settings-toggle" + (value ? " active" : "");
   toggle.addEventListener("click", () => {
     void (async () => {
@@ -345,26 +345,26 @@ function renderInputRow(
   onChange: (v: string) => Promise<void>,
   desc?: string
 ): void {
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelDiv = document.createElement("div");
+  const labelDiv = activeDocument.createElement("div");
   row.appendChild(labelDiv);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = label;
   labelDiv.appendChild(labelSpan);
 
   if (desc) {
-    const descDiv = document.createElement("div");
+    const descDiv = activeDocument.createElement("div");
     descDiv.className = "cashlog-settings-desc";
     descDiv.textContent = desc;
     labelDiv.appendChild(descDiv);
   }
 
-  const input = document.createElement("input");
+  const input = activeDocument.createElement("input");
   input.type = "text";
   input.className = "cashlog-settings-input";
   input.value = value;
@@ -381,19 +381,19 @@ function renderAttachmentFolderRow(
   container: HTMLElement,
   plugin: CashlogPlugin
 ): void {
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelDiv = document.createElement("div");
+  const labelDiv = activeDocument.createElement("div");
   row.appendChild(labelDiv);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = t("panelSettings.attachmentFolder");
   labelDiv.appendChild(labelSpan);
 
-  const input = document.createElement("input");
+  const input = activeDocument.createElement("input");
   input.type = "text";
   input.className = "cashlog-settings-input";
   input.value = plugin.settings.attachmentFolder;
@@ -424,19 +424,19 @@ function renderSelectRow(
   options: { value: string; label: string }[],
   onChange: (v: string) => Promise<void>
 ): void {
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = label;
   row.appendChild(labelSpan);
 
-  const select = document.createElement("select");
+  const select = activeDocument.createElement("select");
   select.className = "cashlog-settings-select";
   for (const opt of options) {
-    const option = document.createElement("option");
+    const option = activeDocument.createElement("option");
     option.value = opt.value;
     option.textContent = opt.label;
     if (opt.value === value) option.selected = true;
@@ -451,7 +451,7 @@ function renderSelectRow(
 }
 
 function renderDivider(container: HTMLElement): void {
-  const divider = document.createElement("div");
+  const divider = activeDocument.createElement("div");
   divider.className = "cashlog-settings-divider";
   container.appendChild(divider);
 }
@@ -464,16 +464,16 @@ function renderTagButton(
   plugin: CashlogPlugin,
   onConfirm: (newTag: string) => Promise<void>
 ): void {
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = label;
   row.appendChild(labelSpan);
 
-  const btn = document.createElement("button");
+  const btn = activeDocument.createElement("button");
   btn.className = "cashlog-settings-btn cashlog-settings-btn-tag";
   // 显示不带 # 号的标签名
   btn.textContent = tagValue.startsWith("#") ? tagValue.substring(1) : tagValue;
@@ -518,16 +518,16 @@ function renderSubTagList(
   baseTag: string,
   plugin: CashlogPlugin
 ): void {
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = label;
   row.appendChild(labelSpan);
 
-  const chipContainer = document.createElement("div");
+  const chipContainer = activeDocument.createElement("div");
   chipContainer.className = "cashlog-subtag-chips";
   row.appendChild(chipContainer);
 
@@ -552,7 +552,7 @@ function renderSubTagList(
   for (const subTag of allSubTags) {
     const isFromCache = !settingsSubTags.includes(subTag);
 
-    const chip = document.createElement("span");
+    const chip = activeDocument.createElement("span");
     chip.className = "cashlog-subtag-chip";
     if (isFromCache) {
       chip.classList.add("cashlog-subtag-chip-cache");
@@ -588,7 +588,7 @@ function renderSubTagList(
   }
 
   // + 添加按钮
-  const addChip = document.createElement("span");
+  const addChip = activeDocument.createElement("span");
   addChip.className = "cashlog-subtag-chip cashlog-subtag-add";
   addChip.textContent = "+";
   addChip.addEventListener("click", () => {
@@ -769,7 +769,7 @@ function openDeleteSubTagDialog(
   const modal = createModalCard(overlay);
   modal.appendChild(createModalTitle(t("panelSettings.deleteSubTag")));
 
-  const desc = document.createElement("div");
+  const desc = activeDocument.createElement("div");
   desc.className = "cashlog-tag-modal-desc";
   desc.textContent = t("panelSettings.deleteSubTagDesc");
   modal.appendChild(desc);
@@ -820,7 +820,7 @@ function openMergeConfirmDialog(
   const modal = createModalCard(overlay);
   modal.appendChild(createModalTitle(t("panelSettings.mergeSubTag")));
 
-  const desc = document.createElement("div");
+  const desc = activeDocument.createElement("div");
   desc.className = "cashlog-tag-modal-desc";
   desc.textContent = tp("panelSettings.mergeSubTagDesc", { oldTag: oldSubTag, existingTag: existingSubTag });
   modal.appendChild(desc);
@@ -874,7 +874,7 @@ function openMergeToBaseDialog(
   const modal = createModalCard(overlay);
   modal.appendChild(createModalTitle(t("panelSettings.mergeToBase")));
 
-  const desc = document.createElement("div");
+  const desc = activeDocument.createElement("div");
   desc.className = "cashlog-tag-modal-desc";
   desc.textContent = tp("panelSettings.mergeToBaseDesc", { oldFullTag, baseTag });
   modal.appendChild(desc);
@@ -926,16 +926,16 @@ function discoverAccountsFromCache(plugin: CashlogPlugin): string[] {
 function renderAccountList(container: HTMLElement, plugin: CashlogPlugin): void {
   const s = plugin.settings;
 
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = t("panelSettings.accountList");
   row.appendChild(labelSpan);
 
-  const chipContainer = document.createElement("div");
+  const chipContainer = activeDocument.createElement("div");
   chipContainer.className = "cashlog-subtag-chips";
   row.appendChild(chipContainer);
 
@@ -958,7 +958,7 @@ function renderAccountList(container: HTMLElement, plugin: CashlogPlugin): void 
   for (const acct of allAccounts) {
     const isFromCache = !s.accounts.includes(acct);
 
-    const chip = document.createElement("span");
+    const chip = activeDocument.createElement("span");
     chip.className = "cashlog-subtag-chip";
     if (isFromCache) {
       chip.classList.add("cashlog-subtag-chip-cache");
@@ -993,7 +993,7 @@ function renderAccountList(container: HTMLElement, plugin: CashlogPlugin): void 
   }
 
   // + 添加按钮
-  const addChip = document.createElement("span");
+  const addChip = activeDocument.createElement("span");
   addChip.className = "cashlog-subtag-chip cashlog-subtag-add";
   addChip.textContent = "+";
   addChip.addEventListener("click", () => {
@@ -1129,16 +1129,16 @@ function openDeleteAccountDialog(
   const modal = createModalCard(overlay);
   modal.appendChild(createModalTitle(t("panelSettings.deleteAccount")));
 
-  const desc = document.createElement("div");
+  const desc = activeDocument.createElement("div");
   desc.className = "cashlog-tag-modal-desc";
   desc.textContent = tp("panelSettings.deleteAccountDesc", { account: acct });
   modal.appendChild(desc);
 
   // 目标账户下拉菜单
-  const select = document.createElement("select");
+  const select = activeDocument.createElement("select");
   select.className = "cashlog-settings-select cashlog-settings-select-full";
   if (targetAccounts.length === 0) {
-    const opt = document.createElement("option");
+    const opt = activeDocument.createElement("option");
     opt.value = "";
     opt.textContent = t("panelSettings.noAvailableAccount");
     opt.disabled = true;
@@ -1146,7 +1146,7 @@ function openDeleteAccountDialog(
     select.appendChild(opt);
   } else {
     for (const tgt of targetAccounts) {
-      const opt = document.createElement("option");
+      const opt = activeDocument.createElement("option");
       opt.value = tgt;
       opt.textContent = tgt;
       select.appendChild(opt);
@@ -1205,16 +1205,16 @@ function renderBalanceButton(
   const s = plugin.settings;
   const balance = s.accountBalances[acct] || 0;
 
-  const row = document.createElement("div");
+  const row = activeDocument.createElement("div");
   row.className = "cashlog-settings-row";
   container.appendChild(row);
 
-  const labelSpan = document.createElement("span");
+  const labelSpan = activeDocument.createElement("span");
   labelSpan.className = "cashlog-settings-label";
   labelSpan.textContent = acct;
   row.appendChild(labelSpan);
 
-  const btn = document.createElement("button");
+  const btn = activeDocument.createElement("button");
   btn.className = "cashlog-settings-btn cashlog-settings-btn-tag";
   btn.textContent = `💴 ${balance.toFixed(2)}`;
   btn.addEventListener("click", () => {
@@ -1235,12 +1235,12 @@ function openBalanceEditModal(
   modal.appendChild(createModalTitle(tp("panelSettings.initialBalance", { account: acct })));
 
   // 警告提示
-  const warning = document.createElement("div");
+  const warning = activeDocument.createElement("div");
   warning.className = "cashlog-warning-box";
   warning.textContent = t("panelSettings.balanceWarning");
   modal.appendChild(warning);
 
-  const input = document.createElement("input");
+  const input = activeDocument.createElement("input");
   input.type = "number";
   input.className = "cashlog-tag-modal-input";
   input.value = String(currentBalance);
@@ -1289,32 +1289,32 @@ function renderBudgetCard(
     weekly: t("settings.period.weekly"), monthly: t("settings.period.monthly"), yearly: t("settings.period.yearly"), custom: t("settings.period.custom")
   };
 
-  const card = document.createElement("div");
+  const card = activeDocument.createElement("div");
   card.className = "cashlog-budget-card";
   container.appendChild(card);
 
-  const info = document.createElement("div");
+  const info = activeDocument.createElement("div");
   info.className = "cashlog-budget-info";
   card.appendChild(info);
 
-  const nameDiv = document.createElement("div");
+  const nameDiv = activeDocument.createElement("div");
   nameDiv.className = "cashlog-budget-name";
   nameDiv.textContent = budget.name;
   info.appendChild(nameDiv);
 
-  const metaDiv = document.createElement("div");
+  const metaDiv = activeDocument.createElement("div");
   metaDiv.className = "cashlog-budget-meta";
   metaDiv.textContent = `¥${budget.amount.toLocaleString()} / ${periodLabels[budget.period] || budget.period}`;
   info.appendChild(metaDiv);
 
   if (budget.tag) {
-    const tagSpan = document.createElement("span");
+    const tagSpan = activeDocument.createElement("span");
     tagSpan.className = "cashlog-budget-tag";
     tagSpan.textContent = budget.tag;
     info.appendChild(tagSpan);
   }
 
-  const deleteBtn = document.createElement("button");
+  const deleteBtn = activeDocument.createElement("button");
   deleteBtn.textContent = t("modal.button.delete");
   deleteBtn.className = "cashlog-budget-delete";
   deleteBtn.addEventListener("click", () => {
@@ -1334,32 +1334,32 @@ function renderGoalCard(
     weekly: t("settings.period.weekly"), monthly: t("settings.period.monthly"), yearly: t("settings.period.yearly"), custom: t("settings.period.custom")
   };
 
-  const card = document.createElement("div");
+  const card = activeDocument.createElement("div");
   card.className = "cashlog-goal-card";
   container.appendChild(card);
 
-  const info = document.createElement("div");
+  const info = activeDocument.createElement("div");
   info.className = "cashlog-goal-info";
   card.appendChild(info);
 
-  const nameDiv = document.createElement("div");
+  const nameDiv = activeDocument.createElement("div");
   nameDiv.className = "cashlog-goal-name";
   nameDiv.textContent = goal.name;
   info.appendChild(nameDiv);
 
-  const metaDiv = document.createElement("div");
+  const metaDiv = activeDocument.createElement("div");
   metaDiv.className = "cashlog-goal-meta";
   metaDiv.textContent = `¥${goal.targetAmount.toLocaleString()} / ${periodLabels[goal.period] || goal.period}`;
   info.appendChild(metaDiv);
 
   if (goal.tag) {
-    const tagSpan = document.createElement("span");
+    const tagSpan = activeDocument.createElement("span");
     tagSpan.className = "cashlog-goal-tag";
     tagSpan.textContent = goal.tag;
     info.appendChild(tagSpan);
   }
 
-  const deleteBtn = document.createElement("button");
+  const deleteBtn = activeDocument.createElement("button");
   deleteBtn.textContent = t("modal.button.delete");
   deleteBtn.className = "cashlog-goal-delete";
   deleteBtn.addEventListener("click", () => {
@@ -1401,74 +1401,74 @@ function buildGoalTagOptions(plugin: CashlogPlugin): string[] {
 }
 
 function renderAddBudgetForm(container: HTMLElement, plugin: CashlogPlugin): void {
-  const form = document.createElement("div");
+  const form = activeDocument.createElement("div");
   form.className = "cashlog-settings-add-form";
   container.appendChild(form);
 
-  const nameInput = document.createElement("input");
+  const nameInput = activeDocument.createElement("input");
   nameInput.type = "text";
   nameInput.className = "cashlog-settings-input";
   nameInput.placeholder = t("panelSettings.budgetName");
   form.appendChild(nameInput);
 
-  const amountInput = document.createElement("input");
+  const amountInput = activeDocument.createElement("input");
   amountInput.type = "number";
   amountInput.className = "cashlog-settings-input";
   amountInput.placeholder = t("settings.placeholder.amount");
   form.appendChild(amountInput);
 
   // 标签和周期放在同一行
-  const selectRow = document.createElement("div");
+  const selectRow = activeDocument.createElement("div");
   selectRow.className = "cashlog-settings-select-row";
   form.appendChild(selectRow);
 
-  const tagSelect = document.createElement("select");
+  const tagSelect = activeDocument.createElement("select");
   tagSelect.className = "cashlog-settings-select cashlog-settings-select-flex";
   const budgetTagOptions = buildBudgetTagOptions(plugin);
   for (const opt of budgetTagOptions) {
-    const option = document.createElement("option");
+    const option = activeDocument.createElement("option");
     option.value = opt;
     option.textContent = opt;
     tagSelect.appendChild(option);
   }
   selectRow.appendChild(tagSelect);
 
-  const select = document.createElement("select");
+  const select = activeDocument.createElement("select");
   select.className = "cashlog-settings-select cashlog-settings-select-flex";
   selectRow.appendChild(select);
 
-  const opt1 = document.createElement("option");
+  const opt1 = activeDocument.createElement("option");
   opt1.value = "weekly";
   opt1.textContent = t("settings.period.weeklyFull");
   select.appendChild(opt1);
 
-  const opt2 = document.createElement("option");
+  const opt2 = activeDocument.createElement("option");
   opt2.value = "monthly";
   opt2.textContent = t("settings.period.monthlyFull");
   opt2.selected = true;
   select.appendChild(opt2);
 
-  const opt3 = document.createElement("option");
+  const opt3 = activeDocument.createElement("option");
   opt3.value = "yearly";
   opt3.textContent = t("settings.period.yearlyFull");
   select.appendChild(opt3);
 
-  const opt4 = document.createElement("option");
+  const opt4 = activeDocument.createElement("option");
   opt4.value = "custom";
   opt4.textContent = t("settings.period.customFull");
   select.appendChild(opt4);
 
   // 自定义日期范围（初始隐藏）
-  const dateRangeContainer = document.createElement("div");
+  const dateRangeContainer = activeDocument.createElement("div");
   dateRangeContainer.className = "cashlog-settings-date-range cashlog-settings-date-range-hidden";
   form.appendChild(dateRangeContainer);
 
-  const startDateInput = document.createElement("input");
+  const startDateInput = activeDocument.createElement("input");
   startDateInput.type = "date";
   startDateInput.className = "cashlog-settings-input cashlog-settings-date-input";
   dateRangeContainer.appendChild(startDateInput);
 
-  const endDateInput = document.createElement("input");
+  const endDateInput = activeDocument.createElement("input");
   endDateInput.type = "date";
   endDateInput.className = "cashlog-settings-input cashlog-settings-date-input";
   dateRangeContainer.appendChild(endDateInput);
@@ -1482,7 +1482,7 @@ function renderAddBudgetForm(container: HTMLElement, plugin: CashlogPlugin): voi
     }
   });
 
-  const addBtn = document.createElement("button");
+  const addBtn = activeDocument.createElement("button");
   addBtn.textContent = t("modal.button.add");
   addBtn.className = "cashlog-settings-btn cashlog-settings-btn-primary";
   form.appendChild(addBtn);
@@ -1525,74 +1525,74 @@ function renderAddBudgetForm(container: HTMLElement, plugin: CashlogPlugin): voi
 }
 
 function renderAddGoalForm(container: HTMLElement, plugin: CashlogPlugin): void {
-  const form = document.createElement("div");
+  const form = activeDocument.createElement("div");
   form.className = "cashlog-settings-add-form";
   container.appendChild(form);
 
-  const nameInput = document.createElement("input");
+  const nameInput = activeDocument.createElement("input");
   nameInput.type = "text";
   nameInput.className = "cashlog-settings-input";
   nameInput.placeholder = t("panelSettings.goalName");
   form.appendChild(nameInput);
 
-  const amountInput = document.createElement("input");
+  const amountInput = activeDocument.createElement("input");
   amountInput.type = "number";
   amountInput.className = "cashlog-settings-input";
   amountInput.placeholder = t("settings.placeholder.targetAmount");
   form.appendChild(amountInput);
 
   // 标签和周期放在同一行
-  const selectRow = document.createElement("div");
+  const selectRow = activeDocument.createElement("div");
   selectRow.className = "cashlog-settings-select-row";
   form.appendChild(selectRow);
 
-  const tagSelect = document.createElement("select");
+  const tagSelect = activeDocument.createElement("select");
   tagSelect.className = "cashlog-settings-select cashlog-settings-select-flex";
   const goalTagOptions = buildGoalTagOptions(plugin);
   for (const opt of goalTagOptions) {
-    const option = document.createElement("option");
+    const option = activeDocument.createElement("option");
     option.value = opt;
     option.textContent = opt;
     tagSelect.appendChild(option);
   }
   selectRow.appendChild(tagSelect);
 
-  const select = document.createElement("select");
+  const select = activeDocument.createElement("select");
   select.className = "cashlog-settings-select cashlog-settings-select-flex";
   selectRow.appendChild(select);
 
-  const opt1 = document.createElement("option");
+  const opt1 = activeDocument.createElement("option");
   opt1.value = "weekly";
   opt1.textContent = t("settings.period.weeklyFull");
   select.appendChild(opt1);
 
-  const opt2 = document.createElement("option");
+  const opt2 = activeDocument.createElement("option");
   opt2.value = "monthly";
   opt2.textContent = t("settings.period.monthlyFull");
   opt2.selected = true;
   select.appendChild(opt2);
 
-  const opt3 = document.createElement("option");
+  const opt3 = activeDocument.createElement("option");
   opt3.value = "yearly";
   opt3.textContent = t("settings.period.yearlyFull");
   select.appendChild(opt3);
 
-  const opt4 = document.createElement("option");
+  const opt4 = activeDocument.createElement("option");
   opt4.value = "custom";
   opt4.textContent = t("settings.period.customFull");
   select.appendChild(opt4);
 
   // 自定义日期范围（初始隐藏）
-  const dateRangeContainer = document.createElement("div");
+  const dateRangeContainer = activeDocument.createElement("div");
   dateRangeContainer.className = "cashlog-settings-date-range cashlog-settings-date-range-hidden";
   form.appendChild(dateRangeContainer);
 
-  const startDateInput = document.createElement("input");
+  const startDateInput = activeDocument.createElement("input");
   startDateInput.type = "date";
   startDateInput.className = "cashlog-settings-input cashlog-settings-date-input";
   dateRangeContainer.appendChild(startDateInput);
 
-  const endDateInput = document.createElement("input");
+  const endDateInput = activeDocument.createElement("input");
   endDateInput.type = "date";
   endDateInput.className = "cashlog-settings-input cashlog-settings-date-input";
   dateRangeContainer.appendChild(endDateInput);
@@ -1606,7 +1606,7 @@ function renderAddGoalForm(container: HTMLElement, plugin: CashlogPlugin): void 
     }
   });
 
-  const addBtn = document.createElement("button");
+  const addBtn = activeDocument.createElement("button");
   addBtn.textContent = t("modal.button.add");
   addBtn.className = "cashlog-settings-btn cashlog-settings-btn-primary";
   form.appendChild(addBtn);

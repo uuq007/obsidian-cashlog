@@ -5,7 +5,7 @@ import { t, tp } from "./i18n";
 // ========== Modal 构建辅助函数 ==========
 
 export function createModalOverlay(_container: HTMLElement): HTMLElement {
-  const overlay = document.createElement("div");
+  const overlay = activeDocument.createElement("div");
   overlay.className = "cashlog-tag-modal-overlay";
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) overlay.remove();
@@ -14,21 +14,21 @@ export function createModalOverlay(_container: HTMLElement): HTMLElement {
 }
 
 export function createModalCard(overlay: HTMLElement): HTMLElement {
-  const modal = document.createElement("div");
+  const modal = activeDocument.createElement("div");
   modal.className = "cashlog-tag-modal";
   overlay.appendChild(modal);
   return modal;
 }
 
 export function createModalTitle(text: string): HTMLElement {
-  const title = document.createElement("div");
+  const title = activeDocument.createElement("div");
   title.className = "cashlog-tag-modal-title";
   title.textContent = text;
   return title;
 }
 
 export function createModalInput(modal: HTMLElement, placeholder: string, value?: string): HTMLInputElement {
-  const input = document.createElement("input");
+  const input = activeDocument.createElement("input");
   input.type = "text";
   input.className = "cashlog-tag-modal-input";
   if (value !== undefined) input.value = value;
@@ -38,14 +38,14 @@ export function createModalInput(modal: HTMLElement, placeholder: string, value?
 }
 
 export function createModalError(modal: HTMLElement): HTMLElement {
-  const errorEl = document.createElement("div");
+  const errorEl = activeDocument.createElement("div");
   errorEl.className = "cashlog-tag-modal-error cashlog-hidden";
   modal.appendChild(errorEl);
   return errorEl;
 }
 
 export function createModalButtonRow(modal: HTMLElement): HTMLElement {
-  const btnRow = document.createElement("div");
+  const btnRow = activeDocument.createElement("div");
   btnRow.className = "cashlog-tag-modal-buttons";
   modal.appendChild(btnRow);
   return btnRow;
@@ -56,7 +56,7 @@ export function createModalButton(
   type: "primary" | "secondary",
   onClick: (btn: HTMLButtonElement) => void | Promise<void>
 ): HTMLButtonElement {
-  const btn = document.createElement("button");
+  const btn = activeDocument.createElement("button");
   btn.className = "cashlog-settings-btn";
   if (type === "primary") {
     btn.classList.add("cashlog-settings-btn-primary");
@@ -71,7 +71,7 @@ export function createModalButton(
 export function finishModal(overlay: HTMLElement, container: HTMLElement, input: HTMLInputElement | null): void {
   container.appendChild(overlay);
   if (input) {
-    setTimeout(() => {
+    activeWindow.setTimeout(() => {
       input.focus();
       input.select();
     }, 50);
@@ -146,7 +146,7 @@ export function createAsyncModalButton(
   onClick: (btn: HTMLButtonElement) => Promise<void>,
   onSuccess?: ModalRefreshFn
 ): HTMLButtonElement {
-  const btn = document.createElement("button");
+  const btn = activeDocument.createElement("button");
   btn.className = "cashlog-settings-btn";
   if (type === "primary") {
     btn.classList.add("cashlog-settings-btn-primary");

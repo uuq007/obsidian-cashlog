@@ -293,7 +293,7 @@ class CashlogRenderChild extends MarkdownRenderChild {
 
     if (error) {
       this.containerEl.empty();
-      this.containerEl.createEl("div", {
+      this.containerEl.createDiv({
         cls: "cashlog-error",
         text: tp("error.queryError", { error }),
       });

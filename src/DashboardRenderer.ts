@@ -128,19 +128,19 @@ function renderPeriodLabel(
   if (period) {
     const startStr = period.start.format("YYYY-MM-DD");
     const endStr = period.end.format("YYYY-MM-DD");
-    const label = container.createEl("div", { cls: "cashlog-period-label" });
-    label.createEl("span", { text: modeLabel, cls: "cashlog-period-mode" });
-    label.createEl("span", { text: `${startStr} ~ ${endStr}`, cls: "cashlog-period-range" });
-    const toggleBtn = label.createEl("span", { cls: "cashlog-period-toggle" });
+    const label = container.createDiv({ cls: "cashlog-period-label" });
+    label.createSpan({ text: modeLabel, cls: "cashlog-period-mode" });
+    label.createSpan({ text: `${startStr} ~ ${endStr}`, cls: "cashlog-period-range" });
+    const toggleBtn = label.createSpan({ cls: "cashlog-period-toggle" });
     setIcon(toggleBtn, hideAmounts ? "eye-off" : "eye");
     toggleBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       onToggleHide();
     });
   } else {
-    const label = container.createEl("div", { cls: "cashlog-period-label" });
-    label.createEl("span", { text: modeLabel, cls: "cashlog-period-mode" });
-    const toggleBtn = label.createEl("span", { cls: "cashlog-period-toggle" });
+    const label = container.createDiv({ cls: "cashlog-period-label" });
+    label.createSpan({ text: modeLabel, cls: "cashlog-period-mode" });
+    const toggleBtn = label.createSpan({ cls: "cashlog-period-toggle" });
     setIcon(toggleBtn, hideAmounts ? "eye-off" : "eye");
     toggleBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -163,7 +163,7 @@ function renderSummaryCards(
   callbacks: DashboardCallbacks,
   hideAmounts: boolean,
 ): void {
-  const cardsRow = container.createEl("div", { cls: "cashlog-summary-cards" });
+  const cardsRow = container.createDiv({ cls: "cashlog-summary-cards" });
 
   renderCard(cardsRow, t("dashboard.card.income"), income, "cashlog-card-income", hideAmounts, () => {
     callbacks.showEntries(incomeEntries, t("dashboard.incomeDetail"));
@@ -187,14 +187,14 @@ function renderCard(
   hideAmounts: boolean,
   onClick?: () => void,
 ): void {
-  const card = row.createEl("div", { cls: `cashlog-card ${cls}` });
-  card.createEl("div", { cls: "cashlog-card-label", text: label });
+  const card = row.createDiv({ cls: `cashlog-card ${cls}` });
+  card.createDiv({ cls: "cashlog-card-label", text: label });
   const formatted = label === t("dashboard.card.count")
     ? String(value)
     : hideAmounts
       ? "***"
       : formatMoney(value);
-  card.createEl("div", { cls: "cashlog-card-value", text: formatted });
+  card.createDiv({ cls: "cashlog-card-value", text: formatted });
 
   if (onClick) {
     card.addEventListener("click", onClick);
@@ -210,7 +210,7 @@ function renderAccountBalances(
   callbacks: DashboardCallbacks,
   hideAmounts: boolean,
 ): void {
-  const section = container.createEl("div", { cls: "cashlog-section" });
+  const section = container.createDiv({ cls: "cashlog-section" });
   section.createEl("h4", { text: t("dashboard.section.accountBalances"), cls: "cashlog-section-title" });
 
   const table = section.createEl("table", { cls: "cashlog-account-table" });
@@ -243,21 +243,21 @@ function renderBudgetProgress(
   progress: Array<{ config: { name: string; amount: number; tag?: string; period?: string }; spent: number; remaining: number; percentage: number; isOverspent: boolean; matchingEntries: CashlogEntry[] }>,
   callbacks: DashboardCallbacks,
 ): void {
-  const section = container.createEl("div", { cls: "cashlog-section" });
+  const section = container.createDiv({ cls: "cashlog-section" });
   section.createEl("h4", { text: t("dashboard.section.budgetProgress"), cls: "cashlog-section-title" });
 
   for (const p of progress) {
-    const item = section.createEl("div", { cls: "cashlog-progress-item" });
-    const header = item.createEl("div", { cls: "cashlog-progress-header" });
-    header.createEl("span", { text: p.config.name });
+    const item = section.createDiv({ cls: "cashlog-progress-item" });
+    const header = item.createDiv({ cls: "cashlog-progress-header" });
+    header.createSpan({ text: p.config.name });
     const periodLabel = p.config.period ? ` · ${p.config.period}` : "";
-    header.createEl("span", {
+    header.createSpan({
       text: `¥${formatMoneyUnsigned(p.spent)} / ¥${formatMoneyUnsigned(p.config.amount)}${periodLabel}`,
       cls: p.isOverspent ? "cashlog-amount-expense" : "",
     });
 
-    const bar = item.createEl("div", { cls: "cashlog-progress-bar" });
-    const fill = bar.createEl("div", {
+    const bar = item.createDiv({ cls: "cashlog-progress-bar" });
+    const fill = bar.createDiv({
       cls: "cashlog-progress-fill" + (p.isOverspent ? " overspent" : ""),
     });
     fill.style.width = `${Math.min(100, p.percentage)}%`;
@@ -275,21 +275,21 @@ function renderGoalProgress(
   progress: Array<{ config: { name: string; targetAmount: number; tag?: string; period?: string }; earned: number; remaining: number; percentage: number; isAchieved: boolean; matchingEntries: CashlogEntry[] }>,
   callbacks: DashboardCallbacks,
 ): void {
-  const section = container.createEl("div", { cls: "cashlog-section" });
+  const section = container.createDiv({ cls: "cashlog-section" });
   section.createEl("h4", { text: t("dashboard.section.goalProgress"), cls: "cashlog-section-title" });
 
   for (const p of progress) {
-    const item = section.createEl("div", { cls: "cashlog-progress-item" });
-    const header = item.createEl("div", { cls: "cashlog-progress-header" });
-    header.createEl("span", { text: p.config.name });
+    const item = section.createDiv({ cls: "cashlog-progress-item" });
+    const header = item.createDiv({ cls: "cashlog-progress-header" });
+    header.createSpan({ text: p.config.name });
     const periodLabel = p.config.period ? ` · ${p.config.period}` : "";
-    header.createEl("span", {
+    header.createSpan({
       text: `¥${formatMoneyUnsigned(p.earned)} / ¥${formatMoneyUnsigned(p.config.targetAmount)}${periodLabel}`,
       cls: p.isAchieved ? "cashlog-amount-income" : "",
     });
 
-    const bar = item.createEl("div", { cls: "cashlog-progress-bar" });
-    const fill = bar.createEl("div", {
+    const bar = item.createDiv({ cls: "cashlog-progress-bar" });
+    const fill = bar.createDiv({
       cls: "cashlog-progress-fill goal" + (p.isAchieved ? " achieved" : ""),
     });
     fill.style.width = `${Math.min(100, p.percentage)}%`;
@@ -303,28 +303,28 @@ function renderGoalProgress(
 
 // 最近交易
 function renderRecentEntries(container: HTMLElement, entries: CashlogEntry[]): void {
-  const section = container.createEl("div", { cls: "cashlog-section" });
+  const section = container.createDiv({ cls: "cashlog-section" });
   section.createEl("h4", { text: t("dashboard.section.recentTransactions"), cls: "cashlog-section-title" });
 
-  const list = section.createEl("div", { cls: "cashlog-recent-list" });
+  const list = section.createDiv({ cls: "cashlog-recent-list" });
 
   for (const entry of entries) {
-    const row = list.createEl("div", { cls: "cashlog-recent-row" });
+    const row = list.createDiv({ cls: "cashlog-recent-row" });
 
     const dateStr = entry.date ? entry.date.format("MM-DD") : "--";
-    row.createEl("span", { cls: "cashlog-recent-date", text: dateStr });
+    row.createSpan({ cls: "cashlog-recent-date", text: dateStr });
 
     const desc = entry.description || entry.tags.join(" ");
-    row.createEl("span", { cls: "cashlog-recent-desc", text: desc });
+    row.createSpan({ cls: "cashlog-recent-desc", text: desc });
 
     if (entry.accountAmounts.length > 0) {
       const text = entry.accountAmounts.map((aa) => `💳${aa.account}`).join(" ");
-      row.createEl("span", { cls: "cashlog-recent-account", text });
+      row.createSpan({ cls: "cashlog-recent-account", text });
     }
 
     const sign = entry.isIncome ? "+" : "-";
     const amountCls = entry.isIncome ? "cashlog-amount-income" : "cashlog-amount-expense";
-    row.createEl("span", {
+    row.createSpan({
       cls: `cashlog-recent-amount ${amountCls}`,
       text: `${sign}¥${formatMoneyUnsigned(Math.abs(entry.totalAmount))}`,
     });
@@ -339,7 +339,7 @@ function renderRecentEntries(container: HTMLElement, entries: CashlogEntry[]): v
   }
 
   if (entries.length === 0) {
-    list.createEl("div", { cls: "cashlog-empty", text: t("dashboard.emptyTransactions") });
+    list.createDiv({ cls: "cashlog-empty", text: t("dashboard.emptyTransactions") });
   }
 }
 
@@ -350,54 +350,54 @@ let _currentTooltip: HTMLElement | null = null;
 function showTooltip(anchor: HTMLElement, entry: CashlogEntry, _event: MouseEvent): void {
   hideTooltip();
 
-  _currentTooltip = document.body.createEl("div", { cls: "cashlog-tooltip" });
+  _currentTooltip = activeDocument.body.createDiv({ cls: "cashlog-tooltip" });
   const tip = _currentTooltip;
 
   // 日期时间
   if (entry.date) {
-    const dateRow = tip.createEl("div", { cls: "cashlog-tooltip-row" });
-    dateRow.createEl("span", { cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.date") });
+    const dateRow = tip.createDiv({ cls: "cashlog-tooltip-row" });
+    dateRow.createSpan({ cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.date") });
     let dateText = entry.date.format("YYYY-MM-DD");
     if (entry.time) dateText += " " + entry.time;
-    dateRow.createEl("span", { cls: "cashlog-tooltip-value", text: dateText });
+    dateRow.createSpan({ cls: "cashlog-tooltip-value", text: dateText });
   }
 
   // 标签
   if (entry.tags.length > 0) {
-    const tagRow = tip.createEl("div", { cls: "cashlog-tooltip-row" });
-    tagRow.createEl("span", { cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.tags") });
-    tagRow.createEl("span", { cls: "cashlog-tooltip-value", text: entry.tags.join(" ") });
+    const tagRow = tip.createDiv({ cls: "cashlog-tooltip-row" });
+    tagRow.createSpan({ cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.tags") });
+    tagRow.createSpan({ cls: "cashlog-tooltip-value", text: entry.tags.join(" ") });
   }
 
   // 描述
   if (entry.description) {
-    const descRow = tip.createEl("div", { cls: "cashlog-tooltip-row" });
-    descRow.createEl("span", { cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.description") });
-    descRow.createEl("span", { cls: "cashlog-tooltip-value", text: entry.description });
+    const descRow = tip.createDiv({ cls: "cashlog-tooltip-row" });
+    descRow.createSpan({ cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.description") });
+    descRow.createSpan({ cls: "cashlog-tooltip-value", text: entry.description });
   }
 
   // 账户金额明细
   if (entry.accountAmounts.length > 0) {
     for (const aa of entry.accountAmounts) {
-      const aaRow = tip.createEl("div", { cls: "cashlog-tooltip-row" });
-      aaRow.createEl("span", { cls: "cashlog-tooltip-label", text: tp("dashboard.tooltip.account", { account: aa.account }) });
-      aaRow.createEl("span", { cls: "cashlog-tooltip-value", text: `¥${aa.amount.toFixed(2)}` });
+      const aaRow = tip.createDiv({ cls: "cashlog-tooltip-row" });
+      aaRow.createSpan({ cls: "cashlog-tooltip-label", text: tp("dashboard.tooltip.account", { account: aa.account }) });
+      aaRow.createSpan({ cls: "cashlog-tooltip-value", text: `¥${aa.amount.toFixed(2)}` });
     }
   } else if (!entry.isTransfer && !entry.isBalanceChange) {
-    const amtRow = tip.createEl("div", { cls: "cashlog-tooltip-row" });
-    amtRow.createEl("span", { cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.amount") });
-    amtRow.createEl("span", { cls: "cashlog-tooltip-value", text: `¥${entry.amount.toFixed(2)}` });
+    const amtRow = tip.createDiv({ cls: "cashlog-tooltip-row" });
+    amtRow.createSpan({ cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.amount") });
+    amtRow.createSpan({ cls: "cashlog-tooltip-value", text: `¥${entry.amount.toFixed(2)}` });
   }
 
   // 类型标签
   if (entry.isTransfer) {
-    const typeRow = tip.createEl("div", { cls: "cashlog-tooltip-row" });
-    typeRow.createEl("span", { cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.type") });
-    typeRow.createEl("span", { cls: "cashlog-tooltip-value", text: t("dashboard.tooltip.transfer") });
+    const typeRow = tip.createDiv({ cls: "cashlog-tooltip-row" });
+    typeRow.createSpan({ cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.type") });
+    typeRow.createSpan({ cls: "cashlog-tooltip-value", text: t("dashboard.tooltip.transfer") });
   } else if (entry.isBalanceChange) {
-    const typeRow = tip.createEl("div", { cls: "cashlog-tooltip-row" });
-    typeRow.createEl("span", { cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.type") });
-    typeRow.createEl("span", { cls: "cashlog-tooltip-value", text: t("dashboard.tooltip.balanceChange") });
+    const typeRow = tip.createDiv({ cls: "cashlog-tooltip-row" });
+    typeRow.createSpan({ cls: "cashlog-tooltip-label", text: t("dashboard.tooltip.type") });
+    typeRow.createSpan({ cls: "cashlog-tooltip-value", text: t("dashboard.tooltip.balanceChange") });
   }
 
   // 定位 tooltip
@@ -421,7 +421,7 @@ function renderCategoryRankFromEntries(
   settings: { expenseTag: string },
   callbacks: DashboardCallbacks,
 ): void {
-  const section = container.createEl("div", { cls: "cashlog-section" });
+  const section = container.createDiv({ cls: "cashlog-section" });
   const titleEl = section.createEl("h4", { text: t("dashboard.section.categoryRanking"), cls: "cashlog-section-title" });
   titleEl.addEventListener("click", () => {
     callbacks.showPieChart(allEntries, settings.expenseTag);
@@ -445,15 +445,15 @@ function renderCategoryRankFromEntries(
 
   for (const [category, amount] of ranked) {
     const pct = totalExpense > 0 ? (amount / totalExpense) * 100 : 0;
-    const item = section.createEl("div", { cls: "cashlog-progress-item" });
-    const header = item.createEl("div", { cls: "cashlog-progress-header" });
-    header.createEl("span", { text: category });
-    header.createEl("span", {
+    const item = section.createDiv({ cls: "cashlog-progress-item" });
+    const header = item.createDiv({ cls: "cashlog-progress-header" });
+    header.createSpan({ text: category });
+    header.createSpan({
       text: `¥${formatMoneyUnsigned(amount)} (${pct.toFixed(1)}%)`,
     });
 
-    const bar = item.createEl("div", { cls: "cashlog-progress-bar" });
-    const fill = bar.createEl("div", { cls: "cashlog-progress-fill category" });
+    const bar = item.createDiv({ cls: "cashlog-progress-bar" });
+    const fill = bar.createDiv({ cls: "cashlog-progress-fill category" });
     fill.style.width = `${Math.min(100, pct)}%`;
 
     // 点击跳转到该分类的支出条目

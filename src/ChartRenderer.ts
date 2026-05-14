@@ -36,7 +36,7 @@ export function renderChartTable(
   containerEl.addClass("cashlog-chart");
 
   // 外层容器用于统一表格对齐
-  const wrapper = containerEl.createEl("div", { cls: "cashlog-chart-table-wrapper" });
+  const wrapper = containerEl.createDiv({ cls: "cashlog-chart-table-wrapper" });
 
   if (!result.groups?.length) return;
 
@@ -111,7 +111,7 @@ function renderEntryRow(
         if ((entry.isTransfer || entry.isBalanceChange) && displayAmount === 0) {
           td.setText("/");
         } else {
-          td.createEl("span", {
+          td.createSpan({
             cls: displayAmount < 0 ? "cashlog-amount-expense" : "cashlog-amount-income",
             text: `${displayAmount}`,
           });
@@ -145,9 +145,9 @@ function renderEntryRow(
         if (entry.accountAmounts.length > 0) {
           for (const aa of entry.accountAmounts) {
             const amountCls = aa.amount < 0 ? "cashlog-amount-expense" : "cashlog-amount-income";
-            const div = td.createEl("div");
-            div.createEl("span", { text: `💳${aa.account}💴` });
-            div.createEl("span", { cls: amountCls, text: `${aa.amount}` });
+            const div = td.createDiv();
+            div.createSpan({ text: `💳${aa.account}💴` });
+            div.createSpan({ cls: amountCls, text: `${aa.amount}` });
           }
         } else {
           td.setText("-");
@@ -225,11 +225,11 @@ function renderGroupSubtotalRow(tbody: HTMLElement, group: EntryGroup, colCount:
   const roundedIncome = Math.round(totalIncome * 100) / 100;
   const roundedExpense = Math.round(totalExpense * 100) / 100;
   if (roundedIncome !== 0) {
-    amountTd.createEl("span", { cls: "cashlog-amount-income", text: `+${roundedIncome}` });
+    amountTd.createSpan({ cls: "cashlog-amount-income", text: `+${roundedIncome}` });
   }
   if (roundedExpense !== 0) {
-    if (roundedIncome !== 0) amountTd.createEl("span", { text: " / " });
-    amountTd.createEl("span", { cls: "cashlog-amount-expense", text: `${roundedExpense}` });
+    if (roundedIncome !== 0) amountTd.createSpan({ text: " / " });
+    amountTd.createSpan({ cls: "cashlog-amount-expense", text: `${roundedExpense}` });
   }
 }
 
@@ -254,21 +254,21 @@ function renderTotalSummary(containerEl: HTMLElement, result: QueryResult): void
     .reduce((sum, e) => sum + e.amount, 0);
   const balance = totalIncome + totalExpense;
 
-  const div = containerEl.createEl("div", { cls: "cashlog-chart-total-summary" });
+  const div = containerEl.createDiv({ cls: "cashlog-chart-total-summary" });
 
   const roundedIncome = Math.round(totalIncome * 100) / 100;
   const roundedExpense = Math.round(totalExpense * 100) / 100;
   const roundedBalance = Math.round(balance * 100) / 100;
 
-  div.createEl("div", {
+  div.createDiv({
     cls: "cashlog-summary-income",
     text: tp("renderer.totalIncomeChart", { amount: roundedIncome.toLocaleString() }),
   });
-  div.createEl("div", {
+  div.createDiv({
     cls: "cashlog-summary-expense",
     text: tp("renderer.totalExpenseChart", { amount: roundedExpense.toLocaleString() }),
   });
-  div.createEl("div", {
+  div.createDiv({
     cls: "cashlog-summary-balance",
     text: tp("renderer.netBalanceChart", { amount: roundedBalance.toLocaleString() }),
   });
@@ -713,10 +713,10 @@ export function createChartContainer(containerEl: HTMLElement, config: ChartConf
   containerEl.empty();
   containerEl.addClass("cashlog-chart");
 
-  const wrapper = containerEl.createEl("div", { cls: "cashlog-chart-container" });
+  const wrapper = containerEl.createDiv({ cls: "cashlog-chart-container" });
 
   if (config.title) {
-    wrapper.createEl("div", { cls: "cashlog-chart-title", text: config.title });
+    wrapper.createDiv({ cls: "cashlog-chart-title", text: config.title });
   }
 
   const canvas = wrapper.createEl("canvas", {
@@ -735,12 +735,12 @@ let _cachedLabelColor: string | null = null;
 
 function getLabelColor(): string {
   if (_cachedLabelColor) return _cachedLabelColor;
-  const probe = document.createElement("span");
+  const probe = activeDocument.createElement("span");
   probe.className = "cashlog-chart-probe";
   probe.textContent = ".";
-  document.body.appendChild(probe);
+  activeDocument.body.appendChild(probe);
   _cachedLabelColor = getComputedStyle(probe).color || "#333333";
-  document.body.removeChild(probe);
+  activeDocument.body.removeChild(probe);
   return _cachedLabelColor;
 }
 
@@ -984,7 +984,7 @@ export class CashlogChartRenderChild extends MarkdownRenderChild {
 
       if (error) {
         this.containerEl.empty();
-        this.containerEl.createEl("div", {
+        this.containerEl.createDiv({
           cls: "cashlog-error",
           text: tp("error.queryError", { error }),
         });
@@ -994,7 +994,7 @@ export class CashlogChartRenderChild extends MarkdownRenderChild {
       const entries = this.plugin.cache.getEntries();
       if (!entries?.length) {
         this.containerEl.empty();
-        this.containerEl.createEl("div", {
+        this.containerEl.createDiv({
           cls: "cashlog-error",
           text: t("error.noData"),
         });
@@ -1040,14 +1040,14 @@ export class CashlogChartRenderChild extends MarkdownRenderChild {
         this.chartInstance = renderPieChart(this.containerEl, chartData, chartConfig);
       } else {
         this.containerEl.empty();
-        this.containerEl.createEl("div", {
+        this.containerEl.createDiv({
           cls: "cashlog-error",
           text: tp("error.unsupportedChartType", { type: chartConfig.type }),
         });
       }
     } catch (err) {
       this.containerEl.empty();
-      this.containerEl.createEl("div", {
+      this.containerEl.createDiv({
         cls: "cashlog-error",
         text: tp("error.chartRenderFailed", { message: err instanceof Error ? err.message : String(err) }),
       });
