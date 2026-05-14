@@ -949,7 +949,7 @@ export function renderPieChart(
 export class CashlogChartRenderChild extends MarkdownRenderChild {
   private source: string;
   private plugin: CashlogPlugin;
-  private chartInstance: Chart | null = null;
+  private chartInstance: { destroy(): void } | null = null;
 
   constructor(containerEl: HTMLElement, source: string, plugin: CashlogPlugin) {
     super(containerEl);
