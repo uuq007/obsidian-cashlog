@@ -40,7 +40,7 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
           for (const k in attrObj) el.setAttribute(k, attrObj[k]);
         }
       }
-      return el as HTMLElement & ReturnType<CreateElFn>;
+      return el as HTMLElement;
     } as unknown as CreateElFn;
   }
 
@@ -280,7 +280,7 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
   });
 
   // 恢复滚动位置
-  requestAnimationFrame(() => {
+  window.requestAnimationFrame(() => {
     container.scrollTop = scrollTop;
   });
 }
@@ -1649,4 +1649,4 @@ function renderAddGoalForm(container: HTMLElement, plugin: CashlogPlugin): void 
   });
 }
 
-/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */
+/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- 结束 Obsidian API 和 Chart.js 类型安全规则禁用 */
