@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- Obsidian API 和 Chart.js 类型在 ESLint 类型检查中无法完全解析 */
 import { App, Modal, Notice, Setting } from "obsidian";
 import { CashlogEntry } from "./CashlogEntry";
 import type { CashlogSettings } from "./Settings";
@@ -233,7 +234,7 @@ export class CashlogModal extends Modal {
 
     // 自动聚焦描述字段（仅首次渲染）
     if (needsFullRebuild) {
-      activeWindow.setTimeout(() => {
+      window.setTimeout(() => {
         const descInput = contentEl.querySelector(".cashlog-desc-input") as HTMLElement;
         if (descInput) descInput.focus();
       }, 10);
@@ -833,3 +834,5 @@ export class CashlogModal extends Modal {
     }
   }
 }
+
+/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */

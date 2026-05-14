@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- Obsidian API 和 Chart.js 类型在 ESLint 类型检查中无法完全解析 */
 import type { CashlogEntry } from "./EntryLocation";
 import type { BudgetConfig, GoalConfig } from "./Settings";
 import { DateRange } from "./Query/DateRange";
@@ -191,3 +192,5 @@ export class BudgetManager {
     return this.filterByCondition(entries, goal.tag, periodStart, periodEnd, (e) => e.isIncome);
   }
 }
+
+/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */

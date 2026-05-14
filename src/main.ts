@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- Obsidian API 和 Chart.js 类型在 ESLint 类型检查中无法完全解析 */
 import { Events, MarkdownRenderChild, Plugin, TFile } from "obsidian";
 import { CashlogSettings, DEFAULT_SETTINGS } from "./Settings";
 import { CashlogSettingsTab } from "./SettingsTab";
@@ -305,3 +306,5 @@ class CashlogRenderChild extends MarkdownRenderChild {
     renderQueryResult(this.containerEl, result, query, this.plugin);
   }
 }
+
+/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */

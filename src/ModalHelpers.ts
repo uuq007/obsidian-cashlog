@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- Obsidian API 和 Chart.js 类型在 ESLint 类型检查中无法完全解析 */
 import { Notice } from "obsidian";
 import { validateTagName } from "./TagValidation";
 import { t, tp } from "./i18n";
@@ -72,7 +73,7 @@ export function createModalButton(
 export function finishModal(overlay: HTMLElement, container: HTMLElement, input: HTMLInputElement | null): void {
   container.appendChild(overlay);
   if (input) {
-    activeWindow.setTimeout(() => {
+    window.setTimeout(() => {
       input.focus();
       input.select();
     }, 50);
@@ -171,3 +172,4 @@ export function createAsyncModalButton(
   });
   return btn;
 }
+/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */

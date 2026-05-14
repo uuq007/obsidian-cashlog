@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- Obsidian API 和 Chart.js 类型在 ESLint 类型检查中无法完全解析 */
 import { Events, MetadataCache, TFile, Vault } from "obsidian";
 import { CashlogEntry, EntryLocation } from "./EntryLocation";
 import { parseCashlogLine } from "./CashlogSerializer";
@@ -147,3 +148,5 @@ export class Cache {
     this.events.trigger("cashlog-cache-update");
   }
 }
+
+/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */

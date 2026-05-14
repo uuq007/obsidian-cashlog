@@ -1,10 +1,7 @@
-// Obsidian 的 moment 类型导出存在已知问题（typeof Moment 是类构造器类型，缺少直接调用签名）
-// 使用 moment npm 包的完整类型进行修正，仅在这一行需要 eslint-disable
-import { moment as _obsMoment } from "obsidian";
-import type _momentDefault from "moment";
+import type MomentModule from "moment";
 
-type MomentFn = typeof _momentDefault;
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-export const moment = _obsMoment as unknown as MomentFn;
-export type Moment = ReturnType<MomentFn>;
+// Obsidian 在运行时通过 window.moment 暴露 moment 库
+// 直接从 window 获取，避免 obsidian.d.ts 中 typeof Moment 类型不完整导致的 ESLint 级联错误
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- Obsidian 通过 window.moment 暴露 moment，需 any 中转获取 moment npm 包完整类型
+export const moment = (window as any).moment as typeof MomentModule;
+export type Moment = ReturnType<typeof MomentModule>;
