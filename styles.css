@@ -341,7 +341,7 @@ input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
   margin: -14px -16px 16px -16px;
   padding: 10px 16px;
   background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: #fff;
+  color: #ffffff;
   border-radius: 0;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
 }
@@ -349,7 +349,7 @@ input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
 .cashlog-period-mode {
   font-size: 0.8em;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.2);
   padding: 3px 10px;
   border-radius: 12px;
@@ -382,7 +382,7 @@ input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
 }
 
 .cashlog-period-toggle:hover {
-  color: #fff;
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.15);
 }
 
@@ -731,6 +731,7 @@ input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
 
 .theme-dark .cashlog-card {
   background: var(--background-primary-alt);
+  border-color: var(--background-modifier-border);
 }
 
 .theme-dark .cashlog-card-income .cashlog-card-value {
@@ -1726,10 +1727,6 @@ input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
 }
 
 /* 深色主题卡片适配 */
-.theme-dark .cashlog-card {
-  border-color: var(--background-modifier-border);
-}
-
 .theme-dark .cashlog-card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   border-color: var(--interactive-accent);
@@ -1798,9 +1795,4 @@ input[type="time"].cashlog-field-input::-webkit-calendar-picker-indicator {
 .cashlog-settings-date-input {
   flex: 1;
   min-width: 0;
-}
-
-/* 隐藏元素（用于 errorEl 等需要显示/隐藏的元素） */
-.cashlog-hidden {
-  display: none !important;
 }
