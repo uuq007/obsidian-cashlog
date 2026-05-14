@@ -2,7 +2,13 @@
 
 A personal finance tracking plugin for [Obsidian](https://obsidian.md). Record income and expenses directly in your Markdown notes with an emoji-based syntax, then query, visualize, and analyze your data — all within your vault.
 
-**[中文文档](README_zh.md)**
+**[中文文档](https://github.com/uuq007/obsidian-cashlog/blob/main/README_zh.md)**
+
+**[使用手册](https://github.com/uuq007/obsidian-cashlog/blob/main/使用手册.md)**
+
+**[USAGE](https://github.com/uuq007/obsidian-cashlog/blob/main/USAGE.md)**
+
+
 
 ---
 
@@ -36,6 +42,32 @@ Use the command palette (`Ctrl+P`) → `Create or edit cashlog`, or write manual
 | `➕` | Date | `➕` + YYYY-MM-DD |
 | `⏰` | Time | `⏰` + HH:mm |
 
+![create-or-edit](assets/create-or-edit.png)
+
+![create-or-edit2](assets/create-or-edit2.png)
+
+After enabling the account and attachment features in the plugin settings, the full create/edit menu looks like this:
+
+![create-or-edit3](assets/create-or-edit3.png)
+
+
+## Dashboard Panel
+
+Open via command palette → `Open Cashlog Panel`. The panel provides:
+
+![dashboard](assets/dashboard.png)
+
+- **Summary cards** — Income, expense, balance, count for the current period
+- **Account balances** — Real-time balance for each account with drill-down details
+- **Budget progress** — Spending vs. budget with period-aware tracking
+- **Goal progress** — Income achievement vs. target
+- **Recent transactions** — Last 10 entries with hover details
+- **Category ranking** — Top 5 expense categories with percentage
+
+All dashboard areas are clickable for drill-down navigation.
+
+
+
 ### Query your data
 
 ````markdown
@@ -47,7 +79,13 @@ show total expense
 ```
 ````
 
+![image-20260514235928988](assets/image-20260514235928988.png)
+
 ### Visualize with charts
+
+Use the command palette (`Ctrl+P`) → `Insert chart`, or write manually:
+
+![image-20260515000639026](assets/image-20260515000639026.png)
 
 ````markdown
 ```cashlog-chart
@@ -58,6 +96,14 @@ chart bar split by valueType
 chart legend true
 ```
 ````
+
+![image-20260515000037141](assets/image-20260515000037141.png)
+
+![image-20260515000305595](assets/image-20260515000305595.png)
+
+![image-20260515000355591](assets/image-20260515000355591.png)
+
+![image-20260515000433199](assets/image-20260515000433199.png)
 
 ## Entry Format
 
@@ -171,18 +217,7 @@ Use `` ```cashlog-chart `` code blocks to render visualizations powered by Chart
 | `chart line split by tag` | Split lines by tag |
 | `chart value income` | Pie chart value mode |
 
-## Dashboard Panel
 
-Open via command palette → `Open Cashlog Panel`. The panel provides:
-
-- **Summary cards** — Income, expense, balance, count for the current period
-- **Account balances** — Real-time balance for each account with drill-down details
-- **Budget progress** — Spending vs. budget with period-aware tracking
-- **Goal progress** — Income achievement vs. target
-- **Recent transactions** — Last 10 entries with hover details
-- **Category ranking** — Top 5 expense categories with percentage
-
-All dashboard areas are clickable for drill-down navigation.
 
 ## Installation
 
@@ -216,7 +251,7 @@ npm run build
 
 ## Requirements
 
-- Obsidian v1.4.11+
+- Obsidian v1.7.2+
 
 ## License
 

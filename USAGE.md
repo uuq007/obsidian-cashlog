@@ -1,83 +1,83 @@
-# Cashlog 使用手册
+# Cashlog User Manual
 
-## 目录
+## Table of Contents
 
-- [安装](#安装)
-- [快速开始](#快速开始)
-- [创建记账条目](#创建记账条目)
-  - [使用命令创建](#使用命令创建)
-  - [手动编写](#手动编写)
-  - [插入图表](#插入图表)
-- [记账条目格式详解](#记账条目格式详解)
-  - [基础格式](#基础格式)
-  - [带账户的格式](#带账户的格式)
-  - [转账格式](#转账格式)
-  - [余额变更格式](#余额变更格式)
-  - [带附件的格式](#带附件的格式)
-- [账户功能](#账户功能)
-  - [开启账户功能](#开启账户功能)
-  - [使用账户记账](#使用账户记账)
-  - [转账](#转账)
-  - [余额变更](#余额变更)
-  - [账户余额](#账户余额)
-- [附件功能](#附件功能)
-  - [上传附件](#上传附件)
-  - [附件的存储格式](#附件的存储格式)
-- [插件设置](#插件设置)
-- [Cashlog 面板](#cashlog-面板)
-  - [打开面板](#打开面板)
-  - [仪表盘](#仪表盘)
-  - [面板设置](#面板设置)
-- [预算与目标](#预算与目标)
-  - [设置预算](#设置预算)
-  - [设置目标](#设置目标)
-- [查询语法](#查询语法)
-  - [基本结构](#基本结构)
-  - [过滤指令](#过滤指令)
-  - [排序指令](#排序指令)
-  - [分组指令](#分组指令)
-  - [汇总指令](#汇总指令)
-  - [显示控制](#显示控制)
-  - [表格配置](#表格配置)
-  - [限制数量](#限制数量)
-  - [注释](#注释)
-- [完整查询示例](#完整查询示例)
-- [工作流建议](#工作流建议)
-- [常见问题](#常见问题)
-
----
-
-## 安装
-
-1. 将 `cashlog` 文件夹复制到你的 Obsidian vault 的 `.obsidian/plugins/obsidian-cashlog/` 目录下
-2. 文件夹中应包含 `main.js`、`manifest.json`、`styles.css` 三个文件
-3. 打开 Obsidian → 设置 → 第三方插件 → 刷新列表
-4. 找到 **Cashlog** 并启用
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Creating Cashlog Entries](#creating-cashlog-entries)
+  - [Using Commands](#using-commands)
+  - [Manual Entry](#manual-entry)
+  - [Inserting Charts](#inserting-charts)
+- [Entry Format Reference](#entry-format-reference)
+  - [Basic Format](#basic-format)
+  - [Format with Account](#format-with-account)
+  - [Transfer Format](#transfer-format)
+  - [Balance Adjustment Format](#balance-adjustment-format)
+  - [Format with Attachments](#format-with-attachments)
+- [Account Feature](#account-feature)
+  - [Enabling Accounts](#enabling-accounts)
+  - [Using Accounts for Tracking](#using-accounts-for-tracking)
+  - [Transfers](#transfers)
+  - [Balance Adjustments](#balance-adjustments)
+  - [Account Balances](#account-balances)
+- [Attachment Feature](#attachment-feature)
+  - [Uploading Attachments](#uploading-attachments)
+  - [Attachment Storage Format](#attachment-storage-format)
+- [Plugin Settings](#plugin-settings)
+- [Cashlog Panel](#cashlog-panel)
+  - [Opening the Panel](#opening-the-panel)
+  - [Dashboard](#dashboard)
+  - [Panel Settings](#panel-settings)
+- [Budgets and Goals](#budgets-and-goals)
+  - [Setting a Budget](#setting-a-budget)
+  - [Setting a Goal](#setting-a-goal)
+- [Query Syntax](#query-syntax)
+  - [Basic Structure](#basic-structure)
+  - [Filter Directives](#filter-directives)
+  - [Sort Directives](#sort-directives)
+  - [Group Directives](#group-directives)
+  - [Summary Directives](#summary-directives)
+  - [Display Controls](#display-controls)
+  - [Table Configuration](#table-configuration)
+  - [Limiting Results](#limiting-results)
+  - [Comments](#comments)
+- [Complete Query Examples](#complete-query-examples)
+- [Workflow Suggestions](#workflow-suggestions)
+- [FAQ](#faq)
 
 ---
 
-## 快速开始
+## Installation
 
-**第一步：记一笔账**
+1. Copy the `cashlog` folder to your Obsidian vault's `.obsidian/plugins/obsidian-cashlog/` directory
+2. The folder should contain three files: `main.js`, `manifest.json`, and `styles.css`
+3. Open Obsidian → Settings → Community Plugins → Refresh list
+4. Find **Cashlog** and enable it
 
-按 `Ctrl+P` 打开命令面板，搜索 `Create or edit cashlog`，回车后在弹出的对话框中填写：
+---
 
-1. 类型：选择「支出」或「收入」
-2. 分类：选择子标签（如「交通」）
-3. 描述：输入说明文字（如「坐高铁」）
-4. 金额：输入正数（如 `100`）
-5. 日期：选择日期
-6. 时间：可选，输入 `HH:mm` 格式
+## Quick Start
 
-点击确认后，当前光标行会被替换为记账条目：
+**Step 1: Record an Entry**
+
+Press `Ctrl+P` to open the command palette, search for `Create or edit cashlog`, and press Enter. In the dialog that appears, fill in:
+
+1. Type: Select "Expense" or "Income"
+2. Tag: Select a sub-tag (e.g., "Transport")
+3. Description: Enter a description (e.g., "High-speed train")
+4. Amount: Enter a positive number (e.g., `100`)
+5. Date: Select a date
+6. Time: Optional, enter in `HH:mm` format
+
+After clicking confirm, the current cursor line will be replaced with a cashlog entry:
 
 ```
-- #支出/交通 坐高铁 💴-100 ➕2026-04-25 ⏰17:30
+- #expense/transport high-speed train 💴-100 ➕2026-04-25 ⏰17:30
 ```
 
-**第二步：查询记账数据**
+**Step 2: Query Cashlog Data**
 
-在任意笔记中创建一个 `cashlog` 代码块：
+Create a `cashlog` code block in any note:
 
 ````markdown
 ```cashlog
@@ -88,39 +88,39 @@ show total
 ```
 ````
 
-切换到阅读模式即可看到查询结果。
+Switch to Reading Mode to see the query results.
 
-**第三步：打开记账面板**
+**Step 3: Open the Cashlog Panel**
 
-`Ctrl+P` → 搜索「打开 Cashlog 面板」→ 回车，在右侧新标签页查看仪表盘和统计数据。
+`Ctrl+P` → Search for "Open Cashlog Panel" → Press Enter to view the dashboard and statistics in a new tab on the right.
 
 ---
 
-## 创建记账条目
+## Creating Cashlog Entries
 
-### 使用命令创建
+### Using Commands
 
-1. 将光标放在编辑器的任意空行上
-2. `Ctrl+P` → 输入 `Create or edit cashlog` → 回车
-3. 在对话框中填写信息并确认
+1. Place the cursor on any blank line in the editor
+2. `Ctrl+P` → Type `Create or edit cashlog` → Press Enter
+3. Fill in the information in the dialog and confirm
 
-### 手动编写
+### Manual Entry
 
-你也可以直接在编辑器中按照格式手写记账条目，插件会自动识别。
+You can also write cashlog entries directly in the editor following the format, and the plugin will recognize them automatically.
 
-### 插入图表
+### Inserting Charts
 
-除了 `cashlog` 查询代码块外，插件还提供 `cashlog-chart` 代码块，用于在笔记中插入表格、条形图、折线图或扇形图。
+In addition to the `cashlog` query code block, the plugin also provides a `cashlog-chart` code block for inserting tables, bar charts, line charts, or pie charts into notes.
 
-1. 将光标放在编辑器的任意空行上
-2. `Ctrl+P` → 输入 `Insert cashlog chart` → 回车
-3. 在弹出的对话框中配置：
-   - **过滤条件**：类型（多选）、标签、描述、金额范围、日期范围、路径
-   - **图表类型**：选择「表格」「条形图」「折线图」或「扇形图」
-   - 根据所选类型会出现对应的选项（表格有列配置、条形图有 X 轴和子分组选项等）
-4. 点击「插入」
+1. Place the cursor on any blank line in the editor
+2. `Ctrl+P` → Type `Insert cashlog chart` → Press Enter
+3. Configure in the dialog that appears:
+   - **Filter conditions**: Type (multi-select), tags, description, amount range, date range, path
+   - **Chart type**: Select "Table", "Bar Chart", "Line Chart", or "Pie Chart"
+   - Additional options will appear based on the selected type (tables have column configuration, bar charts have X-axis and sub-group options, etc.)
+4. Click "Insert"
 
-**表格示例**：
+**Table Example**:
 
 ````markdown
 ```cashlog-chart
@@ -129,595 +129,595 @@ date this month
 sort by date descending
 show summary
 table columns 6
-col1 date "时间" left
-col2 amount "金额" left
-col3 account "账户" left
-col4 description "描述" left
-col5 attachment "附件" left
-col6 link "链接" left
+col1 date "Date" left
+col2 amount "Amount" left
+col3 account "Account" left
+col4 description "Description" left
+col5 attachment "Attachment" left
+col6 link "Link" left
 ```
 ````
 
-**条形图示例**：
+**Bar Chart Example**:
 
 ````markdown
 ```cashlog-chart
 group by month
 chart type bar
-chart title "月度收支对比"
+chart title "Monthly Income vs Expense"
 chart bar split by valueType
 chart legend true
 chart labels true
 ```
 ````
 
-`cashlog-chart` 与 `cashlog` 的查询语法完全相同，额外支持以下指令。
+`cashlog-chart` shares the exact same query syntax as `cashlog`, with additional support for the following directives.
 
-#### 表格专属指令
+#### Table-Specific Directives
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `show summary` | 显示总收入/总支出/净收支的汇总信息 |
-| `show group subtotal` | 分组时在每个分组末尾显示小计 |
-| `show tag in description` | 在描述列中显示标签 |
-| `table columns N` | 设置表格列数（1-6） |
-| `colN 字段 ["表头"] [对齐]` | 配置每列显示的内容 |
+| `show summary` | Show summary of total income / total expense / net balance |
+| `show group subtotal` | Show subtotals at the end of each group when grouped |
+| `show tag in description` | Show tags in the description column |
+| `table columns N` | Set the number of table columns (1-6) |
+| `colN field ["header"] [alignment]` | Configure the content displayed in each column |
 
-#### 扇形图
+#### Pie Charts
 
-扇形图的分组由查询区的 `group by` 控制，数值类型随分组方式联动：
+Pie chart grouping is controlled by the `group by` directive in the query section. The value type adjusts based on the grouping method:
 
-**按标签 / 按类型**：数值固定为绝对值，鼠标悬停可查看带符号实际值。自动排除转账和余额变更条目。无需 `chart value` 指令。
+**By Tag / By Type**: Values are always absolute amounts; hovering shows the actual signed value. Transfer and balance adjustment entries are automatically excluded. No `chart value` directive is needed.
 
 ````markdown
 ```cashlog-chart
 date this month
 group by tag
 chart type pie
-chart title "本月支出分类占比"
+chart title "Expense Category Breakdown This Month"
 chart legend true
 ```
 ````
 
-**按日期 / 周 / 月份 / 年份**：需指定数值类型。
+**By Date / Week / Month / Year**: Must specify a value type.
 
-| `chart value` | 说明 |
+| `chart value` | Description |
 |------|------|
-| `income` | 收入 |
-| `expense` | 支出 |
-| `balance` | 净收支（收入 + 支出） |
+| `income` | Income |
+| `expense` | Expense |
+| `balance` | Net balance (income + expense) |
 
-以上三种均排除转账和余额变更条目。
+All three exclude transfer and balance adjustment entries.
 
-**按账户**：支持六种数值类型。
+**By Account**: Supports six value types.
 
-| `chart value` | 统计范围 | 是否含转账/余额变更 |
+| `chart value` | Scope | Includes Transfers/Balance Adjustments |
 |------|------|:---:|
-| `income` | 收入 | 否 |
-| `expense` | 支出 | 否 |
-| `balance` | 净收支 | 否 |
-| `inflow` | 进账（该账户全部正数金额） | 是 |
-| `outflow` | 转出（该账户全部负数金额） | 是 |
-| `netflow` | 进账 - 转出 | 是 |
+| `income` | Income | No |
+| `expense` | Expense | No |
+| `balance` | Net balance | No |
+| `inflow` | Inflow (all positive amounts for the account) | Yes |
+| `outflow` | Outflow (all negative amounts for the account) | Yes |
+| `netflow` | Inflow - Outflow | Yes |
 
-#### 折线图 / 条形图
+#### Line Charts / Bar Charts
 
-折线图和条形图共用同一套双维度分组语法：X 轴决定主分组（由查询区的 `group by` 控制），子分组决定每组内的多条折线或多根柱子。
+Line charts and bar charts share the same dual-dimension grouping syntax: the X-axis determines the primary grouping (controlled by the `group by` directive in the query section), and sub-grouping determines the multiple lines or bars within each group.
 
-**X 轴分组**由 `group by` 指令控制。条形图支持所有分组方式，折线图仅支持时间维度（月份/周/日期/年份）：
+**X-axis grouping** is controlled by the `group by` directive. Bar charts support all grouping methods; line charts only support time dimensions (month/week/date/year):
 
-| `group by` 值 | 条形图 | 折线图 | 说明 |
+| `group by` value | Bar Chart | Line Chart | Description |
 |------|:---:|:---:|------|
-| `month` | ✓ | ✓ | 按月份 |
-| `week` | ✓ | ✓ | 按周 |
-| `date` | ✓ | ✓ | 按日期 |
-| `year` | ✓ | ✓ | 按年份 |
-| `tag` | ✓ | — | 按标签 |
-| `account` | ✓ | — | 按账户 |
-| `type` | ✓ | — | 按类型 |
+| `month` | ✓ | ✓ | By month |
+| `week` | ✓ | ✓ | By week |
+| `date` | ✓ | ✓ | By date |
+| `year` | ✓ | ✓ | By year |
+| `tag` | ✓ | — | By tag |
+| `account` | ✓ | — | By account |
+| `type` | ✓ | — | By type |
 
-**子分组**由 `chart bar split by` 或 `chart line split by` 指令控制：
+**Sub-grouping** is controlled by `chart bar split by` or `chart line split by` directives:
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `chart bar split by none` / `chart line split by none` | 不分组，显示净收支（默认） |
-| `chart bar split by valueType` / `chart line split by valueType` | 按数值类型拆分（净收支/收入/支出） |
-| `chart bar split by tag` / `chart line split by tag` | 按标签拆分，需配合 `chart bar items` / `chart line items` |
-| `chart bar split by account` / `chart line split by account` | 按账户拆分，需配合 `chart bar items` / `chart line items` |
-| `chart bar split by type` / `chart line split by type` | 按类型拆分（收入/支出） |
-| `chart bar split by date` | 按日期拆分（自动收集），仅条形图 |
-| `chart bar split by week` | 按周拆分（自动收集），仅条形图 |
-| `chart bar split by month` | 按月份拆分（自动收集），仅条形图 |
-| `chart bar split by year` | 按年份拆分（自动收集），仅条形图 |
-| `chart bar items` / `chart line items 项1 项2 …` | 指定子分组的具体项（用于 tag / account 拆分） |
+| `chart bar split by none` / `chart line split by none` | No grouping, show net balance (default) |
+| `chart bar split by valueType` / `chart line split by valueType` | Split by value type (net balance / income / expense) |
+| `chart bar split by tag` / `chart line split by tag` | Split by tag; requires `chart bar items` / `chart line items` |
+| `chart bar split by account` / `chart line split by account` | Split by account; requires `chart bar items` / `chart line items` |
+| `chart bar split by type` / `chart line split by type` | Split by type (income / expense) |
+| `chart bar split by date` | Split by date (auto-collected), bar chart only |
+| `chart bar split by week` | Split by week (auto-collected), bar chart only |
+| `chart bar split by month` | Split by month (auto-collected), bar chart only |
+| `chart bar split by year` | Split by year (auto-collected), bar chart only |
+| `chart bar items` / `chart line items item1 item2 …` | Specify sub-group items (for tag / account splitting) |
 
-**图表通用指令**：
+**Chart Common Directives**:
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `chart type bar` / `line` / `pie` | 设置图表类型 |
-| `chart title "标题"` | 图表标题 |
-| `chart width 800` | 图表宽度（px，默认 600） |
-| `chart height 400` | 图表高度（px，默认 400） |
-| `chart legend true` / `false` | 是否显示图例（默认 true） |
-| `chart labels true` / `false` | 是否显示数据标签（默认 true） |
+| `chart type bar` / `line` / `pie` | Set chart type |
+| `chart title "title"` | Chart title |
+| `chart width 800` | Chart width (px, default 600) |
+| `chart height 400` | Chart height (px, default 400) |
+| `chart legend true` / `false` | Whether to show legend (default true) |
+| `chart labels true` / `false` | Whether to show data labels (default true) |
 
-#### 类型过滤增强
+#### Enhanced Type Filtering
 
-过滤条件支持用 `type includes` 进行多类型 OR 查询：
+Filter conditions support multi-type OR queries using `type includes`:
 
 ```
 type includes income OR expense
 ```
 
-当插入图表对话框中选择 2-3 个类型时，会自动生成此指令。
+This directive is automatically generated when you select 2-3 types in the insert chart dialog.
 
 ---
 
-## 记账条目格式详解
+## Entry Format Reference
 
-### 基础格式
+### Basic Format
 
-记账条目本质上是一行 Markdown 列表项，各部分用空格分隔：
+A cashlog entry is essentially a Markdown list item, with each part separated by spaces:
 
 ```
-- #支出/交通 坐高铁 💴-100 ➕2026-04-25 ⏰17:30
+- #expense/transport high-speed train 💴-100 ➕2026-04-25 ⏰17:30
 ```
 
-逐个部分说明：
+Explanation of each part:
 
-| 部分 | 格式 | 是否必须 | 说明 |
+| Part | Format | Required | Description |
 |------|------|---------|------|
-| `-` | `-`、`*`、`+` 或 `1.` | 必须 | Markdown 列表标记 |
-| `#支出/交通` | `#主标签/子标签` | 必须 | 标签，区分收入/支出和具体分类 |
-| `坐高铁` | 自由文本 | 可选 | 描述文字 |
-| `💴-100` | `💴` + 正负数 | 必须 | 金额标记 + 金额数值 |
-| `➕2026-04-25` | `➕` + YYYY-MM-DD | 可选 | 日期标记 |
-| `⏰17:30` | `⏰` + HH:mm | 可选 | 时间标记 |
+| `-` | `-`, `*`, `+`, or `1.` | Yes | Markdown list marker |
+| `#expense/transport` | `#MainTag/SubTag` | Yes | Tag, distinguishing income/expense and specific category |
+| `high-speed train` | Free text | No | Description text |
+| `💴-100` | `💴` + signed number | Yes | Amount marker + amount value |
+| `➕2026-04-25` | `➕` + YYYY-MM-DD | No | Date marker |
+| `⏰17:30` | `⏰` + HH:mm | No | Time marker |
 
-**更多示例**：
-
-```
-- #收入/工资 发工资 💴10000 ➕2026-04-25 ⏰17:30
-1. #支出/餐饮 午饭 💴-25 ➕2026-04-25
-- #支出/购物 买书 💴-89.5 ➕2026-04-24 ⏰10:00
-- #收入/理财 基金收益 💴120 ➕2026-04-23
-* #支出/娱乐 看电影 💴-60
-```
-
-**金额规则**：
-- 正数 = 收入（如 `💴10000`、`💴120`）
-- 负数 = 支出（如 `💴-100`、`💴-25`）
-- 支持小数（最多两位，如 `💴-89.5`）
-
-### 带账户的格式
-
-当开启账户功能后，记账行会多出 `💳` 账户标记：
+**More Examples**:
 
 ```
-- #支出 买衣服 💳微信💴-200 ➕2026-04-25
-- #收入 报销费用 💳中国银行卡💴200 ➕2026-04-25
+- #income/salary salary payment 💴10000 ➕2026-04-25 ⏰17:30
+1. #expense/food lunch 💴-25 ➕2026-04-25
+- #expense/shopping buy books 💴-89.5 ➕2026-04-24 ⏰10:00
+- #income/investment fund returns 💴120 ➕2026-04-23
+* #expense/entertainment movie 💴-60
 ```
 
-| 部分 | 格式 | 说明 |
+**Amount Rules**:
+- Positive number = Income (e.g., `💴10000`, `💴120`)
+- Negative number = Expense (e.g., `💴-100`, `💴-25`)
+- Decimals supported (up to two places, e.g., `💴-89.5`)
+
+### Format with Account
+
+When the account feature is enabled, entries will include the `💳` account marker:
+
+```
+- #expense buy clothes 💳WeChat💴-200 ➕2026-04-25
+- #income reimbursement 💳Bank of China card💴200 ➕2026-04-25
+```
+
+| Part | Format | Description |
 |------|------|------|
-| `💳微信💴-200` | `💳` + 账户名 + `💴` + 金额 | 标记该笔收支对应的账户及金额 |
+| `💳WeChat💴-200` | `💳` + Account name + `💴` + Amount | Marks the account and amount for this transaction |
 
-### 转账格式
+### Transfer Format
 
-转账是一种特殊的记账类型，一行中有两个账户和两个金额：
+A transfer is a special entry type that has two accounts and two amounts in one line:
 
 ```
-- #转账 还信用卡 💳支付宝💴-500 💳工行信用卡💴500 ➕2026-04-25
+- #transfer credit card repayment 💳Alipay💴-500 💳ICBC credit card💴500 ➕2026-04-25
 ```
 
-| 部分 | 说明 |
+| Part | Description |
 |------|------|
-| `#转账` | 转账专用标签 |
-| `还信用卡` | 描述 |
-| `💳支付宝💴-500` | 转出账户 + 转出金额（负数表示资金流出）|
-| `💳工行信用卡💴500` | 转入账户 + 转入金额（正数表示资金流入）|
+| `#transfer` | Transfer-specific tag |
+| `credit card repayment` | Description |
+| `💳Alipay💴-500` | Source account + transfer-out amount (negative indicates funds leaving) |
+| `💳ICBC credit card💴500` | Destination account + transfer-in amount (positive indicates funds arriving) |
 
-### 余额变更格式
+### Balance Adjustment Format
 
-余额变更用于记录账户余额的调整（如对账后发现余额不符）。格式与转账类似，但标签为 `#余额变更`（可自定义）：
+Balance adjustments are used to record corrections to account balances (e.g., after reconciliation when the balance doesn't match). The format is similar to transfers but uses the `#balance-change` tag (customizable):
 
 ```
-- #余额变更 调整余额 💳支付宝💴50 ➕2026-04-25
+- #balance-change adjust balance 💳Alipay💴50 ➕2026-04-25
 ```
 
-| 部分 | 说明 |
+| Part | Description |
 |------|------|
-| `#余额变更` | 余额变更专用标签（可在设置中自定义） |
-| `调整余额` | 描述 |
-| `💳支付宝💴50` | 账户 + 目标余额与当前余额的差值 |
+| `#balance-change` | Balance adjustment-specific tag (customizable in settings) |
+| `adjust balance` | Description |
+| `💳Alipay💴50` | Account + the difference between target balance and current balance |
 
-余额变更的特点：
-- 不计入收入或支出的统计
-- 仅影响账户余额
-- 创建时插件会自动计算当前余额与目标余额的差值
+Balance adjustment characteristics:
+- Not counted in income or expense statistics
+- Only affects account balance
+- When created, the plugin automatically calculates the difference between current balance and target balance
 
-### 带附件的格式
+### Format with Attachments
 
-开启附件功能后，可以在记账行中附加图片附件：
+When the attachment feature is enabled, you can attach image files to cashlog entries:
 
 ```
-- #支出 买衣服 💳微信💴-200 🧷[[cashlog-2026042517303050|附件1]] ➕2026-04-25
-- #收入 报销费用 💳中国银行卡💴200 🧷[[cashlog-2026042517311520|附件1]] 🧷[[cashlog-2026042517313001|附件2]] ➕2026-04-25
+- #expense buy clothes 💳WeChat💴-200 🧷[[cashlog-2026042517303050|receipt]] ➕2026-04-25
+- #income reimbursement 💳Bank of China card💴200 🧷[[cashlog-2026042517311520|receipt 1]] 🧷[[cashlog-2026042517313001|receipt 2]] ➕2026-04-25
 ```
 
-| 部分 | 格式 | 说明 |
+| Part | Format | Description |
 |------|------|------|
-| `🧷[[文件名\|显示名]]` | 🧷 + wikilink | 附件链接，支持多个 |
+| `🧷[[filename\|display name]]` | 🧷 + wikilink | Attachment link, supports multiple |
 
 ---
 
-## 账户功能
+## Account Feature
 
-账户功能可以帮你追踪每笔收支属于哪个账户（微信、支付宝、银行卡等），并自动计算各账户余额。
+The account feature helps you track which account each transaction belongs to (WeChat, Alipay, bank cards, etc.) and automatically calculates the balance for each account.
 
-### 开启账户功能
+### Enabling Accounts
 
-1. 打开 Cashlog 面板 → 设置 → 账户设置（或 设置 → 第三方插件 → Cashlog）
-2. 打开「开启账户功能」开关
-3. 点击 `+` 按钮逐个添加账户（如：微信、支付宝、现金、银行卡）
-4. 为每个账户设置初始余额（点击余额按钮编辑）
+1. Open Cashlog Panel → Settings → Account Settings (or Settings → Community Plugins → Cashlog)
+2. Toggle on the "Enable account feature" switch
+3. Click the `+` button to add accounts one by one (e.g., WeChat, Alipay, Cash, Bank Card)
+4. Set the initial balance for each account (click the balance button to edit)
 
-开启后，功能变化如下：
-- 创建/编辑记账时，类型下拉框会增加「转账」和「余额变更」选项
-- 创建/编辑记账时，会增加「账户」下拉选择框
-- 记账行中会出现 `💳账户名💴金额` 标记
+After enabling, the following changes occur:
+- The type dropdown in the create/edit dialog will include "Transfer" and "Balance Adjustment" options
+- An "Account" dropdown selector will appear in the create/edit dialog
+- Entries will contain the `💳AccountName💴Amount` marker
 
-### 使用账户记账
+### Using Accounts for Tracking
 
-在创建或编辑记账的对话框中：
+In the create or edit entry dialog:
 
-1. 选择类型（支出/收入）
-2. 在「账户」下拉框中选择一个账户
-3. 填写其他字段后确认
+1. Select the type (Expense/Income)
+2. Select an account from the "Account" dropdown
+3. Fill in the remaining fields and confirm
 
-生成的记账行示例：
-
-```
-- #支出 买衣服 💳微信💴-200 🧷[[cashlog-2026042517303050|附件1]] ➕2026-04-25
-- #收入 报销费用 💳中国银行卡💴200 ➕2026-04-25
-```
-
-### 转账
-
-转账用于记录资金在账户之间的转移，不产生实际的收入或支出。
-
-在创建记账的对话框中：
-
-1. 类型选择「转账」
-2. 选择「转出账户」和「转入账户」
-3. 输入转账金额
-
-生成的转账行示例：
+Generated entry examples:
 
 ```
-- #转账 还信用卡 💳支付宝💴-500 💳工行信用卡💴500 ➕2026-04-25
+- #expense buy clothes 💳WeChat💴-200 🧷[[cashlog-2026042517303050|receipt]] ➕2026-04-25
+- #income reimbursement 💳Bank of China card💴200 ➕2026-04-25
 ```
 
-### 余额变更
+### Transfers
 
-余额变更用于调整账户余额（如对账后发现余额不符）。
+Transfers record the movement of funds between accounts without creating actual income or expense.
 
-在创建记账的对话框中：
+In the create entry dialog:
 
-1. 类型选择「余额变更」
-2. 选择要调整的账户
-3. 输入该账户的**目标余额**
-4. 插件会自动显示当前余额，并计算出差值
+1. Select "Transfer" as the type
+2. Select the "Source account" and "Destination account"
+3. Enter the transfer amount
 
-生成的余额变更行示例：
+Generated transfer entry example:
 
 ```
-- #余额变更 调整余额 💳支付宝💴50 ➕2026-04-25
+- #transfer credit card repayment 💳Alipay💴-500 💳ICBC credit card💴500 ➕2026-04-25
 ```
 
-> 其中 `💳支付宝💴50` 表示目标余额与当前余额的差值为 50。插件会在创建时自动计算这个差值。
+### Balance Adjustments
 
-### 账户余额
+Balance adjustments are used to correct account balances (e.g., after reconciliation when the balance doesn't match).
 
-账户余额 = 初始余额 + 该账户所有收入 - 该账户所有支出 + 转入金额 - 转出金额。
+In the create entry dialog:
 
-- 初始余额在 **Cashlog 面板 → 设置** 中为每个账户单独设置
-- 余额变动实时反映在 **Cashlog 面板 → 仪表盘** 的「账户余额」区域
+1. Select "Balance Adjustment" as the type
+2. Select the account to adjust
+3. Enter the **target balance** for that account
+4. The plugin will display the current balance and calculate the difference
+
+Generated balance adjustment entry example:
+
+```
+- #balance-change adjust balance 💳Alipay💴50 ➕2026-04-25
+```
+
+> Here `💳Alipay💴50` means the difference between the target balance and current balance is 50. The plugin automatically calculates this difference at creation time.
+
+### Account Balances
+
+Account balance = Initial balance + All income for the account - All expenses for the account + Transfer-in amounts - Transfer-out amounts.
+
+- Initial balances are set individually for each account in **Cashlog Panel → Settings**
+- Balance changes are reflected in real-time in the "Account Balances" section of **Cashlog Panel → Dashboard**
 
 ---
 
-## 附件功能
+## Attachment Feature
 
-### 开启附件功能
+### Enabling Attachments
 
-1. 打开 设置 → 第三方插件 → Cashlog
-2. 找到「附件设置」分区
-3. 打开「开启附件功能」开关
-4. 可自定义「附件存储目录」（默认为 `cashlog-attachments`）
+1. Open Settings → Community Plugins → Cashlog
+2. Find the "Attachment Settings" section
+3. Toggle on the "Enable attachment feature" switch
+4. Optionally customize the "Attachment storage directory" (default is `cashlog-attachments`)
 
-### 上传附件
+### Uploading Attachments
 
-在创建或编辑记账的对话框中：
+In the create or edit entry dialog:
 
-1. 点击「📎 添加附件」按钮
-2. 选择一张或多张图片
-3. 图片会自动上传到 vault 的附件目录中
-4. 可以继续添加或点击 ✕ 移除
+1. Click the "📎 Add Attachment" button
+2. Select one or more images
+3. Images will be automatically uploaded to the vault's attachment directory
+4. You can continue adding or click ✕ to remove
 
-### 附件的存储格式
+### Attachment Storage Format
 
-- 图片文件以 `cashlog-YYYYMMDDHHmmssSSS.png` 格式保存在附件目录下
-- 记账行中存储 wikilink 引用：`🧷[[cashlog-2026042517303050|附件1]]`
-- 在查询结果中点击附件链接可以打开对应的图片文件
-- 支持一条记账附加多张图片（多个 `🧷[[...]]` 标记）
+- Image files are saved in the attachment directory with the naming format `cashlog-YYYYMMDDHHmmssSSS.png`
+- Entries store wikilink references: `🧷[[cashlog-2026042517303050|receipt]]`
+- Clicking attachment links in query results opens the corresponding image file
+- A single entry supports multiple image attachments (multiple `🧷[[...]]` markers)
 
 ---
 
-## 插件设置
+## Plugin Settings
 
-打开 设置 → 第三方插件 → Cashlog（齿轮图标）：
+Open Settings → Community Plugins → Cashlog (gear icon):
 
-### 标签设置
+### Tag Settings
 
-标签设置位于 **Cashlog 面板 → 设置 → 标签设置** 中（也可在 Obsidian 原生设置页中修改）。
+Tag settings are located in **Cashlog Panel → Settings → Tag Settings** (also editable in the native Obsidian settings page).
 
-每个标签名以按钮形式展示，点击按钮弹出编辑弹窗：
+Each tag name is displayed as a button; clicking the button opens an edit dialog:
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 收入标签 | `收入` | 收入条目的主标签名，修改后自动迁移所有历史记录 |
-| 支出标签 | `支出` | 支出条目的主标签名，修改后自动迁移所有历史记录 |
-| 转账标签 | `转账` | 转账条目的专用标签（需开启账户功能后显示） |
-| 余额变更标签 | `余额变更` | 余额变更条目的专用标签（需开启账户功能后显示） |
+| Income tag | `income` | Main tag name for income entries; modifying will auto-migrate all historical records |
+| Expense tag | `expense` | Main tag name for expense entries; modifying will auto-migrate all historical records |
+| Transfer tag | `transfer` | Dedicated tag for transfer entries (visible after enabling account feature) |
+| Balance adjustment tag | `balance-change` | Dedicated tag for balance adjustment entries (visible after enabling account feature) |
 
-> **注意**：标签名以 `#` 开头存储在记账行中，但编辑弹窗中显示和输入时不需要带 `#`。
+> **Note**: Tag names are stored with a `#` prefix in entries, but the edit dialog displays and accepts names without the `#`.
 >
-> 修改标签名时，插件会自动扫描并替换所有历史记账记录中的旧标签。例如，将「收入」改为 `earnings` 后，所有 `#收入/工资` 会变为 `#earnings/工资`。
+> When modifying a tag name, the plugin automatically scans and replaces the old tag in all historical entries. For example, changing "income" to `earnings` will convert all `#income/salary` to `#earnings/salary`.
 
-**标签名称规则**：支持中文、英文、数字、下划线（`_`）和连字符（`-`），不能包含空格，不能为纯数字（如 `#1984` 无效，`#y1984` 有效）。
+**Tag Name Rules**: Supports Chinese characters, English letters, numbers, underscores (`_`), and hyphens (`-`). Cannot contain spaces or be purely numeric (e.g., `#1984` is invalid, `#y1984` is valid).
 
-### 子标签预设
+### Sub-Tag Presets
 
-子标签用于在创建记账时快速选择分类，显示为 chip 按钮列表：
+Sub-tags are used for quick category selection when creating entries, displayed as a chip button list:
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 收入子标签 | `工资, 理财, 兼职, 红包, 其他` | 收入条目的分类选项 |
-| 支出子标签 | `餐饮, 交通, 购物, 娱乐, 住房, 医疗, 教育, 其他` | 支出条目的分类选项 |
+| Income sub-tags | `salary, investment, part-time, red envelope, other` | Category options for income entries |
+| Expense sub-tags | `food, transport, shopping, entertainment, housing, medical, education, other` | Category options for expense entries |
 
-**操作方式**：
+**Operations**:
 
-| 操作 | 方式 | 说明 |
+| Action | Method | Description |
 |------|------|------|
-| 新增子标签 | 点击 `+` 按钮 | 输入名称后确认，新子标签会记录到设置中 |
-| 修改子标签 | 右键 chip →「修改子标签」| 修改后自动迁移所有相关记账条目。若新名称与已有子标签重复，会提示是否合并；若名称为空，会提示是否合并到基础标签（如 `#收入`） |
-| 删除子标签 | 右键 chip →「删除」| 确认后会删除该子标签下的所有记账条目，操作不可撤销 |
+| Add sub-tag | Click the `+` button | Enter a name and confirm; the new sub-tag will be saved to settings |
+| Edit sub-tag | Right-click chip → "Edit sub-tag" | After editing, all related entries are auto-migrated. If the new name duplicates an existing sub-tag, you'll be prompted to merge; if empty, you'll be prompted to merge into the base tag (e.g., `#income`) |
+| Delete sub-tag | Right-click chip → "Delete" | After confirmation, all entries under that sub-tag will be deleted; this action is irreversible |
 
-> **自动发现**：插件会自动扫描 vault 中的记账条目，将在缓存中发现但未在设置中配置的子标签也展示出来（虚线边框样式），方便管理。
+> **Auto-discovery**: The plugin automatically scans cashlog entries in the vault and displays sub-tags found in the cache but not configured in settings (shown with a dashed border style) for easy management.
 >
-> **默认子标签**：系统初始提供的默认子标签可以被删除或更名，一旦修改不会再自动恢复。
+> **Default sub-tags**: The system's initial default sub-tags can be deleted or renamed; once modified, they will not automatically reappear.
 
-### 账户设置
+### Account Settings
 
-账户设置位于 **Cashlog 面板 → 设置 → 账户设置** 中（也可在 Obsidian 原生设置页中修改）。
+Account settings are located in **Cashlog Panel → Settings → Account Settings** (also editable in the native Obsidian settings page).
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 开启账户功能 | 关闭 | 开启后记账可关联账户，支持转账和余额变更类型 |
-| 账户列表 | `微信, 支付宝, 现金, 银行卡` | 以 chip 按钮列表展示，右键菜单支持修改和删除，点击 `+` 新增 |
+| Enable account feature | Off | When enabled, entries can be associated with accounts, supporting transfer and balance adjustment types |
+| Account list | `WeChat, Alipay, Cash, Bank Card` | Displayed as a chip button list; right-click menu supports editing and deleting; click `+` to add |
 
-**账户名操作方式**：
+**Account Name Operations**:
 
-| 操作 | 方式 | 说明 |
+| Action | Method | Description |
 |------|------|------|
-| 新增账户 | 点击 `+` 按钮 | 输入名称后确认，自动初始化余额为 0。不能包含 emoji，最长 25 个字符 |
-| 修改账户名 | 右键 chip →「修改账户名」| 修改后自动迁移所有记账条目中的账户名，余额同步转移 |
-| 删除账户 | 右键 chip →「删除」| 选择目标账户，将待删账户下的所有记账条目转移到目标账户中，余额合并后删除原账户 |
+| Add account | Click the `+` button | Enter a name and confirm; balance is automatically initialized to 0. Cannot contain emoji, max 25 characters |
+| Rename account | Right-click chip → "Rename account" | After renaming, all historical entries are auto-migrated; balance is transferred |
+| Delete account | Right-click chip → "Delete" | Select a target account; all entries under the deleted account will be transferred to the target account, and balances will be merged |
 
-**账户初始余额**：每个账户的初始余额以按钮形式展示，点击弹出编辑弹窗。弹窗中会提示不建议直接修改初始余额，推荐通过创建「余额调整」类型的记账来调整余额。
+**Account Initial Balance**: Each account's initial balance is displayed as a button; clicking it opens an edit dialog. The dialog suggests not modifying the initial balance directly and recommends creating a "Balance Adjustment" entry instead.
 
-> **自动发现**：插件会自动扫描 vault 中的记账条目，将在缓存中发现但未在设置中配置的账户也展示出来（虚线边框样式），方便管理。
+> **Auto-discovery**: The plugin automatically scans cashlog entries in the vault and displays accounts found in the cache but not configured in settings (shown with a dashed border style) for easy management.
 
-### 附件设置
+### Attachment Settings
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 开启附件功能 | 关闭 | 开启后记账可上传图片附件 |
-| 附件存储目录 | `cashlog-attachments` | 附件图片存放的文件夹路径，输入时自动模糊匹配 vault 中已有的文件夹 |
+| Enable attachment feature | Off | When enabled, entries can have image attachments uploaded |
+| Attachment storage directory | `cashlog-attachments` | Folder path for storing attachment images; auto-fuzzy-matches existing vault folders as you type |
 
-### 预算设置
+### Budget Settings
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 开启预算功能 | 关闭 | 开启后可在面板中设置支出预算并追踪进度 |
-| 预算列表 | （空） | 可添加多条预算，每条设置：名称、金额、周期（按周/按月/按年/自定义）、关联标签。标签从下拉菜单选择（含所有支出子标签），选择「自定义」周期后会出现起止日期选择器 |
+| Enable budget feature | Off | When enabled, you can set spending budgets and track progress in the panel |
+| Budget list | (empty) | Add multiple budgets, each with: name, amount, period (weekly/monthly/yearly/custom), associated tag. Tags are selected from a dropdown (includes all expense sub-tags). Selecting "custom" period shows start/end date pickers |
 
-### 目标设置
+### Goal Settings
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 开启目标功能 | 关闭 | 开启后可在面板中设置收入目标并追踪进度 |
-| 目标列表 | （空） | 可添加多条目标，每条设置：名称、目标金额、周期、关联标签。标签从下拉菜单选择（含所有收入子标签），选择「自定义」周期后会出现起止日期选择器 |
+| Enable goal feature | Off | When enabled, you can set income goals and track progress in the panel |
+| Goal list | (empty) | Add multiple goals, each with: name, target amount, period, associated tag. Tags are selected from a dropdown (includes all income sub-tags). Selecting "custom" period shows start/end date pickers |
 
-### 面板统计设置
+### Panel Statistics Settings
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 统计方式 | 按月统计 | 可选：按日、按周、按月、按年、全部统计 |
-| 每月起始日期 | 1 | 仅在按月统计时生效，设置每月的统计起始日（1-28） |
-| 每周起始日 | 周一 | 仅在选择按周统计时生效 |
+| Statistics mode | Monthly | Options: daily, weekly, monthly, yearly, all-time |
+| Month start date | 1 | Only effective for monthly statistics; sets the start day of each statistical month (1-28) |
+| Week start day | Monday | Only effective for weekly statistics |
 
-### 高级设置
+### Advanced Settings
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 在查询结果中显示编辑按钮 | 开启 | 开启后，查询结果中每条记录旁显示编辑按钮（✏️），点击可编辑该条记录 |
-| 在查询结果中显示笔记链接 | 开启 | 开启后，查询结果中每条记录旁显示来源笔记链接，点击可跳转到该条记录所在笔记 |
-| 全局查询 | （空） | 每次查询都会自动追加在查询语句中的指令 |
+| Show edit button in query results | On | When enabled, each record in query results shows an edit button (✏️); click to edit that record |
+| Show note link in query results | On | When enabled, each record in query results shows a source note link; click to navigate to the note containing that record |
+| Global query | (empty) | Directives that are automatically appended to every query |
 
-### 路径设置
+### Path Settings
 
-| 设置项 | 默认值 | 说明 |
+| Setting | Default | Description |
 |--------|--------|------|
-| 排除路径 | （空） | 排除这些路径，不索引其中的文件。用逗号分隔。与包含路径互斥。 |
-| 包含路径 | （空） | 仅索引这些路径中的文件。用逗号分隔。与排除路径互斥。 |
+| Exclude paths | (empty) | Exclude these paths from indexing. Comma-separated. Mutually exclusive with include paths. |
+| Include paths | (empty) | Only index files in these paths. Comma-separated. Mutually exclusive with exclude paths. |
 
 ---
 
-## Cashlog 面板
+## Cashlog Panel
 
-Cashlog 面板是一个独立的标签页，提供记账数据的可视化仪表盘和完整的设置管理。
+The Cashlog Panel is a standalone tab that provides a visual dashboard for your cashlog data and comprehensive settings management.
 
-### 打开面板
+### Opening the Panel
 
-有三种方式：
+There are three ways:
 
-1. `Ctrl+P` → 搜索「打开 Cashlog 面板」→ 回车
-2. 在插件设置中查看统计数据时
-3. 设置快捷键绑定到 `open-cashlog-panel` 命令
+1. `Ctrl+P` → Search for "Open Cashlog Panel" → Press Enter
+2. While viewing statistics data in plugin settings
+3. Set a hotkey binding for the `open-cashlog-panel` command
 
-面板会在右侧新建一个标签页，标题为「Cashlog 面板」，图标为 ¥。
+The panel opens as a new tab on the right side, titled "Cashlog Panel" with a ¥ icon.
 
-### 仪表盘
+### Dashboard
 
-仪表盘页面展示以下内容，**所有数据区域均可点击**进入详细视图，顶部有返回按钮可回到仪表盘主页。
+The dashboard page displays the following content. **All data areas are clickable** to enter detailed views. Use the back button at the top to return to the dashboard main page.
 
-**统计时间范围**：顶部蓝色渐变标签显示当前的统计方式和日期范围（如「按月 2026-04-05 ~ 2026-05-01」）。
+**Statistics Time Range**: The blue gradient label at the top shows the current statistics mode and date range (e.g., "Monthly 2026-04-05 ~ 2026-05-01").
 
-**摘要卡片**（四个卡片，均可点击）：
-- **收入**：统计周期内的总收入。点击进入收入明细页，列出所有收入条目
-- **支出**：统计周期内的总支出。点击进入支出明细页，列出所有支出条目
-- **结余**：收入 - 支出（负值带 `-` 号）。点击进入收支明细页，列出所有收支条目
-- **笔数**：统计周期内的总交易笔数（含转账和余额调整）。点击进入全部条目页，列出所有记账记录
+**Summary Cards** (four cards, all clickable):
+- **Income**: Total income for the statistical period. Click to enter the income detail page listing all income entries
+- **Expense**: Total expense for the statistical period. Click to enter the expense detail page listing all expense entries
+- **Balance**: Income - Expense (negative values shown with `-` sign). Click to enter the income/expense detail page listing all entries
+- **Count**: Total number of transactions in the statistical period (including transfers and balance adjustments). Click to enter the all-entries page listing all records
 
-**账户余额**（如开启了账户功能）：
-- 列表形式展示每个账户的名称和当前余额
-- 余额为正显示绿色，为负显示红色
-- **点击账户行**进入该账户的余额明细页，展示：
-  - 余额明细卡片：初始余额 → 收入小计 → 支出小计 → 转入 → 转出 → 余额调整 → 当前余额
-  - 该账户的全部记账记录列表（带编辑按钮和笔记链接）
-  - 当前余额 = 初始余额 + 各类型合计
+**Account Balances** (if account feature is enabled):
+- Displays each account's name and current balance in a list
+- Positive balances shown in green, negative in red
+- **Click an account row** to enter that account's balance detail page, showing:
+  - Balance detail card: Initial balance → Income subtotal → Expense subtotal → Transfers in → Transfers out → Balance adjustments → Current balance
+  - Full list of entries for that account (with edit buttons and note links)
+  - Current balance = Initial balance + Sum of each type
 
-**预算进度**（如开启了预算功能）：
-- 每条预算显示进度条和已用/总额，以及周期标签
-- 超支时进度条变红
-- **点击预算项**进入该预算的支出明细页，按预算自身的周期和标签过滤条目
+**Budget Progress** (if budget feature is enabled):
+- Each budget shows a progress bar with used/total amounts and a period label
+- Progress bar turns red when over budget
+- **Click a budget item** to enter its expense detail page, filtered by the budget's own period and tag
 
-**目标进度**（如开启了目标功能）：
-- 每条目标显示进度条和已达成/目标额，以及周期标签
-- 达成时进度条变亮绿
-- **点击目标项**进入该目标的收入明细页，按目标自身的周期和标签过滤条目
+**Goal Progress** (if goal feature is enabled):
+- Each goal shows a progress bar with achieved/target amounts and a period label
+- Progress bar turns bright green when goal is reached
+- **Click a goal item** to enter its income detail page, filtered by the goal's own period and tag
 
-**最近交易**：
-- 最近 10 条收支记录，按日期倒序
-- 每条显示：日期、描述、账户、金额
-- **鼠标悬浮**在任意行上会弹窗显示该条记录的完整信息（日期时间、标签、描述、账户金额明细、类型）
+**Recent Transactions**:
+- The 10 most recent income/expense records, sorted by date descending
+- Each shows: date, description, account, amount
+- **Hover** over any row to see a popup with the full record details (date/time, tag, description, account amount details, type)
 
-**支出分类排行**：
-- 按支出类别汇总金额，取前 5 名，进度条形式展示
-- 显示金额和占比百分比
-- **点击标题**（带 ▸ 图标）进入扇形图页面，饼图展示各分类占比
-- **点击具体分类进度条**进入该分类的支出明细页
+**Expense Category Ranking**:
+- Amounts summarized by expense category, showing top 5 as progress bars
+- Displays amount and percentage
+- **Click the title** (with ▸ icon) to enter a pie chart page showing category breakdown
+- **Click a specific category progress bar** to enter that category's expense detail page
 
-### 面板设置
+### Panel Settings
 
-点击面板底部「设置」标签，可以在面板内直接管理所有设置：
+Click the "Settings" tab at the bottom of the panel to manage all settings directly within the panel:
 
-- **标签设置**：收入/支出/转账/余额变更标签名（按钮样式，点击弹窗编辑，修改后自动迁移历史记录）
-- **子标签预设**：分类选项（chip 按钮列表，右键菜单支持修改/删除，点击 `+` 新增）
-- **账户设置**：开启/关闭、账户 chip 列表（右键修改/删除，`+` 新增）、**初始余额**（按钮样式，点击弹窗编辑）
-- **附件设置**：开启/关闭、存储目录（支持文件夹模糊匹配）
-- **预算设置**：开启/关闭、新增/删除预算（名称、金额、周期、标签下拉选择）
-- **目标设置**：开启/关闭、新增/删除目标（名称、目标金额、周期、标签下拉选择）
-- **统计设置**：统计方式（按日/按周/按月/按年/全部）、月起止日、周起始日
-- **高级设置**：编辑按钮、笔记链接、全局查询
-- **重置**：恢复所有设置到默认值
+- **Tag Settings**: Income/expense/transfer/balance-change tag names (button style, click to edit in dialog, auto-migrates historical records on change)
+- **Sub-Tag Presets**: Category options (chip button list, right-click menu supports edit/delete, click `+` to add)
+- **Account Settings**: Enable/disable, account chip list (right-click to edit/delete, `+` to add), **Initial Balance** (button style, click to edit in dialog)
+- **Attachment Settings**: Enable/disable, storage directory (supports folder fuzzy matching)
+- **Budget Settings**: Enable/disable, add/delete budgets (name, amount, period, tag dropdown selection)
+- **Goal Settings**: Enable/disable, add/delete goals (name, target amount, period, tag dropdown selection)
+- **Statistics Settings**: Statistics mode (daily/weekly/monthly/yearly/all-time), month start day, week start day
+- **Advanced Settings**: Edit button, note links, global query
+- **Reset**: Restore all settings to default values
 
-面板设置与 Obsidian 原生设置页完全同步，修改任一处另一处自动同步。
-
----
-
-## 预算与目标
-
-### 设置预算
-
-预算用于控制支出，追踪某个分类的支出是否超出计划。
-
-**方式一：在面板设置中设置**
-
-1. 打开 Cashlog 面板 → 切换到底部「设置」标签
-2. 开启预算功能后，在表单中填写：
-   - 名称：如「本月餐饮预算」
-   - 金额：如 2000
-   - 标签：从下拉菜单选择（含支出主标签和所有子标签），如 `#支出/餐饮`
-   - 周期：选择「按周」「按月」「按年」或「自定义」
-3. 选择「自定义」周期后，会出现起止日期选择器，可指定任意日期范围
-4. 点击「添加」
-
-**方式二：在设置页设置**
-
-1. 打开 设置 → Cashlog → 开启「预算功能」
-2. 在新增预算表单中填写相应信息并添加
-
-**查看预算进度**：
-
-打开 Cashlog 面板 → 仪表盘，在「预算进度」区域可以看到每条预算的进度条和已用金额。
-
-每条预算按自己设定的周期独立计算进度。例如：
-- "按月"的餐饮预算只统计本月截止目前的餐饮支出
-- "按年"的购物预算统计今年全年的购物支出
-- "自定义"的预算按指定的起止日期范围统计
-
-### 设置目标
-
-目标用于规划收入，追踪某个收入来源是否达到计划。
-
-设置方式与预算类似，填写：
-- 名称：如「本月工资目标」
-- 目标金额：如 10000
-- 标签：从下拉菜单选择（含收入主标签和所有子标签），如 `#收入/工资`
-- 周期：选择周期，选择「自定义」后可设置起止日期
-
-每条目标同样按自己设定的周期独立计算进度，查看方式与预算相同。
+Panel settings are fully synchronized with the native Obsidian settings page; changes in either location are automatically synced.
 
 ---
 
-## 查询语法
+## Budgets and Goals
 
-### 基本结构
+### Setting a Budget
 
-在 Markdown 笔记中使用 `cashlog` 代码块来查询记账数据：
+Budgets are used to control spending and track whether expenses in a category exceed the plan.
+
+**Method 1: Via Panel Settings**
+
+1. Open the Cashlog Panel → Switch to the "Settings" tab at the bottom
+2. After enabling the budget feature, fill in the form:
+   - Name: e.g., "Monthly Dining Budget"
+   - Amount: e.g., 2000
+   - Tag: Select from dropdown (includes the main expense tag and all sub-tags), e.g., `#expense/food`
+   - Period: Select "Weekly", "Monthly", "Yearly", or "Custom"
+3. Selecting "Custom" period will show start/end date pickers for specifying any date range
+4. Click "Add"
+
+**Method 2: Via Settings Page**
+
+1. Open Settings → Cashlog → Enable "Budget Feature"
+2. Fill in the new budget form and add
+
+**Viewing Budget Progress**:
+
+Open the Cashlog Panel → Dashboard, and check the "Budget Progress" section to see progress bars and used amounts for each budget.
+
+Each budget calculates its progress independently based on its configured period. For example:
+- A "monthly" dining budget only counts dining expenses for the current month to date
+- A "yearly" shopping budget counts all shopping expenses for the current year
+- A "custom" budget counts expenses within the specified start/end date range
+
+### Setting a Goal
+
+Goals are used to plan income and track whether an income source meets expectations.
+
+The setup is similar to budgets. Fill in:
+- Name: e.g., "Monthly Salary Goal"
+- Target amount: e.g., 10000
+- Tag: Select from dropdown (includes the main income tag and all sub-tags), e.g., `#income/salary`
+- Period: Select a period; choosing "Custom" allows setting start/end dates
+
+Each goal also calculates its progress independently based on its configured period. View progress the same way as budgets.
+
+---
+
+## Query Syntax
+
+### Basic Structure
+
+Use `cashlog` code blocks in Markdown notes to query your cashlog data:
 
 ````markdown
 ```cashlog
-指令1
-指令2
-指令3
+directive1
+directive2
+directive3
 ...
 ```
 ````
 
-每行写一条指令，指令不区分大小写。多个过滤指令之间是「且」的关系（必须全部满足）。过滤指令中的多个值可以用 `OR` 连接，表示「或」的关系。
+Write one directive per line. Directives are case-insensitive. Multiple filter directives are combined with AND logic (all must be satisfied). Multiple values within a filter directive can be joined with `OR` for OR logic.
 
-一个完整的查询通常包含：
-1. **过滤**：筛选出符合条件的条目
-2. **排序**：按某个字段排列
-3. **分组**：将结果分类展示
-4. **汇总**：显示统计数字
+A complete query typically includes:
+1. **Filter**: Select entries matching conditions
+2. **Sort**: Arrange by a specific field
+3. **Group**: Display results in categories
+4. **Summary**: Show statistics
 
-### 过滤指令
+### Filter Directives
 
-#### 类型过滤
+#### Type Filter
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `is income` | 只显示收入条目 |
-| `is expense` | 只显示支出条目 |
-| `is transfer` | 只显示转账条目 |
-| `is balance change` | 只显示余额变更条目 |
+| `is income` | Show only income entries |
+| `is expense` | Show only expense entries |
+| `is transfer` | Show only transfer entries |
+| `is balance change` | Show only balance adjustment entries |
 
-示例：
+Example:
 ```
 is expense
 ```
@@ -726,58 +726,58 @@ is expense
 is transfer
 ```
 
-#### 标签过滤
+#### Tag Filter
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `tag includes #支出` | 标签包含 `#支出`（包括 `#支出/交通`、`#支出/餐饮` 等子标签） |
-| `tag includes #支出/交通` | 标签精确包含 `#支出/交通` |
-| `tag includes #支出/交通 OR #支出/餐饮` | 标签包含 `#支出/交通` 或 `#支出/餐饮` |
-| `tag does not include #支出/餐饮` | 标签不包含 `#支出/餐饮` |
-| `tag does not include #支出/餐饮 OR #支出/购物` | 标签不包含 `#支出/餐饮` 且不包含 `#支出/购物` |
+| `tag includes #expense` | Tag contains `#expense` (includes sub-tags like `#expense/transport`, `#expense/food`, etc.) |
+| `tag includes #expense/transport` | Tag exactly contains `#expense/transport` |
+| `tag includes #expense/transport OR #expense/food` | Tag contains `#expense/transport` or `#expense/food` |
+| `tag does not include #expense/food` | Tag does not contain `#expense/food` |
+| `tag does not include #expense/food OR #expense/shopping` | Tag does not contain `#expense/food` and does not contain `#expense/shopping` |
 
-示例：
+Example:
 ```
-tag includes #支出/交通
-```
-
-```
-tag includes #支出/交通 OR #支出/餐饮 OR #支出/购物
+tag includes #expense/transport
 ```
 
-#### 描述过滤
+```
+tag includes #expense/transport OR #expense/food OR #expense/shopping
+```
 
-| 指令 | 说明 |
+#### Description Filter
+
+| Directive | Description |
 |------|------|
-| `description includes 高铁` | 描述中包含「高铁」 |
-| `description includes 高铁 OR 飞机` | 描述中包含「高铁」或「飞机」 |
-| `description does not include 工资` | 描述中不包含「工资」 |
-| `description does not include 工资 OR 奖金` | 描述中不包含「工资」且不包含「奖金」 |
+| `description includes high-speed train` | Description contains "high-speed train" |
+| `description includes high-speed train OR flight` | Description contains "high-speed train" or "flight" |
+| `description does not include salary` | Description does not contain "salary" |
+| `description does not include salary OR bonus` | Description does not contain "salary" and does not contain "bonus" |
 
-示例：
+Example:
 ```
-description includes 高铁
-```
-
-```
-description includes 高铁 OR 飞机 OR 打车
+description includes high-speed train
 ```
 
-#### 金额过滤
+```
+description includes high-speed train OR flight OR taxi
+```
 
-| 指令 | 说明 |
+#### Amount Filter
+
+| Directive | Description |
 |------|------|
-| `amount above 100` | 金额的绝对值大于 100 |
-| `amount above or equal 100` | 金额的绝对值大于或等于 100 |
-| `amount above or equal 100 OR 200` | 金额的绝对值大于或等于 100 或 200 |
-| `amount below 50` | 金额的绝对值小于 50 |
-| `amount below or equal 50` | 金额的绝对值小于或等于 50 |
-| `amount equals 100` | 金额的绝对值等于 100 |
-| `amount equals 100 OR 200 OR 500` | 金额的绝对值等于 100、200 或 500 |
+| `amount above 100` | Absolute amount is greater than 100 |
+| `amount above or equal 100` | Absolute amount is greater than or equal to 100 |
+| `amount above or equal 100 OR 200` | Absolute amount is greater than or equal to 100 or 200 |
+| `amount below 50` | Absolute amount is less than 50 |
+| `amount below or equal 50` | Absolute amount is less than or equal to 50 |
+| `amount equals 100` | Absolute amount equals 100 |
+| `amount equals 100 OR 200 OR 500` | Absolute amount equals 100, 200, or 500 |
 
-**注意**：金额过滤比较的是绝对值，不区分收入和支出。如果只想看大额支出，需要同时用 `is expense` 和 `amount above`。
+**Note**: Amount filtering compares absolute values and does not distinguish between income and expense. To see only large expenses, use both `is expense` and `amount above`.
 
-示例：
+Example:
 ```
 is expense
 amount above 500
@@ -787,53 +787,53 @@ amount above 500
 amount equals 100 OR 200 OR 500
 ```
 
-#### 账户过滤（需开启账户功能）
+#### Account Filter (requires account feature enabled)
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `account is 微信` | 账户名包含「微信」 |
-| `account is 微信 OR 支付宝` | 账户名包含「微信」或「支付宝」 |
-| `account is not 现金` | 账户名不包含「现金」 |
+| `account is WeChat` | Account name contains "WeChat" |
+| `account is WeChat OR Alipay` | Account name contains "WeChat" or "Alipay" |
+| `account is not Cash` | Account name does not contain "Cash" |
 
-示例：
+Example:
 ```
-account is 微信
+account is WeChat
 ```
 
 ```
 is expense
-account is 支付宝
+account is Alipay
 ```
 
-#### 附件过滤
+#### Attachment Filter
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `has attachment` 或 `has attachments` | 只显示带有附件的条目 |
+| `has attachment` or `has attachments` | Show only entries with attachments |
 
-示例：
+Example:
 ```
 has attachment
 sort by date descending
 ```
 
-#### 日期过滤
+#### Date Filter
 
-日期过滤支持丰富的操作符和日期格式。
+Date filtering supports a rich set of operators and date formats.
 
-##### 操作符
+##### Operators
 
-| 操作符 | 说明 |
+| Operator | Description |
 |--------|------|
-| `date on <日期>` 或 `date <日期>` | 匹配该日期（`on` 可省略） |
-| `date before <日期>` | 匹配该日期之前的所有日期（不含该日期） |
-| `date after <日期>` | 匹配该日期之后的所有日期（不含该日期） |
-| `date on or before <日期>` | 匹配该日期及之前的所有日期 |
-| `date on or after <日期>` | 匹配该日期及之后的所有日期 |
+| `date on <date>` or `date <date>` | Match the specified date (`on` is optional) |
+| `date before <date>` | Match all dates before the specified date (not inclusive) |
+| `date after <date>` | Match all dates after the specified date (not inclusive) |
+| `date on or before <date>` | Match the specified date and all dates before it |
+| `date on or after <date>` | Match the specified date and all dates after it |
 
-##### 绝对日期
+##### Absolute Dates
 
-格式为 `YYYY-MM-DD`：
+Format is `YYYY-MM-DD`:
 
 ```
 date 2026-04-25
@@ -841,9 +841,9 @@ date before 2026-05-01
 date on or after 2026-01-01
 ```
 
-##### 自然语言日期
+##### Natural Language Dates
 
-支持通过自然语言描述日期（基于 chrono 库）：
+Supports natural language date descriptions (powered by the chrono library):
 
 ```
 date today
@@ -857,9 +857,9 @@ date 14 October
 date May
 ```
 
-##### 相对日期范围
+##### Relative Date Ranges
 
-支持 `last`、`this`、`next` 配合 `week`、`month`、`quarter`、`year`：
+Supports `last`, `this`, `next` with `week`, `month`, `quarter`, `year`:
 
 ```
 date this week
@@ -872,48 +872,48 @@ date next month
 date next year
 ```
 
-##### 编号日期范围
+##### Numbered Date Ranges
 
-| 格式 | 示例 | 说明 |
+| Format | Example | Description |
 |------|------|------|
-| `YYYY` | `date 2026` | 匹配 2026 年全年 |
-| `YYYY-mm` | `date 2026-04` | 匹配 2026 年 4 月整月 |
-| `YYYY-Www` | `date 2026-W15` | 匹配 2026 年第 15 周（ISO 周，周一至周日） |
-| `YYYY-Qq` | `date 2026-Q2` | 匹配 2026 年第二季度 |
+| `YYYY` | `date 2026` | Match the entire year 2026 |
+| `YYYY-mm` | `date 2026-04` | Match the entire month of April 2026 |
+| `YYYY-Www` | `date 2026-W15` | Match ISO week 15 of 2026 (Monday to Sunday) |
+| `YYYY-Qq` | `date 2026-Q2` | Match Q2 of 2026 |
 
-##### 绝对日期范围
+##### Absolute Date Ranges
 
-可以用两个 `YYYY-MM-DD` 指定一个闭区间：
+Use two `YYYY-MM-DD` dates to specify a closed interval:
 
 ```
 date 2026-01-01 2026-03-31
 ```
 
-#### 路径过滤
+#### Path Filter
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `path includes 日记/` | 文件路径包含「日记/」 |
-| `path includes 记账` | 文件路径包含「记账」 |
-| `path includes 记账/2026 OR 记账/2025` | 文件路径包含「记账/2026」或「记账/2025」 |
+| `path includes journal/` | File path contains "journal/" |
+| `path includes accounting` | File path contains "accounting" |
+| `path includes accounting/2026 OR accounting/2025` | File path contains "accounting/2026" or "accounting/2025" |
 
-示例：
+Example:
 ```
-path includes 记账/2026
+path includes accounting/2026
 ```
 
-### 排序指令
+### Sort Directives
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `sort by date ascending` | 按日期从早到晚 |
-| `sort by date descending` | 按日期从晚到早 |
-| `sort by amount ascending` | 按金额从小到大 |
-| `sort by amount descending` | 按金额从大到小 |
-| `sort by description ascending` | 按描述字母顺序 |
-| `sort by account ascending` | 按账户名字母顺序 |
+| `sort by date ascending` | Sort by date, earliest to latest |
+| `sort by date descending` | Sort by date, latest to earliest |
+| `sort by amount ascending` | Sort by amount, smallest to largest |
+| `sort by amount descending` | Sort by amount, largest to smallest |
+| `sort by description ascending` | Sort by description alphabetically |
+| `sort by account ascending` | Sort by account name alphabetically |
 
-示例：
+Example:
 ```
 sort by date descending
 ```
@@ -922,21 +922,21 @@ sort by date descending
 sort by account ascending
 ```
 
-### 分组指令
+### Group Directives
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `group by tag` | 按标签分组 |
-| `group by date` | 按日期分组（同一天为一组） |
-| `group by week` | 按周分组（同年同周为一组，ISO 周，周一至周日） |
-| `group by month` | 按月份分组（同年同月为一组） |
-| `group by year` | 按年份分组 |
-| `group by account` | 按账户分组 |
-| `group by type` | 按类型分组（收入/支出/转账/余额变更） |
+| `group by tag` | Group by tag |
+| `group by date` | Group by date (same day = one group) |
+| `group by week` | Group by week (same year and week = one group, ISO week, Monday to Sunday) |
+| `group by month` | Group by month (same year and month = one group) |
+| `group by year` | Group by year |
+| `group by account` | Group by account |
+| `group by type` | Group by type (income/expense/transfer/balance adjustment) |
 
-分组后每个分组会显示该组的条目列表和分组小计。
+After grouping, each group displays its entry list and group subtotal.
 
-示例：
+Example:
 ```
 group by tag
 ```
@@ -946,45 +946,45 @@ group by month
 ```
 
 ```
-# 按账户查看各账户流水
+# View transactions by account
 group by account
 sort by date ascending
 ```
 
-### 汇总指令
+### Summary Directives
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `show total` | 显示总收入、总支出、结余、条目数量 |
-| `show total income` | 只显示总收入 |
-| `show total expense` | 只显示总支出 |
-| `show balance` | 只显示结余（收入 + 支出） |
-| `show count` | 只显示条目数量 |
+| `show total` | Show total income, total expense, balance, and entry count |
+| `show total income` | Show only total income |
+| `show total expense` | Show only total expense |
+| `show balance` | Show only balance (income + expense) |
+| `show count` | Show only entry count |
 
-`show total` 等价于同时写 `show total income` + `show total expense` + `show balance` + `show count`。
+`show total` is equivalent to writing `show total income` + `show total expense` + `show balance` + `show count` together.
 
-示例：
+Example:
 ```
 is expense
 date this month
 show total expense
 ```
 
-### 显示控制
+### Display Controls
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `hide date` | 隐藏每条记录的日期 |
-| `hide time` | 隐藏每条记录的时间 |
-| `hide tag` | 隐藏每条记录的标签 |
-| `hide amount` | 隐藏每条记录的金额 |
-| `hide account` | 隐藏每条记录的账户 |
-| `show account` | 强制显示账户列 |
-| `list style unordered` | 以无序列表显示（默认） |
-| `list style ordered` | 以有序列表显示 |
-| `list style none` | 不使用列表样式（纯文本块） |
+| `hide date` | Hide the date for each record |
+| `hide time` | Hide the time for each record |
+| `hide tag` | Hide the tag for each record |
+| `hide amount` | Hide the amount for each record |
+| `hide account` | Hide the account for each record |
+| `show account` | Force show the account column |
+| `list style unordered` | Display as unordered list (default) |
+| `list style ordered` | Display as ordered list |
+| `list style none` | No list styling (plain text block) |
 
-示例：
+Example:
 ```
 hide time
 hide tag
@@ -995,88 +995,88 @@ list style ordered
 ```
 
 ```
-# 查看所有带账户的条目
+# View all entries with accounts
 show account
 sort by date descending
 ```
 
-### 表格配置
+### Table Configuration
 
-通过插入图表菜单或手动编写代码块，可以自定义表格的列数和每列内容。
+Through the insert chart menu or manual code block editing, you can customize the number of columns and the content of each column.
 
-#### 表格列数
+#### Table Columns
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `table columns 2` | 设置表格为 2 列 |
-| `table columns 3` | 设置表格为 3 列 |
+| `table columns 2` | Set table to 2 columns |
+| `table columns 3` | Set table to 3 columns |
 
-默认列数为 6。
+Default is 6 columns.
 
-#### 列配置
+#### Column Configuration
 
-每列的配置格式为 `colN 字段 [表头名称] [对齐方式]`，其中 N 为列号（1-6）。
+The configuration format for each column is `colN field ["header name"] [alignment]`, where N is the column number (1-6).
 
-| 参数 | 可选值 | 说明 |
+| Parameter | Options | Description |
 |------|--------|------|
-| 字段 | `date`、`amount`、`account`、`description`、`attachment`、`link` | 该列显示的数据类型 |
-| 表头名称 | `"自定义名称"` | 可选，自定义表头文字，留空则显示默认名称 |
-| 对齐方式 | `left`、`center`、`right` | 可选，该列文本对齐方式 |
+| Field | `date`, `amount`, `account`, `description`, `attachment`, `link` | Data type displayed in this column |
+| Header name | `"Custom Name"` | Optional; custom header text. Leave empty for default name |
+| Alignment | `left`, `center`, `right` | Optional; text alignment for this column |
 
-示例：
+Example:
 ```
-# 2列表格，时间居中，金额居右
+# 2-column table, time centered, amount right-aligned
 table columns 2
-col1 date "时间" center
-col2 amount "金额" right
+col1 date "Date" center
+col2 amount "Amount" right
 ```
 
 ```
-# 3列表格，含账户列
+# 3-column table with account column
 table columns 3
-col1 date "日期" left
-col2 account "账户" center
-col3 amount "金额" right
+col1 date "Date" left
+col2 account "Account" center
+col3 amount "Amount" right
 ```
 
 ```
-# 3列表格，隐藏表头
+# 3-column table, hidden headers
 table columns 3
 col1 date "" left
 col2 amount "" left
 col3 description "" left
 ```
 
-### 限制数量
+### Limiting Results
 
-| 指令 | 说明 |
+| Directive | Description |
 |------|------|
-| `limit to 10` | 最多显示 10 条结果 |
+| `limit to 10` | Show at most 10 results |
 
-示例：
+Example:
 ```
 limit to 20
 ```
 
-### 注释
+### Comments
 
-以 `#` 开头的行是注释，不会被执行：
+Lines starting with `#` are comments and will not be executed:
 
 ```
-# 这是一条注释，不会影响查询
+# This is a comment and will not affect the query
 ```
 
 ---
 
-## 完整查询示例
+## Complete Query Examples
 
-### 示例 1：本月支出明细
+### Example 1: Expense Details This Month
 
-查看本月所有支出，按日期从新到旧排列，并显示总支出：
+View all expenses this month, sorted by date from newest to oldest, and show total expenses:
 
 ````markdown
 ```cashlog
-# 本月支出明细
+# Expense details this month
 is expense
 date this month
 sort by date descending
@@ -1084,13 +1084,13 @@ show total expense
 ```
 ````
 
-### 示例 2：本年度收入汇总
+### Example 2: Annual Income Summary
 
-查看今年所有收入，按金额从大到小排列：
+View all income this year, sorted by amount from highest to lowest:
 
 ````markdown
 ```cashlog
-# 今年收入一览
+# Income overview this year
 is income
 date this year
 sort by amount descending
@@ -1098,26 +1098,26 @@ show total income
 ```
 ````
 
-### 示例 3：交通相关支出
+### Example 3: Transportation Expenses
 
-查看所有与交通相关的支出：
+View all transportation-related expenses:
 
 ````markdown
 ```cashlog
-# 交通支出
-tag includes #支出/交通
+# Transportation expenses
+tag includes #expense/transport
 sort by date descending
 show total expense
 ```
 ````
 
-### 示例 4：大额支出统计
+### Example 4: Large Expense Statistics
 
-查看金额超过 200 的支出，按金额从大到小排列，只显示前 20 条：
+View expenses over 200, sorted by amount from highest to lowest, showing only the first 20:
 
 ````markdown
 ```cashlog
-# 大额支出（>200）
+# Large expenses (>200)
 is expense
 amount above 200
 sort by amount descending
@@ -1127,13 +1127,13 @@ show count
 ```
 ````
 
-### 示例 5：按月份分组查看收支
+### Example 5: Income and Expenses Grouped by Month
 
-查看今年所有记录，按月份分组，显示每月汇总：
+View all records this year, grouped by month, showing monthly summaries:
 
 ````markdown
 ```cashlog
-# 今年月度收支
+# Monthly income and expenses this year
 date this year
 group by month
 sort by date ascending
@@ -1141,13 +1141,13 @@ show total
 ```
 ````
 
-### 示例 6：按分类分组查看本月支出
+### Example 6: This Month's Expenses Grouped by Category
 
-查看本月支出，按标签分组，显示各分类小计：
+View this month's expenses, grouped by tag, showing subtotals for each category:
 
 ````markdown
 ```cashlog
-# 本月支出分类统计
+# Expense category statistics this month
 is expense
 date this month
 group by tag
@@ -1155,25 +1155,25 @@ show total expense
 ```
 ````
 
-### 示例 7：指定文件的记账数据
+### Example 7: Data from Specific Files
 
-只查看「记账」文件夹下的数据：
+Only view data from the "accounting" folder:
 
 ````markdown
 ```cashlog
-# 记账本数据
-path includes 记账/
+# Accounting book data
+path includes accounting/
 show total
 ```
 ````
 
-### 示例 8：精简显示
+### Example 8: Compact Display
 
-只显示描述和金额，隐藏日期、时间、标签：
+Only show description and amount, hide date, time, and tags:
 
 ````markdown
 ```cashlog
-# 精简清单
+# Compact list
 is expense
 date this month
 hide date
@@ -1183,372 +1183,372 @@ show total expense
 ```
 ````
 
-### 示例 9：自定义表格列
+### Example 9: Custom Table Columns
 
-自定义表格为 2 列，时间居中，金额居右：
+Customize the table to 2 columns, with time centered and amount right-aligned:
 
 ````markdown
 ```cashlog
-# 收支概览
+# Income and expense overview
 is expense
 date this month
 sort by date descending
 table columns 2
-col1 date "时间" center
-col2 amount "金额" right
+col1 date "Date" center
+col2 amount "Amount" right
 ```
 ````
 
-### 示例 10：按账户查看流水
+### Example 10: View Transactions by Account
 
-查看某个账户的所有交易记录：
+View all transactions for a specific account:
 
 ````markdown
 ```cashlog
-# 微信账户流水
-account is 微信
+# WeChat account transactions
+account is WeChat
 sort by date descending
 show total
 ```
 ````
 
-### 示例 11：查看转账记录
+### Example 11: View Transfer Records
 
-查看所有转账记录：
+View all transfer records:
 
 ````markdown
 ```cashlog
-# 转账记录
+# Transfer records
 is transfer
 sort by date descending
 ```
 ````
 
-### 示例 12：查看有附件的条目
+### Example 12: View Entries with Attachments
 
 ````markdown
 ```cashlog
-# 带附件的记账
+# Entries with attachments
 has attachment
 sort by date descending
 ```
 ````
 
-### 示例 13：多账户对比
+### Example 13: Multi-Account Comparison
 
-按账户分组查看各账户的收支情况：
+View income and expenses for each account, grouped by account:
 
 ````markdown
 ```cashlog
-# 各账户收支对比
+# Account income and expense comparison
 date this month
 group by account
 show total
 ```
 ````
 
-### 示例 14：按月份和账户交叉分组
+### Example 14: Cross-Group by Month and Account
 
-结合多条件过滤查看特定账户的特定分类支出：
+Combine multiple conditions to view specific category expenses for a specific account:
 
 ````markdown
 ```cashlog
-# 本月微信餐饮支出
+# WeChat dining expenses this month
 is expense
 date this month
-account is 微信
-tag includes #支出/餐饮
+account is WeChat
+tag includes #expense/food
 sort by date descending
 show total expense
 ```
 ````
 
-### 示例 15：查看余额变更记录
+### Example 15: View Balance Change Records
 
 ````markdown
 ```cashlog
-# 余额变更记录
+# Balance change records
 is balance change
 sort by date descending
 ```
 ````
 
-### 示例 16：按类型分组查看本月收支
+### Example 16: This Month's Income and Expenses Grouped by Type
 
 ````markdown
 ```cashlog
-# 本月按类型汇总
+# Summary by type this month
 date this month
 group by type
 show total
 ```
 ````
 
-### 示例 17：表格代码块
+### Example 17: Table Code Block
 
-在笔记中插入表格视图：
+Insert a table view in a note:
 
 ````markdown
 ```cashlog-chart
-# 本月支出明细表
+# Expense detail table this month
 is expense
 date this month
 sort by date descending
 show summary
 show tag in description
 table columns 4
-col1 date "日期" left
-col2 amount "金额" right
-col3 description "描述" left
-col4 link "来源" left
+col1 date "Date" left
+col2 amount "Amount" right
+col3 description "Description" left
+col4 link "Source" left
 ```
 ````
 
-### 示例 18：条形图 — 月度收支对比
+### Example 18: Bar Chart — Monthly Income vs. Expenses
 
-按月查看净收支、收入和支出：
+View net balance, income, and expenses by month:
 
 ````markdown
 ```cashlog-chart
-# 月度收支对比
+# Monthly income vs. expenses
 group by month
 chart type bar
-chart title "月度收支对比"
+chart title "Monthly Income vs. Expenses"
 chart bar split by valueType
 chart legend true
 chart labels true
 ```
 ````
 
-> X 轴为月份，每月三根柱子：净收支（第一根）、收入、支出。
+> The X-axis shows months, with three bars per month: net balance (first bar), income, and expenses.
 
-### 示例 19：条形图 — 各账户月度支出
+### Example 19: Bar Chart — Monthly Expenses by Account
 
-按账户查看各月的支出分布（每个账户一根柱子）：
+View the distribution of expenses by account for each month (one bar per account):
 
 ````markdown
 ```cashlog-chart
-# 各账户月度支出
+# Monthly expenses by account
 group by month
 chart type bar
-chart title "各账户月度支出"
+chart title "Monthly Expenses by Account"
 chart bar split by account
-chart bar items 微信 支付宝 银行卡
+chart bar items WeChat Alipay BankCard
 chart legend true
 chart labels true
 ```
 ````
 
-### 示例 20：条形图 — 各类型账户对比
+### Example 20: Bar Chart — Account Comparison by Type
 
-按类型查看账户分布：
+View account distribution by type:
 
 ````markdown
 ```cashlog-chart
-# 各类型账户收支
+# Income and expenses by account type
 group by type
 chart type bar
-chart title "各类型账户收支"
+chart title "Income and Expenses by Account Type"
 chart bar split by account
-chart bar items 微信 支付宝
+chart bar items WeChat Alipay
 chart legend true
 chart labels true
 ```
 ````
 
-### 示例 21：条形图 — 各账户标签流水
+### Example 21: Bar Chart — Tag Transactions by Account
 
-按账户查看各标签的金额：
+View amounts by tag for each account:
 
 ````markdown
 ```cashlog-chart
-# 各账户标签收支
+# Tag income and expenses by account
 group by account
 chart type bar
-chart title "各账户标签收支"
+chart title "Tag Income and Expenses by Account"
 chart bar split by tag
-chart bar items #支出 #收入 #转账 #余额变更
+chart bar items #expense #income #transfer #balance-change
 chart legend true
 chart labels true
 ```
 ````
 
-### 示例 22：折线图 — 月度收支趋势
+### Example 22: Line Chart — Monthly Income and Expense Trends
 
-按月查看净收支、收入和支出的变化趋势：
+View the trends of net balance, income, and expenses by month:
 
 ````markdown
 ```cashlog-chart
-# 月度收支趋势
+# Monthly income and expense trends
 date this year
 group by month
 chart type line
-chart title "月度收支趋势"
+chart title "Monthly Income and Expense Trends"
 chart line split by valueType
 chart legend true
 chart labels true
 ```
 ````
 
-> 每月三条折线：净收支、收入、支出。折线图 X 轴仅支持时间维度（月/周/日/年）。
+> Three lines per month: net balance, income, and expenses. Line chart X-axis only supports time dimensions (month/week/day/year).
 
-### 示例 23：折线图 — 各标签月度支出对比
+### Example 23: Line Chart — Monthly Expense Comparison by Tag
 
-按标签查看各月支出趋势，多线对比：
+View monthly expense trends by tag with multi-line comparison:
 
 ````markdown
 ```cashlog-chart
-# 各标签月度支出
+# Monthly expenses by tag
 is expense
 date this year
 group by month
 chart type line
-chart title "各标签月度支出趋势"
+chart title "Monthly Expense Trends by Tag"
 chart line split by tag
-chart line items #支出/餐饮 #支出/交通 #支出/娱乐
+chart line items #expense/food #expense/transport #expense/entertainment
 chart legend true
 chart labels true
 ```
 ````
 
-### 示例 24：折线图 — 不分组，净收支趋势
+### Example 24: Line Chart — No Grouping, Net Balance Trend
 
-查看每月净收支变化（单条折线）：
+View monthly net balance changes (single line):
 
 ````markdown
 ```cashlog-chart
-# 月度净收支
+# Monthly net balance
 date this year
 group by month
 chart type line
-chart title "月度净收支趋势"
+chart title "Monthly Net Balance Trend"
 chart line split by none
 chart legend true
 chart labels true
 ```
 ````
 
-### 示例 25：条形图 — 按周查看支出
+### Example 25: Bar Chart — View Expenses by Week
 
-按周查看支出分布：
+View expense distribution by week:
 
 ````markdown
 ```cashlog-chart
-# 每周支出
+# Weekly expenses
 is expense
 date this month
 group by week
 chart type bar
-chart title "每周支出"
+chart title "Weekly Expenses"
 chart bar split by type
 chart legend true
 chart labels true
 ```
 ````
 
-### 示例 26：扇形图 — 本月支出分类占比
+### Example 26: Pie Chart — Expense Category Breakdown This Month
 
 ````markdown
 ```cashlog-chart
-# 本月支出分类
+# Expense categories this month
 is expense
 date this month
 group by tag
 chart type pie
-chart title "本月支出分类占比"
+chart title "Expense Category Breakdown This Month"
 chart legend true
 ```
 ````
 
-> 按标签/类型分组时数值固定为绝对值，无需 `chart value`。
+> When grouped by tag/type, values are fixed to absolute amounts, so `chart value` is not needed.
 
-### 示例 27：扇形图 — 月度净收支构成
+### Example 27: Pie Chart — Monthly Net Balance Composition
 
 ````markdown
 ```cashlog-chart
-# 月度净收支
+# Monthly net balance
 date this year
 group by month
 chart type pie
-chart title "月度净收支构成"
+chart title "Monthly Net Balance Composition"
 chart value balance
 chart legend true
 ```
 ````
 
-### 示例 28：扇形图 — 账户进账构成
+### Example 28: Pie Chart — Account Inflow Composition
 
 ````markdown
 ```cashlog-chart
-# 各账户进账
+# Inflow by account
 date this year
 group by account
 chart type pie
-chart title "各账户进账构成"
+chart title "Account Inflow Composition"
 chart value inflow
 chart legend true
 ```
 ````
 
-> 按账户时 `inflow` 统计该账户全部正数金额（收入 + 转账转入 + 余额调增）。
+> When grouped by account, `inflow` calculates all positive amounts for that account (income + transfer in + balance increase).
 
 ---
 
-## 工作流建议
+## Workflow Suggestions
 
-### 推荐的文件组织方式
+### Recommended File Organization
 
-**方式一：每日日记中记账**
+**Method 1: Record in Daily Notes**
 
-在每日日记中随手记录当天的收支：
+Record daily income and expenses in your daily notes:
 
 ```markdown
 # 2026-04-25
 
-## 今日收支
-- #支出/交通 坐高铁 💴-100 ➕2026-04-25 ⏰17:30
-- #支出/餐饮 午饭 💴-25 ➕2026-04-25 ⏰12:00
-- #收入/理财 基金收益 💴120 ➕2026-04-25
+## Today's Income and Expenses
+- #expense/transport high-speed train 💴-100 ➕2026-04-25 ⏰17:30
+- #expense/food lunch 💴-25 ➕2026-04-25 ⏰12:00
+- #income/investment fund returns 💴120 ➕2026-04-25
 ```
 
-配合 Templater 等模板插件，可以自动在每日日记中插入 `## 今日收支` 标题。
+Combined with template plugins like Templater, you can automatically insert a `## Today's Income and Expenses` heading in each daily note.
 
-**方式二：专门的记账文件**
+**Method 2: Dedicated Accounting File**
 
-创建一个 `记账.md` 文件，所有记录都写在里面：
+Create an `accounting.md` file with all records in it:
 
 ```markdown
-# 记账
+# Accounting
 
 ## 2026-04
-- #支出/交通 坐高铁 💳微信💴-100 ➕2026-04-25 ⏰17:30
-- #收入/工资 发工资 💳银行卡💴10000 ➕2026-04-25 ⏰09:00
-- #转账 还信用卡 💳银行卡💴-500 💳信用卡💴500 ➕2026-04-25
-- #余额变更 调整余额 💳支付宝💴50 ➕2026-04-25
-- #支出/餐饮 午饭 💳支付宝💴-25 ➕2026-04-24 ⏰12:00
+- #expense/transport high-speed train 💳WeChat💴-100 ➕2026-04-25 ⏰17:30
+- #income/salary salary payment 💳BankCard💴10000 ➕2026-04-25 ⏰09:00
+- #transfer credit card repayment 💳BankCard💴-500 💳CreditCard💴500 ➕2026-04-25
+- #balance-change balance adjustment 💳Alipay💴50 ➕2026-04-25
+- #expense/food lunch 💳Alipay💴-25 ➕2026-04-24 ⏰12:00
 ```
 
-**方式三：按月分文件**
+**Method 3: Separate Files per Month**
 
-每月一个文件，如 `记账/2026-04.md`：
+One file per month, such as `accounting/2026-04.md`:
 
 ```markdown
-# 2026年4月
+# April 2026
 
-- #支出/交通 坐高铁 💳微信💴-100 ➕2026-04-25 ⏰17:30
-- #收入/工资 发工资 💳银行卡💴10000 ➕2026-04-05 ⏰09:00
+- #expense/transport high-speed train 💳WeChat💴-100 ➕2026-04-25 ⏰17:30
+- #income/salary salary payment 💳BankCard💴10000 ➕2026-04-05 ⏰09:00
 ```
 
-不管用哪种方式，查询语法都能自动索引整个 Vault 中的所有记账条目。
+Regardless of which method you use, the query syntax automatically indexes all cashlog entries across the entire Vault.
 
-### 推荐的月度汇总笔记
+### Recommended Monthly Summary Note
 
-创建一个「月度汇总」笔记，用查询块自动统计：
+Create a "Monthly Summary" note with query blocks for automatic statistics:
 
 ````markdown
-# 月度财务汇总
+# Monthly Financial Summary
 
-## 本月支出明细
+## Expense Details This Month
 ```cashlog
 is expense
 date this month
@@ -1557,7 +1557,7 @@ group by tag
 show total expense
 ```
 
-## 本月收入明细
+## Income Details This Month
 ```cashlog
 is income
 date this month
@@ -1565,101 +1565,101 @@ sort by date descending
 show total income
 ```
 
-## 本月转账记录
+## Transfer Records This Month
 ```cashlog
 is transfer
 date this month
 sort by date descending
 ```
 
-## 本月收支概览
+## Income and Expense Overview This Month
 ```cashlog
 date this month
 show total
 ```
 ````
 
-### 配合面板使用
+### Using with the Panel
 
-1. 给 `open-cashlog-panel` 命令设置快捷键（如 `Ctrl+Shift+J`）
-2. 每天用 `Create or edit cashlog` 命令随手记账
-3. 按快捷键打开面板查看当日/本周/本月统计
-4. 设置预算和目标，面板自动追踪进度
+1. Set a hotkey for the `open-cashlog-panel` command (e.g., `Ctrl+Shift+J`)
+2. Use the `Create or edit cashlog` command daily to record entries
+3. Press the hotkey to open the panel and view daily/weekly/monthly statistics
+4. Set budgets and goals; the panel automatically tracks progress
 
 ---
 
-## 常见问题
+## FAQ
 
-**Q：记账条目必须写在特定文件中吗？**
+**Q: Do cashlog entries need to be written in specific files?**
 
-不需要。插件会自动扫描 Vault 中所有 Markdown 文件，任何文件中的记账条目都会被索引。
+No. The plugin automatically scans all Markdown files in the Vault. Cashlog entries in any file will be indexed.
 
-**Q：可以不用命令，直接手写记账条目吗？**
+**Q: Can I write cashlog entries manually without using commands?**
 
-可以。只要格式正确，插件就能识别。基础格式为：`- #标签 描述 💴金额 ➕日期 ⏰时间`
+Yes. As long as the format is correct, the plugin will recognize it. The basic format is: `- #tag description 💴amount ➕date ⏰time`
 
-**Q：账户功能需要每个账户预先设置吗？**
+**Q: Does the account feature require each account to be set up in advance?**
 
-建议在设置中预先添加账户名，这样编辑时可以从下拉框直接选择。如果手写格式中用了未设置的账户名，插件也会自动识别并在设置页中展示（虚线边框标识），但初始余额只能通过设置来设定。
+It is recommended to add account names in settings beforehand so you can select them from the dropdown during editing. If you use an account name in manual format that hasn't been set up, the plugin will still recognize it automatically and display it in the settings page (identified by a dashed border). However, the initial balance can only be set through settings.
 
-**Q：如何修改或删除账户？**
+**Q: How do I modify or delete an account?**
 
-在面板设置 → 账户设置中，右键账户 chip 可修改账户名或删除账户。修改账户名会自动迁移所有历史记账条目。删除账户时需要选择目标账户，原账户下的记账条目会全部转移到目标账户，余额也会合并。
+In the panel settings → Account settings, right-click an account chip to rename or delete it. Renaming an account automatically migrates all historical entries. When deleting an account, you need to select a target account — all entries under the original account will be transferred to the target account, and balances will be merged.
 
-**Q：转账会影响收入和支出的统计吗？**
+**Q: Do transfers affect income and expense statistics?**
 
-不会。转账条目的 `isIncome` 和 `isExpense` 均为 false，不会计入收入或支出的汇总中。转账只影响两个账户的余额。
+No. Transfer entries have both `isIncome` and `isExpense` set to false, so they are not included in income or expense summaries. Transfers only affect the balances of the two accounts involved.
 
-**Q：余额变更会影响收入和支出的统计吗？**
+**Q: Do balance changes affect income and expense statistics?**
 
-不会。余额变更条目与转账类似，不计入收入或支出的统计，仅影响对应账户的余额。它主要用于对账时调整账户余额。
+No. Balance change entries are similar to transfers — they are not included in income or expense statistics and only affect the balance of the corresponding account. They are primarily used for adjusting account balances during reconciliation.
 
-**Q：转账标签和余额变更标签可以自定义吗？**
+**Q: Can transfer tags and balance change tags be customized?**
 
-可以。在 Cashlog 面板 → 设置 → 标签设置 中可以修改（需要先开启账户功能才会显示）。点击标签按钮即可编辑，修改后自动迁移所有历史转账/余额变更记录。
+Yes. You can modify them in the Cashlog panel → Settings → Tag settings (only visible when the account feature is enabled). Click the tag button to edit; changes automatically migrate all historical transfer/balance change records.
 
-**Q：附件存储在哪里？**
+**Q: Where are attachments stored?**
 
-附件图片存储在插件设置中指定的目录（默认 `cashlog-attachments/`）下，文件名格式为 `cashlog-YYYYMMDDHHmmssSSS.png`。
+Attachment images are stored in the directory specified in plugin settings (default: `cashlog-attachments/`), with filenames in the format `cashlog-YYYYMMDDHHmmssSSS.png`.
 
-**Q：子标签必须提前在设置中配置吗？**
+**Q: Do sub-tags need to be configured in settings in advance?**
 
-不需要。设置中的子标签只是编辑对话框中的快捷选项。插件会自动扫描 vault 中发现的所有子标签并展示在设置页中（虚线边框标识），也可在编辑记账时从下拉菜单中看到。你可以手动输入任意子标签，如 `#支出/宠物`、`#收入/副业` 等。
+No. Sub-tags in settings are just shortcuts in the edit dialog. The plugin automatically scans all sub-tags found in the vault and displays them on the settings page (identified by a dashed border). You can also see them in the dropdown menu when editing entries. You can manually enter any sub-tag, such as `#expense/pets`, `#income/side-job`, etc.
 
-**Q：修改或删除标签/子标签后，历史记账数据会怎样？**
+**Q: What happens to historical data when tags/sub-tags are modified or deleted?**
 
-修改标签名时，插件会自动迁移所有历史记录中的标签（保留子标签映射）。删除子标签时，插件会同时删除该子标签下的所有记账条目并给出提示。这些操作均不可撤销，建议在操作前备份 vault。
+When renaming a tag, the plugin automatically migrates tags in all historical records (preserving sub-tag mappings). When deleting a sub-tag, the plugin simultaneously deletes all entries under that sub-tag and provides a prompt. These operations are irreversible, so it is recommended to back up your vault before proceeding.
 
-**Q：查询代码块显示「查询错误」怎么办？**
+**Q: What should I do if the query code block shows "Query Error"?**
 
-检查指令拼写是否正确。错误信息会告诉你具体是哪一行有问题。常见的错误包括：
-- 日期格式不正确
-- 指令名拼写错误
-- `path includes` 指定的路径在排除路径中或不在包含路径中
+Check that the directive spelling is correct. The error message will tell you which specific line has the problem. Common errors include:
+- Incorrect date format
+- Misspelled directive names
+- The path specified in `path includes` is in the exclude paths or not in the include paths
 
-**Q：日期过滤支持哪些格式？**
+**Q: What date formats does the date filter support?**
 
-日期过滤支持多种格式：
-- 绝对日期：`date 2026-04-25`
-- 自然语言：`date today`、`date yesterday`、`date next monday`、`date 14 days ago`
-- 相对范围：`date this week`、`date last month`、`date next year`
-- 编号范围：`date 2026`（全年）、`date 2026-04`（整月）、`date 2026-W15`（整周）、`date 2026-Q2`（季度）
-- 绝对范围：`date 2026-01-01 2026-03-31`
+The date filter supports multiple formats:
+- Absolute date: `date 2026-04-25`
+- Natural language: `date today`, `date yesterday`, `date next monday`, `date 14 days ago`
+- Relative ranges: `date this week`, `date last month`, `date next year`
+- Numbered ranges: `date 2026` (full year), `date 2026-04` (full month), `date 2026-W15` (full week), `date 2026-Q2` (quarter)
+- Absolute ranges: `date 2026-01-01 2026-03-31`
 
-**Q：修改文件后查询结果没有更新？**
+**Q: Query results not updating after modifying files?**
 
-插件会监听文件变更并自动更新缓存。如果未更新，尝试关闭并重新打开包含查询代码块的笔记。
+The plugin monitors file changes and automatically updates the cache. If results don't update, try closing and reopening the note containing the query code block.
 
-**Q：设置排除/包含路径后没有生效？**
+**Q: Exclude/include path settings not taking effect?**
 
-修改路径后需要点击输入框旁的「应用」按钮才会生效。生效后插件会重新索引文件。
+After modifying paths, you need to click the "Apply" button next to the input field for changes to take effect. Once applied, the plugin will re-index files.
 
-**Q：面板中的统计方式如何切换？**
+**Q: How do I switch the statistics mode in the panel?**
 
-在 Cashlog 面板 → 设置 → 统计方式中选择。支持按日、按周（可设起始日）、按月（可设起始日）、按年、或全部历史统计。切换后仪表盘数据即时刷新。
+In the Cashlog panel → Settings → Statistics mode. Supports daily, weekly (with configurable start day), monthly (with configurable start day), yearly, or all-time statistics. The dashboard data refreshes immediately after switching.
 
-**Q：预算和目标有什么区别？**
+**Q: What is the difference between budgets and goals?**
 
-- **预算**用于控制支出，监控某个分类的支出是否超出计划
-- **目标**用于规划收入，追踪某个收入来源是否达到预期
-- 两者都在面板仪表盘中以进度条形式展示
+- **Budgets** are for controlling expenses, monitoring whether spending in a category exceeds the plan
+- **Goals** are for planning income, tracking whether an income source meets expectations
+- Both are displayed as progress bars in the panel dashboard

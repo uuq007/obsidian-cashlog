@@ -1,8 +1,10 @@
 # Cashlog
 
-一款 [Obsidian](https://obsidian.md) 个人记账插件。使用 Emoji 标记直接在 Markdown 笔记中记录收支，然后通过查询语法检索、可视化和分析数据 — 所有操作都在你的 Vault 中完成。
+一款 Obsidian 个人记账插件。使用 Emoji 标记直接在 Markdown 笔记中记录收支，然后通过查询语法检索、可视化和分析数据 — 所有操作都在你的 Vault 中完成。
 
-**[English](README.md)**
+**[English](https://github.com/uuq007/obsidian-cashlog/blob/main/README.md)**
+
+**[使用手册](https://github.com/uuq007/obsidian-cashlog/blob/main/使用手册.md)**
 
 ---
 
@@ -36,6 +38,32 @@
 | `➕` | 日期 | `➕` + YYYY-MM-DD |
 | `⏰` | 时间 | `⏰` + HH:mm |
 
+![create-or-edit](assets/create-or-edit.png)
+
+![create-or-edit2](assets/create-or-edit2.png)
+
+在插件设置菜单中开启账户功能和附件功能后，完整的添加记账或编辑记账菜单如下：
+
+![create-or-edit3](assets/create-or-edit3.png)
+
+
+## 仪表盘面板
+
+通过命令面板 → `打开 Cashlog 面板` 打开。面板提供：
+
+![dashboard](assets/dashboard.png)
+
+- **摘要卡片** — 当期收入、支出、结余、笔数
+- **账户余额** — 各账户实时余额，支持点击查看明细
+- **预算进度** — 支出 vs 预算，按周期追踪
+- **目标进度** — 收入达成 vs 目标
+- **最近交易** — 最近 10 条记录，悬浮显示详情
+- **分类排行** — 支出分类 Top 5，显示占比
+
+所有区域均可点击进入详情页。
+
+
+
 ### 查询数据
 
 ````markdown
@@ -47,7 +75,13 @@ show total expense
 ```
 ````
 
+![image-20260514235928988](assets/image-20260514235928988.png)
+
 ### 图表可视化
+
+通过命令面板（`Ctrl+P`）→ `插入图表`，或手动编写：
+
+![image-20260515000639026](assets/image-20260515000639026.png)
 
 ````markdown
 ```cashlog-chart
@@ -58,6 +92,14 @@ chart bar split by valueType
 chart legend true
 ```
 ````
+
+![image-20260515000037141](assets/image-20260515000037141.png)
+
+![image-20260515000305595](assets/image-20260515000305595.png)
+
+![image-20260515000355591](assets/image-20260515000355591.png)
+
+![image-20260515000433199](assets/image-20260515000433199.png)
 
 ## 条目格式
 
@@ -171,18 +213,7 @@ date 2026-01-01 2026-03-31   # 绝对范围
 | `chart line split by tag` | 按标签拆分折线 |
 | `chart value income` | 扇形图数值模式 |
 
-## 仪表盘面板
 
-通过命令面板 → `打开 Cashlog 面板` 打开。面板提供：
-
-- **摘要卡片** — 当期收入、支出、结余、笔数
-- **账户余额** — 各账户实时余额，支持点击查看明细
-- **预算进度** — 支出 vs 预算，按周期追踪
-- **目标进度** — 收入达成 vs 目标
-- **最近交易** — 最近 10 条记录，悬浮显示详情
-- **分类排行** — 支出分类 Top 5，显示占比
-
-所有区域均可点击进入详情页。
 
 ## 安装
 
@@ -216,7 +247,7 @@ npm run build
 
 ## 系统要求
 
-- Obsidian v1.4.11+
+- Obsidian v1.7.2+
 
 ## 许可证
 
