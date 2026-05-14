@@ -18,7 +18,7 @@
     "obsidian": "latest",
     "obsidian-dev-utils": "^63.1.0",
     "tslib": "2.4.0",
-    "typescript": "4.7.4",
+    "typescript": "~5.7.0",
     "typescript-eslint": "^8.59.3"
   },
   "dependencies": {
