@@ -5,6 +5,7 @@ import { DEFAULT_SETTINGS } from "./Settings";
 import type { BudgetConfig, GoalConfig } from "./Settings";
 import { openTagEditModal } from "./ModalHelpers";
 import { t } from "./i18n";
+import { getErrorMessage } from "./ErrorUtils";
 
 let budgetIdCounter = 0;
 let goalIdCounter = 0;
@@ -159,7 +160,7 @@ export class CashlogSettingsTab extends PluginSettingTab {
         new FolderSuggest(this.app, inputEl, (folderPath: string) => {
           this.plugin.settings.attachmentFolder = normalizePath(folderPath) || DEFAULT_SETTINGS.attachmentFolder;
           this.plugin.saveSettings().catch((e) => {
-            new Notice(t("error.queryError") + ": " + (e as Error).message);
+            new Notice(t("error.queryError") + ": " + getErrorMessage(e));
           });
         });
       }

@@ -1,6 +1,7 @@
 import { Notice } from "obsidian";
 import { validateTagName } from "./TagValidation";
 import { t, tp } from "./i18n";
+import { getErrorMessage } from "./ErrorUtils";
 
 // ========== Modal 构建辅助函数 ==========
 
@@ -119,7 +120,7 @@ export function openTagEditModal(
       await onConfirm(newTag);
       overlay.remove();
     } catch (e) {
-      new Notice(tp("notice.tagEditFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.tagEditFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -162,7 +163,7 @@ export function createAsyncModalButton(
         await onClick(btn);
         if (onSuccess) onSuccess();
       } catch (e) {
-        new Notice(tp("notice.operationFailed", { message: (e as Error).message }));
+        new Notice(tp("notice.operationFailed", { message: getErrorMessage(e) }));
         btn.disabled = false;
         btn.textContent = text;
       }

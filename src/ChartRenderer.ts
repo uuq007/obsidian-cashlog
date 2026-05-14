@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
 import { MarkdownRenderChild, TFile } from "obsidian";
 import { t, tp } from "./i18n";
 import { Query, TableColConfig, parseTableConfig, createDefaultTableConfig } from "./Query/Query";
@@ -6,6 +7,7 @@ import { QueryResult, EntryGroup } from "./Query/Filter";
 import { CashlogEntry } from "./EntryLocation";
 import { extractNoteName, renderAttachmentLink } from "./PathUtils";
 import type CashlogPlugin from "./main";
+import { getErrorMessage } from "./ErrorUtils";
 import { Chart, registerables, type TooltipItem } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import type { Context as DatalabelsContext } from "chartjs-plugin-datalabels/types/context";
@@ -1049,7 +1051,7 @@ export class CashlogChartRenderChild extends MarkdownRenderChild {
       this.containerEl.empty();
       this.containerEl.createDiv({
         cls: "cashlog-error",
-        text: tp("error.chartRenderFailed", { message: err instanceof Error ? err.message : String(err) }),
+        text: tp("error.chartRenderFailed", { message: getErrorMessage(err) }),
       });
     }
   }

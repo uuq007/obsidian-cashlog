@@ -6,6 +6,7 @@ import { CashlogModal, EditableEntryData } from "./CashlogModal";
 import { buildEntryFromModalData } from "./EntryEditor";
 import { extractNoteName, renderAttachmentLink } from "./PathUtils";
 import { t, tp } from "./i18n";
+import { getErrorMessage } from "./ErrorUtils";
 import type CashlogPlugin from "./main";
 
 // 渲染查询结果到 HTML
@@ -208,7 +209,7 @@ function openEditModal(plugin: CashlogPlugin, entry: CashlogEntry): void {
         lines[entry.location.lineNumber] = newLine;
         return lines.join("\n");
       }).catch((e) => {
-        new Notice(t("error.queryError") + ": " + (e as Error).message);
+        new Notice(t("error.queryError") + ": " + getErrorMessage(e));
       });
     }
   };

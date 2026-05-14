@@ -5,6 +5,7 @@ import { DEFAULT_SETTINGS } from "./Settings";
 import type { BudgetConfig, GoalConfig } from "./Settings";
 import { validateSubTagName, validateAccountName } from "./TagValidation";
 import { t, tp } from "./i18n";
+import { getErrorMessage } from "./ErrorUtils";
 
 let panelBudgetId = 0;
 let panelGoalId = 0;
@@ -404,7 +405,7 @@ function renderAttachmentFolderRow(
   new FolderSuggest(plugin.app, input, (folderPath: string) => {
     plugin.settings.attachmentFolder = normalizePath(folderPath) || DEFAULT_SETTINGS.attachmentFolder;
     plugin.saveSettings().catch((e) => {
-      new Notice(t("error.queryError") + ": " + (e as Error).message);
+      new Notice(t("error.queryError") + ": " + getErrorMessage(e));
     });
   });
 
@@ -641,7 +642,7 @@ function openAddSubTagModal(
       overlay.remove();
       refreshPanel();
     } catch (e) {
-      new Notice(tp("notice.addSubTagFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.addSubTagFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -747,7 +748,7 @@ async function executeRenameSubTag(
     }
     refreshPanel();
   } catch (e) {
-    new Notice(tp("notice.editSubTagFailed", { message: (e as Error).message }));
+    new Notice(tp("notice.editSubTagFailed", { message: getErrorMessage(e) }));
     btn.disabled = false;
     btn.textContent = t("modal.button.confirm");
   }
@@ -796,7 +797,7 @@ function openDeleteSubTagDialog(
       }
       refreshPanel();
     } catch (e) {
-      new Notice(tp("notice.deleteSubTagFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.deleteSubTagFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -849,7 +850,7 @@ function openMergeConfirmDialog(
       }
       refreshPanel();
     } catch (e) {
-      new Notice(tp("notice.mergeFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.mergeFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -901,7 +902,7 @@ function openMergeToBaseDialog(
       }
       refreshPanel();
     } catch (e) {
-      new Notice(tp("notice.mergeFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.mergeFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -1040,7 +1041,7 @@ function openAddAccountModal(
       overlay.remove();
       refreshPanel();
     } catch (e) {
-      new Notice(tp("notice.addAccountFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.addAccountFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -1106,7 +1107,7 @@ function openEditAccountModal(
       }
       refreshPanel();
     } catch (e) {
-      new Notice(tp("notice.editAccountFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.editAccountFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -1187,7 +1188,7 @@ function openDeleteAccountDialog(
       }
       refreshPanel();
     } catch (e) {
-      new Notice(tp("notice.deleteAccountFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.deleteAccountFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
@@ -1271,7 +1272,7 @@ function openBalanceEditModal(
         renderPanelSettings(panelContent as HTMLElement, plugin);
       }
     } catch (e) {
-      new Notice(tp("notice.editBalanceFailed", { message: (e as Error).message }));
+      new Notice(tp("notice.editBalanceFailed", { message: getErrorMessage(e) }));
       btn.disabled = false;
       btn.textContent = t("modal.button.confirm");
     }
