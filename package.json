@@ -1,6 +1,6 @@
 {
   "name": "obsidian-cashlog",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "在 Obsidian 中记录和查询收支流水",
   "main": "main.js",
   "scripts": {
