@@ -12,7 +12,7 @@ import {
   renderPieChart,
 } from "./ChartRenderer";
 import type { ChartDataResult } from "./ChartRenderer";
-import type { ChartConfig, GroupByField, PieValueType } from "./Query/Query";
+import type { ChartConfig } from "./Query/Query";
 import { t, tp, formatMoneyUnsigned } from "./i18n";
 import { round2 } from "./MoneyUtils";
 
@@ -368,8 +368,8 @@ export class CashlogView extends ItemView {
 
     const chartData: ChartDataResult = transformToChartData(
       result,
-      "tag" as GroupByField,
-      "expense" as PieValueType,
+      "tag",
+      "expense",
       defaultColors,
     );
 

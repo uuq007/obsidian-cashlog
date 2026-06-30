@@ -28,9 +28,9 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
   const scrollTop = container.scrollTop;
 
   // 确保 container 有 createEl 方法（polyfill for 非 Obsidian 容器）
-  if (!("createEl" in container)) {
+  if (typeof container.createEl !== "function") {
     type CreateElFn = HTMLElement["createEl"];
-    (container as unknown as { createEl: CreateElFn }).createEl = function(this: HTMLElement, tag: string, opts?: Record<string, unknown>) {
+    container.createEl = function(this: HTMLElement, tag: string, opts?: Record<string, unknown>) {
       const el = activeDocument.createElement(tag);
       if (opts) {
         if (opts.cls) el.className = opts.cls as string;
@@ -40,7 +40,7 @@ export function renderPanelSettings(container: HTMLElement, plugin: CashlogPlugi
           for (const k in attrObj) el.setAttribute(k, attrObj[k]);
         }
       }
-      return el as HTMLElement;
+      return el;
     } as unknown as CreateElFn;
   }
 
