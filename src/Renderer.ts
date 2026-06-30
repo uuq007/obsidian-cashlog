@@ -7,6 +7,7 @@ import { CashlogModal, EditableEntryData } from "./CashlogModal";
 import { buildEntryFromModalData } from "./EntryEditor";
 import { extractNoteName, renderAttachmentLink } from "./PathUtils";
 import { t, tp } from "./i18n";
+import { round2 } from "./MoneyUtils";
 import { getErrorMessage } from "./ErrorUtils";
 import type CashlogPlugin from "./main";
 
@@ -264,12 +265,12 @@ async function openFileAtLine(
 
 // 计算分组汇总
 function calculateGroupSummary(entries: CashlogEntry[]): Summary {
-  const totalIncome = entries.filter((e) => e.amount > 0).reduce((sum, e) => sum + e.amount, 0);
-  const totalExpense = entries.filter((e) => e.amount < 0).reduce((sum, e) => sum + e.amount, 0);
+  const totalIncome = round2(entries.filter((e) => e.amount > 0).reduce((sum, e) => sum + e.amount, 0));
+  const totalExpense = round2(entries.filter((e) => e.amount < 0).reduce((sum, e) => sum + e.amount, 0));
   return {
     totalIncome,
     totalExpense,
-    balance: totalIncome + totalExpense,
+    balance: round2(totalIncome + totalExpense),
     count: entries.length,
   };
 }

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- Obsidian API 和 Chart.js 类型在 ESLint 类型检查中无法完全解析 */
 import { MarkdownRenderChild, TFile } from "obsidian";
 import { t, tp } from "./i18n";
+import { round2 } from "./MoneyUtils";
 import { Query, TableColConfig, parseTableConfig, createDefaultTableConfig } from "./Query/Query";
 import type { ChartConfig, GroupByField, SplitBy, PieValueType } from "./Query/Query";
 import { QueryResult, EntryGroup } from "./Query/Filter";
@@ -224,8 +225,8 @@ function renderGroupSubtotalRow(tbody: HTMLElement, group: EntryGroup, colCount:
 
   // 收入/支出金额列
   const amountTd = tr.createEl("td", { attr: { colspan: String(colCount - 1) } });
-  const roundedIncome = Math.round(totalIncome * 100) / 100;
-  const roundedExpense = Math.round(totalExpense * 100) / 100;
+  const roundedIncome = round2(totalIncome);
+  const roundedExpense = round2(totalExpense);
   if (roundedIncome !== 0) {
     amountTd.createSpan({ cls: "cashlog-amount-income", text: `+${roundedIncome}` });
   }
@@ -258,9 +259,9 @@ function renderTotalSummary(containerEl: HTMLElement, result: QueryResult): void
 
   const div = containerEl.createDiv({ cls: "cashlog-chart-total-summary" });
 
-  const roundedIncome = Math.round(totalIncome * 100) / 100;
-  const roundedExpense = Math.round(totalExpense * 100) / 100;
-  const roundedBalance = Math.round(balance * 100) / 100;
+  const roundedIncome = round2(totalIncome);
+  const roundedExpense = round2(totalExpense);
+  const roundedBalance = round2(balance);
 
   div.createDiv({
     cls: "cashlog-summary-income",
@@ -314,13 +315,13 @@ export function transformToChartData(
       raw = group.entries
         .filter((e) => !e.isTransfer && !e.isBalanceChange)
         .reduce((sum, e) => sum + pickEntryAmountValue(e, groupBy, group.key), 0);
-      const display = Math.round(Math.abs(raw) * 100) / 100;
+      const display = round2(Math.abs(raw));
       // 排除转账/余额变更分组（过滤后值为 0 的切片不显示）
       if (display !== 0) {
         slices.push({
           label: formatGroupLabel(group.key, groupBy),
           display,
-          raw: Math.round(raw * 100) / 100,
+          raw: round2(raw),
         });
       }
     } else if (isAccount) {
@@ -367,8 +368,8 @@ export function transformToChartData(
       }
       slices.push({
         label: formatGroupLabel(group.key, groupBy),
-        display: Math.round(Math.abs(raw) * 100) / 100,
-        raw: Math.round(raw * 100) / 100,
+        display: round2(Math.abs(raw)),
+        raw: round2(raw),
       });
     } else {
       // 按日期/周/月/年：仅统计收支（排除转账和余额变更）
@@ -398,8 +399,8 @@ export function transformToChartData(
       }
       slices.push({
         label: formatGroupLabel(group.key, groupBy),
-        display: Math.round(Math.abs(raw) * 100) / 100,
-        raw: Math.round(raw * 100) / 100,
+        display: round2(Math.abs(raw)),
+        raw: round2(raw),
       });
     }
   }
@@ -513,10 +514,10 @@ function transformSplitChartData(
     const rawData: number[] = [];
     for (const xg of xGroups) {
       const rawValue = computeBarValue(xg.entries, splitBy, item, xg.key, xGroupBy);
-      rawData.push(Math.round(rawValue * 100) / 100);
+      rawData.push(round2(rawValue));
       // 条形图用绝对值，折线图保留原始符号
       const displayValue = chartType === "bar" ? Math.abs(rawValue) : rawValue;
-      data.push(Math.round(displayValue * 100) / 100);
+      data.push(round2(displayValue));
     }
     const ds: ChartDataResult["datasets"][number] & { _rawData: number[] } = {
       label: formatSplitItemLabel(item, splitBy),

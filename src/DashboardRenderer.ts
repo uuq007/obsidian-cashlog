@@ -7,6 +7,7 @@ import { AccountManager } from "./AccountManager";
 import { BudgetManager, computePeriodRange } from "./BudgetManager";
 import { DateRange } from "./Query/DateRange";
 import { t, tp, formatMoney, formatMoneyUnsigned } from "./i18n";
+import { round2 } from "./MoneyUtils";
 
 // 仪表盘回调接口
 export interface DashboardCallbacks {
@@ -43,7 +44,9 @@ export function renderDashboard(container: HTMLElement, plugin: CashlogPlugin, c
       expenseEntries.push(e);
     }
   }
-  const balance = totalIncome - totalExpense;
+  totalIncome = round2(totalIncome);
+  totalExpense = round2(totalExpense);
+  const balance = round2(totalIncome - totalExpense);
   const count = periodEntries.length;
 
   // 统计时间范围

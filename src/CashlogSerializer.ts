@@ -3,6 +3,7 @@ import { CashlogEntry, type AccountAmount } from "./CashlogEntry";
 import { moment } from "./types";
 import type { Moment } from "./types";
 import { EntryLocation } from "./EntryLocation";
+import { round2 } from "./MoneyUtils";
 import {
   listItemRegex,
   amountRegex,
@@ -187,7 +188,7 @@ function parseLineCore(
     accountAmounts.push({ account: oldAccountNoAmount, amount: yenAmount });
     amount = yenAmount;
   } else {
-    amount = yenAmount + accountAmounts.reduce((s, aa) => s + aa.amount, 0);
+    amount = round2(yenAmount + accountAmounts.reduce((s, aa) => s + aa.amount, 0));
   }
 
   // 严格模式：必须有金额

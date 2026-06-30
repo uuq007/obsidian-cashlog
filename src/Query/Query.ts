@@ -3,6 +3,7 @@ import { CashlogEntry } from "../EntryLocation";
 import { FilterFunction, Sorter, Grouper, QueryResult, EntryGroup, Summary } from "./Filter";
 import { parseFilter } from "./FilterParser";
 import type { CashlogSettings } from "../Settings";
+import { round2 } from "../MoneyUtils";
 
 // 表格列配置
 export interface TableColConfig {
@@ -649,17 +650,17 @@ export class Query {
 
   // 汇总
   private summarize(entries: CashlogEntry[]): Summary {
-    const totalIncome = entries
+    const totalIncome = round2(entries
       .filter((e) => e.amount > 0)
-      .reduce((sum, e) => sum + e.amount, 0);
-    const totalExpense = entries
+      .reduce((sum, e) => sum + e.amount, 0));
+    const totalExpense = round2(entries
       .filter((e) => e.amount < 0)
-      .reduce((sum, e) => sum + e.amount, 0);
+      .reduce((sum, e) => sum + e.amount, 0));
 
     return {
       totalIncome: this.showTotal || this.showTotalIncome ? totalIncome : 0,
       totalExpense: this.showTotal || this.showTotalExpense ? totalExpense : 0,
-      balance: this.showTotal || this.showBalance ? totalIncome + totalExpense : 0,
+      balance: this.showTotal || this.showBalance ? round2(totalIncome + totalExpense) : 0,
       count: this.showTotal || this.showCount ? entries.length : 0,
     };
   }

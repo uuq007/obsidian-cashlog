@@ -5,6 +5,7 @@ import { EditableEntryData } from "./CashlogModal";
 import type CashlogPlugin from "./main";
 import { AccountManager } from "./AccountManager";
 import type { EntryLocation } from "./EntryLocation";
+import { round2 } from "./MoneyUtils";
 
 // 构建上下文：indentation、listMarker、location 可能来自新条目的行上下文，也可能来自原条目
 export interface EntryBuildContext {
@@ -100,7 +101,7 @@ export function buildEntryFromModalData(
     }
   }
 
-  const amount = noAccountAmt + accountAmounts.reduce((s, aa) => s + aa.amount, 0);
+  const amount = round2(noAccountAmt + accountAmounts.reduce((s, aa) => s + aa.amount, 0));
 
   return new CashlogEntry(
     data.description,

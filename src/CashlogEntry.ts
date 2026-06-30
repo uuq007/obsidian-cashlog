@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument -- Obsidian API 和 Chart.js 类型在 ESLint 类型检查中无法完全解析 */
 import { EntryLocation } from "./EntryLocation";
 import type { Moment } from "./types";
+import { round2 } from "./MoneyUtils";
 
 // 账户-金额对
 export interface AccountAmount {
@@ -28,7 +29,7 @@ export class CashlogEntry {
   // 无账户金额（💴）
   get noAccountAmount(): number {
     if (this.entryType === "transfer" || this.entryType === "balanceChange") return 0;
-    return this.amount - this.accountAmounts.reduce((s, aa) => s + aa.amount, 0);
+    return round2(this.amount - this.accountAmounts.reduce((s, aa) => s + aa.amount, 0));
   }
 
   // 总金额

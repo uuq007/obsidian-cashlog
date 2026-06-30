@@ -14,6 +14,7 @@ import {
 import type { ChartDataResult } from "./ChartRenderer";
 import type { ChartConfig, GroupByField, PieValueType } from "./Query/Query";
 import { t, tp, formatMoneyUnsigned } from "./i18n";
+import { round2 } from "./MoneyUtils";
 
 export const CASHLOG_VIEW_TYPE = "cashlog-panel";
 
@@ -213,19 +214,19 @@ export class CashlogView extends ItemView {
     const entries = this.subPage.entries;
     const query = new Query("list style none\nshow total", this.plugin.settings);
 
-    const totalIncome = entries
+    const totalIncome = round2(entries
       .filter((e) => e.amount > 0)
-      .reduce((sum, e) => sum + e.amount, 0);
-    const totalExpense = entries
+      .reduce((sum, e) => sum + e.amount, 0));
+    const totalExpense = round2(entries
       .filter((e) => e.amount < 0)
-      .reduce((sum, e) => sum + e.amount, 0);
+      .reduce((sum, e) => sum + e.amount, 0));
 
     const result: QueryResult = {
       groups: [{ key: this.subPage.title, entries }],
       summary: {
         totalIncome,
         totalExpense,
-        balance: totalIncome + totalExpense,
+        balance: round2(totalIncome + totalExpense),
         count: entries.length,
       },
     };
@@ -239,7 +240,13 @@ export class CashlogView extends ItemView {
     if (!this.subPage) return;
     const accountName = this.subPage.accountName;
     if (!accountName) return;
-    const entries = this.subPage.entries;
+    // 按时间从新到旧排序：日期降序，同日按时间降序
+    const entries = [...this.subPage.entries].sort((a, b) => {
+      const aDate = a.date ? a.date.valueOf() : 0;
+      const bDate = b.date ? b.date.valueOf() : 0;
+      if (aDate !== bDate) return bDate - aDate;
+      return (b.time ?? "").localeCompare(a.time ?? "");
+    });
     const initialBalance = this.subPage.initialBalance ?? 0;
 
     // 按账户金额类型分类汇总
@@ -303,19 +310,19 @@ export class CashlogView extends ItemView {
 
     // === 条目列表（使用原有样式） ===
     const listQuery = new Query("list style none\nshow total", this.plugin.settings);
-    const totalIncome = entries
+    const totalIncome = round2(entries
       .filter((e) => e.amount > 0)
-      .reduce((sum, e) => sum + e.amount, 0);
-    const totalExpense = entries
+      .reduce((sum, e) => sum + e.amount, 0));
+    const totalExpense = round2(entries
       .filter((e) => e.amount < 0)
-      .reduce((sum, e) => sum + e.amount, 0);
+      .reduce((sum, e) => sum + e.amount, 0));
 
     const listResult: QueryResult = {
       groups: [{ key: t("dashboard.accountDetail.entries"), entries }],
       summary: {
         totalIncome,
         totalExpense,
-        balance: totalIncome + totalExpense,
+        balance: round2(totalIncome + totalExpense),
         count: entries.length,
       },
     };

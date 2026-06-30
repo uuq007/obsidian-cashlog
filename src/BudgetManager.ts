@@ -4,6 +4,7 @@ import type { BudgetConfig, GoalConfig } from "./Settings";
 import { DateRange } from "./Query/DateRange";
 import { moment } from "./types";
 import type { Moment } from "./types";
+import { round2 } from "./MoneyUtils";
 
 export interface BudgetProgress {
   config: BudgetConfig;
@@ -97,10 +98,10 @@ export class BudgetManager {
       const matchingEntries = this.filterByBudget(
         entries, budget, range?.start ?? null, range?.end ?? null,
       );
-      const spent = Math.abs(
+      const spent = round2(Math.abs(
         matchingEntries.reduce((sum, e) => sum + (e.amount < 0 ? e.amount : 0), 0),
-      );
-      const remaining = budget.amount - spent;
+      ));
+      const remaining = round2(budget.amount - spent);
       const percentage = budget.amount > 0 ? Math.min(100, (spent / budget.amount) * 100) : 0;
 
       return {
@@ -129,8 +130,8 @@ export class BudgetManager {
       const matchingEntries = this.filterByGoal(
         entries, goal, range?.start ?? null, range?.end ?? null,
       );
-      const earned = matchingEntries.reduce((sum, e) => sum + (e.amount > 0 ? e.amount : 0), 0);
-      const remaining = goal.targetAmount - earned;
+      const earned = round2(matchingEntries.reduce((sum, e) => sum + (e.amount > 0 ? e.amount : 0), 0));
+      const remaining = round2(goal.targetAmount - earned);
       const percentage = goal.targetAmount > 0
         ? Math.min(100, (earned / goal.targetAmount) * 100)
         : 0;
